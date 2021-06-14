@@ -7,3 +7,6 @@ Materials for the 2021 ISPOR short course entitled 'Health Economic Modeling in 
 - [Advanced R](advanced)
 - [BCEA](bcea)
 
+## RSS South West Local Group seminars (June 2021)
+
+- [Missing data in HTA](rss-sw-2021)
