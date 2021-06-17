@@ -4,7 +4,6 @@ This website contains links to presentaiton and other material. More on this is 
 ## ISPOR short-course "An introduction to R" (June 2021)
 Materials for the 2021 ISPOR short course entitled 'Health Economic Modeling in R: A Hands-on >
 
-- [Advanced R](advanced)
 - [BCEA](bcea)
 
 ## RSS South West Local Group seminars (June 2021)
