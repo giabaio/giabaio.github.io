@@ -458,7 +458,7 @@ background-size: contain
 
 ---
 
-# Example: ICD &amp; Cardiac death
+# Example (1): ICD &amp; Cardiac death
 
 .alignright[&lt;svg viewBox="0 0 384 512" xmlns="http://www.w3.org/2000/svg" style="height:1em;fill:currentColor;position:relative;display:inline-block;top:.1em;"&gt;  &lt;g label="icon" id="layer6" groupmode="layer"&gt;    &lt;path id="path2" d="M 120.19265,177.73779 C 123.18778,77.35076 64.277527,63.999998 64.277527,63.999998 v 31.26245 C 40.834519,83.611374 18.32863,81.929634 18.32863,81.929634 V 337.10903 c 0,0 98.10414,-11.41744 98.10414,84.40952 0,0 36.58424,-153.37442 248.86103,26.48145 0,-61.59342 0.37757,-216.93925 0.37757,-268.28471 C 169.9561,37.131382 120.1931,177.73779 120.1931,177.73779 Z m 187.20631,173.82056 -12.37599,-97.65441 h -0.448 l -40.72819,97.65441 h -17.55994 l -38.9362,-97.65441 h -0.448 l -14.17589,97.65441 h -43.87514 l 28.8015,-169.61925 h 43.42716 l 34.43518,90.6496 36.46566,-90.6496 h 43.87513 l 25.6817,169.61925 h -44.13938 z" style="stroke-width:0.0675239"&gt;&lt;/path&gt;  &lt;/g&gt;&lt;/svg&gt; [Benaglia et al (2015)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4847642/)]
 
@@ -488,7 +488,7 @@ background-size: contain
 ---
 
 count: false
-# Example: ICD &amp; Cardiac death
+# Example (1): ICD &amp; Cardiac death
 
 ## Basic idea
 
@@ -499,7 +499,7 @@ Use UK population data (matched by age/sex) to "**anchor**" the ICD population a
 ---
 
 count: false
-# Example: ICD &amp; Cardiac death
+# Example (1): ICD &amp; Cardiac death
 
 ## Basic idea
 
@@ -602,6 +602,60 @@ count: false
 &lt;center&gt;&lt;img src=./img/ICD2.png width='85%' title='INCLUDE TEXT HERE'&gt;&lt;/center&gt;
 
 - Ignoring cause-specific mortality (.red[Weibull]) results in larger bias, especially for females (because the arrhythmia proportion of deaths does vary over time in that subgroup)
+
+---
+
+
+# Example (2): constraints on `\(S(t)\)`
+
+### Observed data
+&lt;center&gt;&lt;img src=./img/surv1-1.png width='72%' title=''&gt;&lt;/center&gt;
+
+---
+
+count: false
+# Example: constraints on `\(S(t)\)`
+
+
+
+### Parametric extrapolation
+&lt;center&gt;&lt;img src=./img/surv2-1.png width='72%' title=''&gt;&lt;/center&gt;
+
+---
+
+count: false
+# Example: constraints on `\(S(t)\)`
+
+## What do we see?
+
+- The data are **sparse** and the follow up is limited in comparison to the relevant time horizon
+
+- The **best fitting** model responds by extrapolating a survival curves that implies `\(\Pr(\style{font-family:inherit;}{\text{Still alive after 100 months}})&gt;\)` 0.5
+
+- This is most likely a ridiculous finding!
+
+--
+
+&lt;span style="display:block; margin-top: 40px ;"&gt;&lt;/span&gt;
+## What do we know?
+
+- Perhaps we may think a bit more carefully and figure out some kind of "constraint" or upper limit for the survival probability at a given time point in the future...
+
+- Maybe, it's not so controversial to assume that, **before observing any data**, `\(\Pr(\style{font-family:inherit;}{\text{Still alive after 70 months}})\)` should not exceed, say, 0.20
+
+- We can use this information in our prior specification and let it be modified by the observed data
+   - This is a relatively strong prior, so you would need a **really** strong signal to modify it significantly...
+
+&lt;span style="display:block; margin-top: 50px ;"&gt;&lt;/span&gt;
+.alignright[(*Che et al*, work in progress...)]
+
+---
+
+count: false
+# Example: constraints on `\(S(t)\)`
+
+### Constrained semi-parametric
+&lt;center&gt;&lt;img src=./img/surv3-1.png width='72%' title=''&gt;&lt;/center&gt;
 
 ---
 
