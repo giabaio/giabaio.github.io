@@ -9,3 +9,7 @@ Materials for the 2021 ISPOR short course entitled 'Health Economic Modeling in 
 ## RSS South West Local Group seminars (June 2021)
 
 - [Missing data in HTA](rss-sw-2021)
+
+## Life course analysis: data and methodological challenges, ISER, University of Essex (July 2021)
+
+- [A recipe for disaster](survival)

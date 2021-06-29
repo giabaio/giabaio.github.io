@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>A recipe for disaster: Survival modelling and extrapolation in health economic evaluation</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gianluca Baio" />
+    <meta name="date" content="2021-07-07" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <script src="libs/clipboard/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
+    <script src="libs/freezeframe/freezeframe.min.js"></script>
+    <script src="libs/xaringanExtra-freezeframe/freezeframe-init.js"></script>
+    <script id="xaringanExtra-freezeframe-options" type="application/json">{"selector":"img[src$=\"gif\"]","trigger":"click","overlay":false,"responsive":true,"warnings":true}</script>
+    <!-- (Re)Defines a bunch of LaTeX commands that can then be used directly in the .Rmd file as '\command{...}' -->
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      TeX: {
+        /* This enables color macros */
+        extensions: ["color.js"],
+        Macros: {
+          /* Probability & mathematical symbols */
+          Pr: "{\\style{font-family:inherit; font-size: 110%;}{\\text{Pr}}}",
+          exp: "{\\style{font-family:inherit; font-size: 105%;}{\\text{exp}}}",
+          log: "{\\style{font-family:inherit; font-size: 105%;}{\\text{log}}}",
+          ln: "{\\style{font-family:inherit; font-size: 105%;}{\\text{ln}}}",
+          logit: "{\\style{font-family:inherit; font-size: 100%;}{\\text{logit}}}",
+          HR: "{\\style{font-family:inherit; font-size: 105%;}{\\text{HR}}}",
+          OR: "{\\style{font-family:inherit; font-size: 105%;}{\\text{OR}}}",
+          E: "{\\style{font-family:inherit; font-size: 105%;}{\\text{E}}}",
+          Var: "{\\style{font-family:inherit; font-size: 105%;}{\\text{Var}}}",
+          Cov: "{\\style{font-family:inherit; font-size: 105%;}{\\text{Cov}}}",
+          Corr: "{\\style{font-family:inherit; font-size: 105%;}{\\text{Corr}}}",
+          DIC: "{\\style{font-family:inherit; font-size: 105%;}{\\text{DIC}}}",
+          se: "{\\style{font-family:inherit; font-size: 100%;}{\\text{se}}}",
+          sd: "{\\style{font-family:inherit; font-size: 100%;}{\\text{sd}}}",
+          /* Distributions */
+          dnorm: "{\\style{font-family:inherit;}{\\text{Normal}}}",
+          dt: "{\\style{font-family:inherit;}{\\text{t}}}",
+          ddirch: "{\\style{font-family:inherit;}{\\text{Dirichlet}}}",
+          dmulti: "{\\style{font-family:inherit;}{\\text{Multinomial}}}",
+          dbeta: "{\\style{font-family:inherit;}{\\text{Beta}}}",
+          dgamma: "{\\style{font-family:inherit;}{\\text{Gamma}}}",
+          dbern: "{\\style{font-family:inherit;}{\\text{Bernoulli}}}",
+          dbin: "{\\style{font-family:inherit;}{\\text{Binomial}}}",
+          dpois: "{\\style{font-family:inherit;}{\\text{Poisson}}}",
+          dweib: "{\\style{font-family:inherit;}{\\text{Weibull}}}",
+          dexp: "{\\style{font-family:inherit;}{\\text{Exponential}}}",
+          dlnorm: "{\\style{font-family:inherit;}{\\text{logNormal}}}",
+          dunif: "{\\style{font-family:inherit;}{\\text{Uniform}}}",
+          /* LaTeX formatting */
+          bm: ["{\\boldsymbol #1}",1],
+          /* These create macros to typeset numbers in maths with the basic font */
+          0: "{\\style{font-family:inherit; font-size: 105%;}{\\text{0}}}",
+          1: "{\\style{font-family:inherit; font-size: 105%;}{\\text{1}}}",
+          3: "{\\style{font-family:inherit; font-size: 105%;}{\\text{2}}}",
+          3: "{\\style{font-family:inherit; font-size: 105%;}{\\text{3}}}",
+          4: "{\\style{font-family:inherit; font-size: 105%;}{\\text{4}}}",
+          5: "{\\style{font-family:inherit; font-size: 105%;}{\\text{5}}}",
+          6: "{\\style{font-family:inherit; font-size: 105%;}{\\text{6}}}",
+          7: "{\\style{font-family:inherit; font-size: 105%;}{\\text{7}}}",
+          8: "{\\style{font-family:inherit; font-size: 105%;}{\\text{8}}}",
+          9: "{\\style{font-family:inherit; font-size: 105%;}{\\text{9}}}",
+          /* Health economics quantities */
+          icer: "{\\style{font-family:inherit; font-size: 100%;}{\\text{ICER}}}",
+          nb: "{\\style{font-family:inherit; font-size: 100%;}{\\text{NB}}}",
+          ol: "{\\style{font-family:inherit; font-size: 100%;}{\\text{OL}}}",
+          ceac: "{\\style{font-family:inherit; font-size: 100%;}{\\text{CEAC}}}",
+          evpi: "{\\style{font-family:inherit; font-size: 100%;}{\\text{EVPI}}}",
+          evppi: "{\\style{font-family:inherit; font-size: 100%;}{\\text{EVPPI}}}",
+          evsi: "{\\style{font-family:inherit; font-size: 100%;}{\\text{EVSI}}}"
+        }
+      }
+    });
+    </script>
+    <link rel="stylesheet" href="assets/ucl-powerpoint.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+class: title-slide
+
+# A recipe for disaster: Survival modelling and extrapolation in health economic evaluation
+
+## Gianluca Baio
+
+### [Department of Statistical Science](https://www.ucl.ac.uk/statistics/) | University College London    
+
+.title-small[
+&lt;svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" style="position:relative;display:inline-block;top:.1em;fill:#00acee;height:0.8em;"&gt;  [ comment ]  &lt;path d="M502.3 190.8c3.9-3.1 9.7-.2 9.7 4.7V400c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V195.6c0-5 5.7-7.8 9.7-4.7 22.4 17.4 52.1 39.5 154.1 113.6 21.1 15.4 56.7 47.8 92.2 47.6 35.7.3 72-32.8 92.3-47.6 102-74.1 131.6-96.3 154-113.7zM256 320c23.2.4 56.6-29.2 73.4-41.4 132.7-96.3 142.8-104.7 173.4-128.7 5.8-4.5 9.2-11.5 9.2-18.9v-19c0-26.5-21.5-48-48-48H48C21.5 64 0 85.5 0 112v19c0 7.4 3.4 14.3 9.2 18.9 30.6 23.9 40.7 32.4 173.4 128.7 16.8 12.2 50.2 41.8 73.4 41.4z"&gt;&lt;/path&gt;&lt;/svg&gt;  [g.baio@ucl.ac.uk](mailto:g.baio@ucl.ac.uk)
+&lt;svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" style="position:relative;display:inline-block;top:.1em;fill:#EA7600;height:0.8em;"&gt;  [ comment ]  &lt;path d="M503.52,241.48c-.12-1.56-.24-3.12-.24-4.68v-.12l-.36-4.68v-.12a245.86,245.86,0,0,0-7.32-41.15c0-.12,0-.12-.12-.24l-1.08-4c-.12-.24-.12-.48-.24-.6-.36-1.2-.72-2.52-1.08-3.72-.12-.24-.12-.6-.24-.84-.36-1.2-.72-2.4-1.08-3.48-.12-.36-.24-.6-.36-1-.36-1.2-.72-2.28-1.2-3.48l-.36-1.08c-.36-1.08-.84-2.28-1.2-3.36a8.27,8.27,0,0,0-.36-1c-.48-1.08-.84-2.28-1.32-3.36-.12-.24-.24-.6-.36-.84-.48-1.2-1-2.28-1.44-3.48,0-.12-.12-.24-.12-.36-1.56-3.84-3.24-7.68-5-11.4l-.36-.72c-.48-1-.84-1.8-1.32-2.64-.24-.48-.48-1.08-.72-1.56-.36-.84-.84-1.56-1.2-2.4-.36-.6-.6-1.2-1-1.8s-.84-1.44-1.2-2.28c-.36-.6-.72-1.32-1.08-1.92s-.84-1.44-1.2-2.16a18.07,18.07,0,0,0-1.2-2c-.36-.72-.84-1.32-1.2-2s-.84-1.32-1.2-2-.84-1.32-1.2-1.92-.84-1.44-1.32-2.16a15.63,15.63,0,0,0-1.2-1.8L463.2,119a15.63,15.63,0,0,0-1.2-1.8c-.48-.72-1.08-1.56-1.56-2.28-.36-.48-.72-1.08-1.08-1.56l-1.8-2.52c-.36-.48-.6-.84-1-1.32-1-1.32-1.8-2.52-2.76-3.72a248.76,248.76,0,0,0-23.51-26.64A186.82,186.82,0,0,0,412,62.46c-4-3.48-8.16-6.72-12.48-9.84a162.49,162.49,0,0,0-24.6-15.12c-2.4-1.32-4.8-2.52-7.2-3.72a254,254,0,0,0-55.43-19.56c-1.92-.36-3.84-.84-5.64-1.2h-.12c-1-.12-1.8-.36-2.76-.48a236.35,236.35,0,0,0-38-4H255.14a234.62,234.62,0,0,0-45.48,5c-33.59,7.08-63.23,21.24-82.91,39-1.08,1-1.92,1.68-2.4,2.16l-.48.48H124l-.12.12.12-.12a.12.12,0,0,0,.12-.12l-.12.12a.42.42,0,0,1,.24-.12c14.64-8.76,34.92-16,49.44-19.56l5.88-1.44c.36-.12.84-.12,1.2-.24,1.68-.36,3.36-.72,5.16-1.08.24,0,.6-.12.84-.12C250.94,20.94,319.34,40.14,367,85.61a171.49,171.49,0,0,1,26.88,32.76c30.36,49.2,27.48,111.11,3.84,147.59-34.44,53-111.35,71.27-159,24.84a84.19,84.19,0,0,1-25.56-59,74.05,74.05,0,0,1,6.24-31c1.68-3.84,13.08-25.67,18.24-24.59-13.08-2.76-37.55,2.64-54.71,28.19-15.36,22.92-14.52,58.2-5,83.28a132.85,132.85,0,0,1-12.12-39.24c-12.24-82.55,43.31-153,94.31-170.51-27.48-24-96.47-22.31-147.71,15.36-29.88,22-51.23,53.16-62.51,90.36,1.68-20.88,9.6-52.08,25.8-83.88-17.16,8.88-39,37-49.8,62.88-15.6,37.43-21,82.19-16.08,124.79.36,3.24.72,6.36,1.08,9.6,19.92,117.11,122,206.38,244.78,206.38C392.77,503.42,504,392.19,504,255,503.88,250.48,503.76,245.92,503.52,241.48Z"&gt;&lt;/path&gt;&lt;/svg&gt;  [http://www.statistica.it/gianluca/](http://www.statistica.it/gianluca/)
+&lt;svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" style="position:relative;display:inline-block;top:.1em;fill:#EA7600;height:0.8em;"&gt;  [ comment ]  &lt;path d="M503.52,241.48c-.12-1.56-.24-3.12-.24-4.68v-.12l-.36-4.68v-.12a245.86,245.86,0,0,0-7.32-41.15c0-.12,0-.12-.12-.24l-1.08-4c-.12-.24-.12-.48-.24-.6-.36-1.2-.72-2.52-1.08-3.72-.12-.24-.12-.6-.24-.84-.36-1.2-.72-2.4-1.08-3.48-.12-.36-.24-.6-.36-1-.36-1.2-.72-2.28-1.2-3.48l-.36-1.08c-.36-1.08-.84-2.28-1.2-3.36a8.27,8.27,0,0,0-.36-1c-.48-1.08-.84-2.28-1.32-3.36-.12-.24-.24-.6-.36-.84-.48-1.2-1-2.28-1.44-3.48,0-.12-.12-.24-.12-.36-1.56-3.84-3.24-7.68-5-11.4l-.36-.72c-.48-1-.84-1.8-1.32-2.64-.24-.48-.48-1.08-.72-1.56-.36-.84-.84-1.56-1.2-2.4-.36-.6-.6-1.2-1-1.8s-.84-1.44-1.2-2.28c-.36-.6-.72-1.32-1.08-1.92s-.84-1.44-1.2-2.16a18.07,18.07,0,0,0-1.2-2c-.36-.72-.84-1.32-1.2-2s-.84-1.32-1.2-2-.84-1.32-1.2-1.92-.84-1.44-1.32-2.16a15.63,15.63,0,0,0-1.2-1.8L463.2,119a15.63,15.63,0,0,0-1.2-1.8c-.48-.72-1.08-1.56-1.56-2.28-.36-.48-.72-1.08-1.08-1.56l-1.8-2.52c-.36-.48-.6-.84-1-1.32-1-1.32-1.8-2.52-2.76-3.72a248.76,248.76,0,0,0-23.51-26.64A186.82,186.82,0,0,0,412,62.46c-4-3.48-8.16-6.72-12.48-9.84a162.49,162.49,0,0,0-24.6-15.12c-2.4-1.32-4.8-2.52-7.2-3.72a254,254,0,0,0-55.43-19.56c-1.92-.36-3.84-.84-5.64-1.2h-.12c-1-.12-1.8-.36-2.76-.48a236.35,236.35,0,0,0-38-4H255.14a234.62,234.62,0,0,0-45.48,5c-33.59,7.08-63.23,21.24-82.91,39-1.08,1-1.92,1.68-2.4,2.16l-.48.48H124l-.12.12.12-.12a.12.12,0,0,0,.12-.12l-.12.12a.42.42,0,0,1,.24-.12c14.64-8.76,34.92-16,49.44-19.56l5.88-1.44c.36-.12.84-.12,1.2-.24,1.68-.36,3.36-.72,5.16-1.08.24,0,.6-.12.84-.12C250.94,20.94,319.34,40.14,367,85.61a171.49,171.49,0,0,1,26.88,32.76c30.36,49.2,27.48,111.11,3.84,147.59-34.44,53-111.35,71.27-159,24.84a84.19,84.19,0,0,1-25.56-59,74.05,74.05,0,0,1,6.24-31c1.68-3.84,13.08-25.67,18.24-24.59-13.08-2.76-37.55,2.64-54.71,28.19-15.36,22.92-14.52,58.2-5,83.28a132.85,132.85,0,0,1-12.12-39.24c-12.24-82.55,43.31-153,94.31-170.51-27.48-24-96.47-22.31-147.71,15.36-29.88,22-51.23,53.16-62.51,90.36,1.68-20.88,9.6-52.08,25.8-83.88-17.16,8.88-39,37-49.8,62.88-15.6,37.43-21,82.19-16.08,124.79.36,3.24.72,6.36,1.08,9.6,19.92,117.11,122,206.38,244.78,206.38C392.77,503.42,504,392.19,504,255,503.88,250.48,503.76,245.92,503.52,241.48Z"&gt;&lt;/path&gt;&lt;/svg&gt;  [https://egon.stats.ucl.ac.uk/research/statistics-health-economics/](https://egon.stats.ucl.ac.uk/research/statistics-health-economics/)
+&lt;svg viewBox="0 0 496 512" xmlns="http://www.w3.org/2000/svg" style="position:relative;display:inline-block;top:.1em;fill:black;height:0.8em;"&gt;  [ comment ]  &lt;path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"&gt;&lt;/path&gt;&lt;/svg&gt;  [https://github.com/giabaio](https://github.com/giabaio)
+&lt;svg viewBox="0 0 496 512" xmlns="http://www.w3.org/2000/svg" style="position:relative;display:inline-block;top:.1em;fill:black;height:0.8em;"&gt;  [ comment ]  &lt;path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"&gt;&lt;/path&gt;&lt;/svg&gt;  [https://github.com/StatisticsHealthEconomics](https://github.com/StatisticsHealthEconomics)
+&lt;svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" style="position:relative;display:inline-block;top:.1em;fill:#00acee;height:0.8em;"&gt;  [ comment ]  &lt;path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"&gt;&lt;/path&gt;&lt;/svg&gt;  [@gianlubaio](https://twitter.com/gianlubaio)     
+]
+
+### Life course analysis: data and methodological challenges, ISER, University of Essex 
+&lt;!-- Can also separate the various components of the extra argument 'params', eg as in 
+### Life course analysis: data and methodological challenges, ISER, University of Essex, A recipe for disaster
+--&gt;
+
+7 July 2021
+
+&lt;!-- This adds a footer (optional and with other possibilities...) --&gt;
+.footer-left[
+&lt;span&gt;&lt;a href="http://www.statistica.it/gianluca/"&gt;&lt;img src="assets/logo.png" title="Go home" width="2.0%"&gt;&lt;/a&gt;&lt;/span&gt; &lt;span style="position: relative; bottom: 5px; color: #D5D5D5;"&gt; &amp;nbsp; &amp;copy; Gianluca Baio (UCL)&lt;/span&gt;
+]
+
+---
+
+layout: true
+.footer-left[
+&lt;span&gt;&lt;a href="http://www.statistica.it/gianluca/"&gt;&lt;img src="assets/logo.png" title="Go home" width="2.0%"&gt;&lt;/a&gt;&lt;/span&gt; &lt;span style="position: relative; bottom: 5px; color: #D5D5D5;"&gt; &amp;nbsp; &amp;copy; Gianluca Baio (UCL)&lt;/span&gt;
+]
+&lt;!-- Can also include social media icons &amp; hyperlinks --&gt;
+.footer-social[
+&amp;nbsp;&lt;a href="https://twitter.com/giabaio"; title="Follow me on Twitter"&gt;&lt;svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" style="position:relative;display:inline-block;top:.1em;fill:#bcc0c4;height:0.8em;bottom:1em;"&gt;
+  [ comment ]
+  &lt;path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"&gt;&lt;/path&gt;
+&lt;/svg&gt;&lt;/a&gt;&amp;nbsp; &amp;nbsp;&lt;a href="mailto:g.baio@ucl.ac.uk"; title="Email me"&gt;&lt;svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" style="position:relative;display:inline-block;top:.1em;fill:#bcc0c4;height:0.8em;"&gt;
+  [ comment ]
+  &lt;path d="M502.3 190.8c3.9-3.1 9.7-.2 9.7 4.7V400c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V195.6c0-5 5.7-7.8 9.7-4.7 22.4 17.4 52.1 39.5 154.1 113.6 21.1 15.4 56.7 47.8 92.2 47.6 35.7.3 72-32.8 92.3-47.6 102-74.1 131.6-96.3 154-113.7zM256 320c23.2.4 56.6-29.2 73.4-41.4 132.7-96.3 142.8-104.7 173.4-128.7 5.8-4.5 9.2-11.5 9.2-18.9v-19c0-26.5-21.5-48-48-48H48C21.5 64 0 85.5 0 112v19c0 7.4 3.4 14.3 9.2 18.9 30.6 23.9 40.7 32.4 173.4 128.7 16.8 12.2 50.2 41.8 73.4 41.4z"&gt;&lt;/path&gt;
+&lt;/svg&gt;&lt;/a&gt;&amp;nbsp; &amp;nbsp;&lt;a href="http://www.statistica.it/gianluca"; title="Visit my website"&gt;&lt;svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" style="position:relative;display:inline-block;top:.1em;fill:#bcc0c4;height:0.8em;"&gt;
+  [ comment ]
+  &lt;path d="M503.52,241.48c-.12-1.56-.24-3.12-.24-4.68v-.12l-.36-4.68v-.12a245.86,245.86,0,0,0-7.32-41.15c0-.12,0-.12-.12-.24l-1.08-4c-.12-.24-.12-.48-.24-.6-.36-1.2-.72-2.52-1.08-3.72-.12-.24-.12-.6-.24-.84-.36-1.2-.72-2.4-1.08-3.48-.12-.36-.24-.6-.36-1-.36-1.2-.72-2.28-1.2-3.48l-.36-1.08c-.36-1.08-.84-2.28-1.2-3.36a8.27,8.27,0,0,0-.36-1c-.48-1.08-.84-2.28-1.32-3.36-.12-.24-.24-.6-.36-.84-.48-1.2-1-2.28-1.44-3.48,0-.12-.12-.24-.12-.36-1.56-3.84-3.24-7.68-5-11.4l-.36-.72c-.48-1-.84-1.8-1.32-2.64-.24-.48-.48-1.08-.72-1.56-.36-.84-.84-1.56-1.2-2.4-.36-.6-.6-1.2-1-1.8s-.84-1.44-1.2-2.28c-.36-.6-.72-1.32-1.08-1.92s-.84-1.44-1.2-2.16a18.07,18.07,0,0,0-1.2-2c-.36-.72-.84-1.32-1.2-2s-.84-1.32-1.2-2-.84-1.32-1.2-1.92-.84-1.44-1.32-2.16a15.63,15.63,0,0,0-1.2-1.8L463.2,119a15.63,15.63,0,0,0-1.2-1.8c-.48-.72-1.08-1.56-1.56-2.28-.36-.48-.72-1.08-1.08-1.56l-1.8-2.52c-.36-.48-.6-.84-1-1.32-1-1.32-1.8-2.52-2.76-3.72a248.76,248.76,0,0,0-23.51-26.64A186.82,186.82,0,0,0,412,62.46c-4-3.48-8.16-6.72-12.48-9.84a162.49,162.49,0,0,0-24.6-15.12c-2.4-1.32-4.8-2.52-7.2-3.72a254,254,0,0,0-55.43-19.56c-1.92-.36-3.84-.84-5.64-1.2h-.12c-1-.12-1.8-.36-2.76-.48a236.35,236.35,0,0,0-38-4H255.14a234.62,234.62,0,0,0-45.48,5c-33.59,7.08-63.23,21.24-82.91,39-1.08,1-1.92,1.68-2.4,2.16l-.48.48H124l-.12.12.12-.12a.12.12,0,0,0,.12-.12l-.12.12a.42.42,0,0,1,.24-.12c14.64-8.76,34.92-16,49.44-19.56l5.88-1.44c.36-.12.84-.12,1.2-.24,1.68-.36,3.36-.72,5.16-1.08.24,0,.6-.12.84-.12C250.94,20.94,319.34,40.14,367,85.61a171.49,171.49,0,0,1,26.88,32.76c30.36,49.2,27.48,111.11,3.84,147.59-34.44,53-111.35,71.27-159,24.84a84.19,84.19,0,0,1-25.56-59,74.05,74.05,0,0,1,6.24-31c1.68-3.84,13.08-25.67,18.24-24.59-13.08-2.76-37.55,2.64-54.71,28.19-15.36,22.92-14.52,58.2-5,83.28a132.85,132.85,0,0,1-12.12-39.24c-12.24-82.55,43.31-153,94.31-170.51-27.48-24-96.47-22.31-147.71,15.36-29.88,22-51.23,53.16-62.51,90.36,1.68-20.88,9.6-52.08,25.8-83.88-17.16,8.88-39,37-49.8,62.88-15.6,37.43-21,82.19-16.08,124.79.36,3.24.72,6.36,1.08,9.6,19.92,117.11,122,206.38,244.78,206.38C392.77,503.42,504,392.19,504,255,503.88,250.48,503.76,245.92,503.52,241.48Z"&gt;&lt;/path&gt;
+&lt;/svg&gt;&lt;/a&gt;&amp;nbsp;
+]
+
+&lt;!-- Can also add a center footer, eg to include the title of the talk --&gt;
+.footer-center[
+A recipe for disaster
+]
+&lt;!-- And a right footer, to include the date --&gt;
+.footer-right[
+Life course analysis: data and methodological challenges,  7 Jul 2021
+]
+
+---
+
+# Disclaimer...
+
+&lt;center&gt;
+&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;Best opening sentence &lt;a href="https://twitter.com/hashtag/ISPOREurope?src=hash&amp;amp;ref_src=twsrc%5Etfw"&gt;#ISPOREurope&lt;/a&gt; from Gianluca Baio: “statisticians should rule the world and Bayesian statisticians should rule all statisticians” &lt;a href="https://t.co/GN2w7liAcR"&gt;https://t.co/GN2w7liAcR&lt;/a&gt;&lt;/p&gt;&amp;mdash; Manuela Joore (@ManuelaJoore) &lt;a href="https://twitter.com/ManuelaJoore/status/1191397718930939904?ref_src=twsrc%5Etfw"&gt;November 4, 2019&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt; 
+&lt;/center&gt;
+
+&lt;span style="display:block; margin-top: 10px ;"&gt;&lt;/span&gt;
+...Just so you know what you're about to get into... 😉
+
+---
+
+# Outline
+
+1. Health economic evaluation
+
+   - What is it?
+   - How does it work?   
+
+--
+
+2. Survival data in health economic evaluations   
+
+   - Extrapolation from clinical trials   
+   - Parametric models
+   - Why you should always be a Bayesian about this (and everything else...)
+
+--
+
+3. Example
+   - ICD + prior knowledge
+
+--
+
+4. Conclusions
+
+---
+
+# Health technology assessment (HTA)
+
+**Objective**: Combine .red[costs] and .blue[benefits] of a given intervention into a rational scheme for allocating resources 
+
+--
+
+&lt;center&gt;&lt;img src=./img/hta-scheme1.png width='80%' title='INCLUDE TEXT HERE'&gt;&lt;/center&gt;
+
+---
+
+count: false
+# Health technology assessment (HTA)
+
+**Objective**: Combine .red[costs] and .blue[benefits] of a given intervention into a rational scheme for allocating resources 
+
+
+&lt;center&gt;&lt;img src=./img/hta-scheme2.png width='80%' title='INCLUDE TEXT HERE'&gt;&lt;/center&gt;
+
+---
+
+count: false
+# Health technology assessment (HTA)
+
+**Objective**: Combine .red[costs] and .blue[benefits] of a given intervention into a rational scheme for allocating resources 
+
+&lt;center&gt;&lt;img src=./img/hta-scheme3.png width='80%' title='INCLUDE TEXT HERE'&gt;&lt;/center&gt;
+
+---
+
+background-image: url("img/whatstheproblem.gif")
+background-size: cover
+
+# 
+
+---
+
+count: false
+# Health technology assessment (HTA)
+
+**Objective**: Combine .red[costs] and .blue[benefits] of a given intervention into a rational scheme for allocating resources 
+
+
+&lt;center&gt;&lt;img src=./img/hta-scheme4.png width='80%' title='INCLUDE TEXT HERE'&gt;&lt;/center&gt;
+
+---
+
+# *To be or not to be?... (A Bayesian)*
+
+
+.center[
+.pull-left[
+### Frequentist ("standard")
+]
+.pull-right[
+### Bayesian 
+]
+]
+.center[
+&lt;center&gt;&lt;img src=./img/unnamed-chunk-2-1.png width='75%' title=''&gt;&lt;/center&gt;
+]
+
+&lt;span style="display:block; margin-top: 40px ;"&gt;&lt;/span&gt;
+
+- A Bayesian only speaks one language: probability distributions to describe    
+   - Sampling variability (relevant for observ.blue[***ed***] data)
+   - Epistemic uncertainty (relevant for .orange[***un***]observ.orange[***able***] parameters + yet .magenta[***un***]observ.magenta[***ed***] future data)
+--
+
+- Contextual (="prior") information to be formally included in the construction of the model    
+   - Almost irrelevant when evidence is "definitive" (large and consistent data)    
+   - Crucial when data are sparse! (... But this isn't preposterous, is it?...) 
+---
+
+count: false
+# *To be or not to be?... (A Bayesian)*
+## In HTA
+
+.center[
+.pull-left[
+### Frequentist ("standard")
+&lt;center&gt;&lt;img src=./img/two-stage.png width='610px' title=''&gt;&lt;/center&gt;
+]
+
+.pull-right[
+### Bayesian     
+&lt;center&gt;&lt;img src=./img/integrated.png width='610px' title=''&gt;&lt;/center&gt;
+]
+]
+
+---
+
+count: false
+# The problem with survival analysis in HTA
+
+Time-to-event data constitute the main outcome in a large number of HTAs (e.g. for cancer drugs)
+
+.pull-left[
+&lt;span style="display:block; margin-top: 1cm ;"&gt;&lt;/span&gt;
+
+&lt;center&gt;&lt;img src=./img/cake.gif width='100%' title=''&gt;&lt;/center&gt;
+]
+
+.pull-right[
+
+## Data
+
+1. We may (or may not!) access **individual level data** for "our" trial, but not for the competitors'    
+2. The trial data have a very limited follow up, which implies large amount of censoring
+   - This is often OK(-ish!) for "medical stats" analysis. But **HORRIBLE** for economic evaluation! `\(\Rightarrow\)` .blue[**Extrapolation**] (more on this later...)   
+3. Often the data are manipulated by the stats team within the sponsor and the economic modellers only get summaries/estimates    
+   - It is **ALWAYS** good to leave things to statisticians. But the modellers can (should?!) be statisticians too, so they could handle the data!...
+
+]
+
+---
+
+count: false
+# The problem with survival analysis in HTA
+
+Time-to-event data constitute the main outcome in a large number of HTAs (e.g. for cancer drugs)
+
+.pull-left[
+&lt;span style="display:block; margin-top: 1cm ;"&gt;&lt;/span&gt;
+
+&lt;center&gt;&lt;img src=./img/cake.gif width='100%' title=''&gt;&lt;/center&gt;
+]
+
+.pull-right[
+## Models
+
+1. Which model is the "best fit" &amp;ndash; how to judge that?
+
+2. Is modelling even enough? (How to make the most of "external data")
+
+3. Should you be Bayesians about this? 
+   - (Spoiler alert: the answer is *always* Yes!...)
+
+]
+
+---
+
+
+background-image: url("img/survival.gif")
+background-size: contain
+
+# 
+
+---
+
+# Survival analysis in HTA
+
+.alignleft[
+.ubuntublue[Trial data &amp;ndash; [Kaplan-Meier](https://en.wikipedia.org/wiki/Kaplan–Meier_estimator) curves]
+]
+
+
+
+&lt;center&gt;&lt;img src=./img/survival_hta1.png width='60%' title='The Kaplan-Meier curves are non-parametric statistics used to estimate the survival function from lifetime data. They resemble closely the observed data'&gt;&lt;/center&gt;
+
+---
+
+count: false
+# Survival analysis in HTA
+
+.alignleft[
+.ubuntublue[**Median** time:] `\(\class{ubuntublue}{t: S(t)=0.5}\)`
+]
+
+
+&lt;center&gt;&lt;img src=./img/survival_hta2.png width='60%' title='The median survival time is the time (on the x-axis) in correspondence of which the estimated survival curve is equal to 0.5. That is the point in the follow up at which 50% of the population have experienced the event'&gt;&lt;/center&gt;
+
+---
+
+count: false
+# Survival analysis in HTA
+
+.alignleft[
+.ubuntublue[**Mean** time:] `\(\class{ubuntublue}{\displaystyle\int_0^\infty S(t)dt}\)`
+]
+
+
+&lt;center&gt;&lt;img src=./img/survival_hta3.png width='60%' title='Conversely, the mean survival time gives the point on the x-axis that balances the distribution of the times. Because the underlying time distributions is generally skewed, mean and median times tend to be different'&gt;&lt;/center&gt;
+
+---
+
+# Extrapolation
+
+## A recipe for disaster?...
+
+.pull-left[
+&lt;center&gt;&lt;img src=./img/ristorante.png width='74%' title=''&gt;&lt;/center&gt;
+]
+.pull-right[
+&lt;center&gt;&lt;img src=./img/pizza.png width='185%' title=''&gt;&lt;/center&gt;
+]
+
+---
+
+count: false
+# Extrapolation
+
+## A recipe for disaster?...
+
+&lt;img src="./img/unnamed-chunk-3-1.png" style="display: block; margin: auto;" width="60%" title="INSERT TEXT HERE"&gt;
+
+---
+
+count: false
+# Extrapolation
+
+## A recipe for disaster?...
+
+&lt;img src="./img/unnamed-chunk-4-1.png" style="display: block; margin: auto;" width="60%" title="INSERT TEXT HERE"&gt;
+
+---
+
+count: false
+# Extrapolation
+
+## A recipe for disaster?...
+
+&lt;img src="./img/unnamed-chunk-5-1.png" style="display: block; margin: auto;" width="60%" title="INSERT TEXT HERE"&gt;
+
+---
+
+count: false
+# Extrapolation
+
+## A recipe for disaster?...
+
+&lt;img src="./img/unnamed-chunk-6-1.png" style="display: block; margin: auto;" width="50%" title="INSERT TEXT HERE"&gt;
+
+- **NB**: Any \*IC can only tell us about model fit **for the observed data**!     
+- Extrapolation (like missing data) is based on (virtually) untestable assumptions
+
+---
+
+count: false
+exclude: true
+# Extrapolation
+
+## A recipe for disaster?...
+
+&lt;center&gt;&lt;img src=./img/xls_analysis.png width='68%' title='INCLUDE TEXT HERE'&gt;&lt;/center&gt;
+
+---
+
+exclude: true
+# Survival analysis in HTA
+
+## ... *To be or not to be (Bayesian)?*...
+
+- For more complex models, MLE-based estimates may fail to converge
+
+   – This may be an issue for multi-parameter models, where limited data (not compounded by relevant prior information) are not enough to fit all the model parameters
+   
+   – **NB**: you would normally need to fit more complex models for cases where the survival curves are "strange" and so the usual parametric models fail to provide sufficient fit
+
+.lightgray[
+- When there is strong correlation among the survival parameters, the results of the uncertainty analysis may be (strongly) biased under a more simplistic frequentist model
+
+   – This matters most in health economics, because this bias carries over the economic modelling, optimal decision making and assessment of the impact of parametric uncertainty!
+   
+   – **A full Bayesian approach propagates directly correlation and uncertainty in the model parameters through to the survival curves and the economic model**
+]
+
+---
+
+background-image: url("img/happytohelp.gif")
+background-size: contain
+
+# 
+
+---
+
+# Example: ICD &amp; Cardiac death
+
+.alignright[&lt;svg viewBox="0 0 384 512" xmlns="http://www.w3.org/2000/svg" style="height:1em;fill:currentColor;position:relative;display:inline-block;top:.1em;"&gt;  &lt;g label="icon" id="layer6" groupmode="layer"&gt;    &lt;path id="path2" d="M 120.19265,177.73779 C 123.18778,77.35076 64.277527,63.999998 64.277527,63.999998 v 31.26245 C 40.834519,83.611374 18.32863,81.929634 18.32863,81.929634 V 337.10903 c 0,0 98.10414,-11.41744 98.10414,84.40952 0,0 36.58424,-153.37442 248.86103,26.48145 0,-61.59342 0.37757,-216.93925 0.37757,-268.28471 C 169.9561,37.131382 120.1931,177.73779 120.1931,177.73779 Z m 187.20631,173.82056 -12.37599,-97.65441 h -0.448 l -40.72819,97.65441 h -17.55994 l -38.9362,-97.65441 h -0.448 l -14.17589,97.65441 h -43.87514 l 28.8015,-169.61925 h 43.42716 l 34.43518,90.6496 36.46566,-90.6496 h 43.87513 l 25.6817,169.61925 h -44.13938 z" style="stroke-width:0.0675239"&gt;&lt;/path&gt;  &lt;/g&gt;&lt;/svg&gt; [Benaglia et al (2015)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4847642/)]
+
+## Set up/interventions
+
+- ICD (Implantable Cardioverter Defibrillators) compared to anti-arrhythmic drugs (AAD) for prevention of sudden cardiac death in people with cardiac arrhythmia
+
+--
+
+## Data
+
+- Individual data from cohort of 535 UK cardiac arrhythmia patients implanted with ICDs between 1991 and 2002
+
+-  Meta-analysis of three (non-UK) RCTs providing published HRs
+   – Relatively short-term follow-up: approximately 75% people, followed for less than 5 years, maximum 10 years
+   
+- UK population mortality statistics by age, sex, cause of death
+
+--
+
+## Objective
+
+- Estimate the survival curve over the lifetime of ICD and AAD patients in UK 
+
+- Extrapolate the output to inform the wider economic model
+
+---
+
+count: false
+# Example: ICD &amp; Cardiac death
+
+## Basic idea
+
+Use UK population data (matched by age/sex) to "**anchor**" the ICD population at risk
+
+&lt;center&gt;&lt;img src=./img/ICD1.png width='45%' title='INCLUDE TEXT HERE'&gt;&lt;/center&gt;
+
+---
+
+count: false
+# Example: ICD &amp; Cardiac death
+
+## Basic idea
+
+Use UK population data (matched by age/sex) to "**anchor**" the ICD population at risk
+
+- Perhaps the easiest way to do this is to relate the hazard between the two populations &amp;ndash; eg **proportional hazard** (PH) model
+&lt;span style="display:block; margin-top: -20px ;"&gt;&lt;/span&gt;
+   `$$\class{myblue}{h_{\rm{ICD}}(t) = e^{\beta}h_{\rm{UK}}(t) \qquad \Leftrightarrow \qquad \HR = \frac{h_{\rm{ICD}}(t)}{h_{\rm{UK}}(t)} = e^{\beta} = \style{font-family:inherit;}{\text{Constant}}}$$`
+   
+&lt;span style="display:block; margin-top: -20px ;"&gt;&lt;/span&gt;
+   
+- Relatively easy to model &amp;ndash; but probably very unrealistic!
+
+   - ICD patients are at (much?) greater risk of arrhythmia death 
+   - If the proportion of deaths caused by arrythmia changes over time, we would induce bias, because we would be extrapolate a constant HR for all causes mortality
+   
+--
+
+- Formally account for multiple mortality causes (.blue[**Poly-Weibull**] model &lt;svg viewBox="0 0 384 512" xmlns="http://www.w3.org/2000/svg" style="height:1em;fill:currentColor;position:relative;display:inline-block;top:.1em;"&gt;  &lt;g label="icon" id="layer6" groupmode="layer"&gt;    &lt;path id="path2" d="M 120.19265,177.73779 C 123.18778,77.35076 64.277527,63.999998 64.277527,63.999998 v 31.26245 C 40.834519,83.611374 18.32863,81.929634 18.32863,81.929634 V 337.10903 c 0,0 98.10414,-11.41744 98.10414,84.40952 0,0 36.58424,-153.37442 248.86103,26.48145 0,-61.59342 0.37757,-216.93925 0.37757,-268.28471 C 169.9561,37.131382 120.1931,177.73779 120.1931,177.73779 Z m 187.20631,173.82056 -12.37599,-97.65441 h -0.448 l -40.72819,97.65441 h -17.55994 l -38.9362,-97.65441 h -0.448 l -14.17589,97.65441 h -43.87514 l 28.8015,-169.61925 h 43.42716 l 34.43518,90.6496 36.46566,-90.6496 h 43.87513 l 25.6817,169.61925 h -44.13938 z" style="stroke-width:0.0675239"&gt;&lt;/path&gt;  &lt;/g&gt;&lt;/svg&gt; [Demiris et al, 2015](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4456429/)):
+`\begin{align}
+\class{myblue}{h_{\rm{ICD}}(t)} &amp;\class{myblue}{= h}_{\rm{\class{red}{ICD}}}^{\rm{\class{myblue}{arr}}}\class{myblue}{(t) + h}_{\rm{\class{red}{ICD}}}^{\rm{\class{myblue}{oth}}}\class{myblue}{(t)} \\
+&amp;\class{myblue}{=} \class{orange}{e^\beta} \class{myblue}{h^{\rm{arr}}}_{\rm{\class{blue}{UK}}}\class{myblue}{(t)} + \class{myblue}{h^{\rm{oth}}}_{\rm{\class{blue}{UK}}}\class{myblue}{(t)} \\
+&amp;\class{myblue}{=} \class{orange}{e^\beta}\class{myblue}{\alpha_1 \mu_1 t^{\alpha_1-1} + \alpha_2 \mu_2 t^{\alpha_2-1}}
+\end{align}`
+
+&lt;span style="display:block; margin-top: -20px ;"&gt;&lt;/span&gt;
+- This assumes that
+   -  Arrhythmia hazard is .orange[**proportional**] to matched UK population
+   - Other causes hazard is **identical** to matched UK population
+
+---
+
+# &lt;svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" style="height:1em;fill:currentColor;position:relative;display:inline-block;top:.1em;"&gt;  [ comment ]  &lt;path d="M470.38 1.51L150.41 96A32 32 0 0 0 128 126.51v261.41A139 139 0 0 0 96 384c-53 0-96 28.66-96 64s43 64 96 64 96-28.66 96-64V214.32l256-75v184.61a138.4 138.4 0 0 0-32-3.93c-53 0-96 28.66-96 64s43 64 96 64 96-28.65 96-64V32a32 32 0 0 0-41.62-30.49z"&gt;&lt;/path&gt;&lt;/svg&gt; You don't know what you're doing...
+
+&lt;style type="text/css"&gt;
+.left-column30 {
+  width: 30%;
+  height: 92%;
+  float: left;
+}
+.left-column30 h2, .left-column h3 {
+  color: #035AA699;
+}
+.left-column30 h2:last-of-type, .left-column h3:last-child {
+  color: #035AA6;
+}
+.right-column70 {
+  width: 65%;
+  float: right;
+  padding-top: 0em;
+}
+
+&lt;/style&gt;
+.left-column30[
+&lt;iframe width="560" height="315" src="https://www.youtube.com/embed/JhTCOVnU0gY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;
+]
+.right-column70[
+- To set up a full Bayesian model including a reasonable specification of the priors can be a hard task
+- Often people claim that they have "no prior information". 
+]
+
+---
+
+count: false
+# &lt;svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" style="height:1em;fill:currentColor;position:relative;display:inline-block;top:.1em;"&gt;  [ comment ]  &lt;path d="M470.38 1.51L150.41 96A32 32 0 0 0 128 126.51v261.41A139 139 0 0 0 96 384c-53 0-96 28.66-96 64s43 64 96 64 96-28.66 96-64V214.32l256-75v184.61a138.4 138.4 0 0 0-32-3.93c-53 0-96 28.66-96 64s43 64 96 64 96-28.65 96-64V32a32 32 0 0 0-41.62-30.49z"&gt;&lt;/path&gt;&lt;/svg&gt; You don't know what you're doing...
+
+.left-column30[
+&lt;iframe width="560" height="315" src="https://www.youtube.com/embed/JhTCOVnU0gY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;
+]
+.right-column70[
+- To set up a full Bayesian model including a reasonable specification of the priors can be a hard task
+- Often people claim that they have "no prior information". **But: don't they?...**
+]
+
+---
+
+count: false
+# &lt;svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" style="height:1em;fill:currentColor;position:relative;display:inline-block;top:.1em;"&gt;  [ comment ]  &lt;path d="M470.38 1.51L150.41 96A32 32 0 0 0 128 126.51v261.41A139 139 0 0 0 96 384c-53 0-96 28.66-96 64s43 64 96 64 96-28.66 96-64V214.32l256-75v184.61a138.4 138.4 0 0 0-32-3.93c-53 0-96 28.66-96 64s43 64 96 64 96-28.65 96-64V32a32 32 0 0 0-41.62-30.49z"&gt;&lt;/path&gt;&lt;/svg&gt; You don't know what you're doing...
+
+.left-column30[
+&lt;iframe width="560" height="315" src="https://www.youtube.com/embed/JhTCOVnU0gY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;
+]
+.right-column70[
+- To set up a full Bayesian model including a reasonable specification of the priors can be a hard task
+- Often people claim that they have "no prior information". **But: don't they?...**
+
+&lt;span style="display:block; margin-top: 2em ;"&gt;&lt;/span&gt;
+- In the ICD case, age at entry is around 60 &amp;ndash; we **know** that people won't survive more than 60 more years
+   - Setting a prior for the scale `\(\mu_i \sim \dunif(0,100)\)` implies that the prior mean survival of the resulting Weibull distribution is 
+   `$$\class{myblue}{\mu_i\Gamma\left(1+\frac{1}{\alpha}\right) &lt; 60}$$`
+   
+- Can also include some knowledge on the shape `\(\alpha\)` and the coefficient `\(\beta\)` to limit their variations in reasonable ranges...
+
+]
+
+---
+
+# Results
+
+&lt;center&gt;&lt;img src=./img/ICD2.png width='85%' title='INCLUDE TEXT HERE'&gt;&lt;/center&gt;
+
+- Ignoring cause-specific mortality (.red[Weibull]) results in larger bias, especially for females (because the arrhythmia proportion of deaths does vary over time in that subgroup)
+
+---
+
+# Conclusions
+
+## Too much, too soon?
+- Tension between early introduction in the market and reimbursment decisions on the back of promising, but extremely immature data 
+   - Early plateau that doesn't materialise in later data cuts
+- Divorce between "medical" and "economic" analysis
+   - Lancet papers are OK with estimating median survival time and HRs... Economic evaluations need extrapolation to estimate mean survival time
+
+--
+
+## All the help you can get
+- Long-term data are ideal &amp;ndash; if they're aligned with the population of interest and heterogeneity is manageable (and managed!)
+- Often, even defining a comparator is a very complex operation and the market landscape is tricky...
+   - Registry data can produce information "in real time". **But**: at the price of confounding/need for confirmation periods (conditional registration/reimbursment?)
+
+--
+
+## Know what you know
+- Some information ***is*** controversial and subjective and could bias the assessment. **But**: other simply isn't and we shouldn't be afraid to use it!
+
+---
+
+exclude: TRUE
+# References
+
+NULL
+
+---
+
+class: thankyou-michelle 
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
