@@ -13,3 +13,7 @@ Materials for the 2021 ISPOR short course entitled 'Health Economic Modeling in 
 ## Life course analysis: data and methodological challenges, ISER, University of Essex (July 2021)
 
 - [A recipe for disaster](survival)
+
+## [R-HTA Workshop 2021](https://r-hta.org/events/workshop/2021/) - selected talks
+
+- [Harry Lee](r-hta/lee)
