@@ -1,0 +1,282 @@
+---
+title: "What is statistics?"
+author: Gianluca Baio
+date: 21 June 2021
+institute: "[Department of Statistical Science](https://www.ucl.ac.uk/statistics/) | University College London"
+params: 
+   conference: "Data Detectives"
+   location: ""
+   short_title: ""
+output:
+  xaringan::moon_reader:
+    includes: 
+       in_header: "assets/latex_macros.html" 
+       # This line adds a logo based on the format selected in the file 'assets/include_logo.html'
+       # NB: the actual options (eg placement of the logo and actual logo file) can be changed there
+       # after_body: "assets/insert-logo.html"
+    seal: false
+    yolo: no
+    lib_dir: libs
+    nature:
+      beforeInit: ["https://platform.twitter.com/widgets.js"]
+      highlightStyle: github
+      highlightLines: yes
+      countIncrementalSlides: no
+      ratio: '16:9'
+      titleSlideClass:
+      - center
+      - middle
+    self_contained: false 
+    css:
+    - "assets/ucl-powerpoint.css"
+---
+
+```{r echo=F,message=FALSE,warning=FALSE,comment=NA}
+# Sources the R file with all the relevant setup and commands
+source("assets/setup.R")
+
+# Stuff from 'xaringanExtra' (https://pkg.garrickadenbuie.com/xaringanExtra)
+# This allows the use of panels (from 'xaringanExtra')
+xaringanExtra::use_panelset()
+# This allows to copy code from the slides directly
+xaringanExtra::use_clipboard()
+# This freezes the frame for when there's a gif included
+xaringanExtra::use_freezeframe()
+
+# Defines the path to the file with the .bib entries (in case there are references)
+bibfile=ReadBib("~/Dropbox/Perso/Office/CV/mypubs.bib",check = FALSE)
+```
+
+class: title-slide
+
+# `r rmarkdown::metadata$title`
+
+## `r rmarkdown::metadata$author`
+
+### `r rmarkdown::metadata$institute`    
+
+.title-small[
+`r icon::icon_style(icon::fontawesome("envelope",style = "solid"),scale=.8,fill="#00acee")`  [g.baio@ucl.ac.uk](mailto:g.baio@ucl.ac.uk)
+`r icon::icon_style(icon::fontawesome("firefox"),scale=.8,fill="#EA7600")`  [http://www.statistica.it/gianluca/](http://www.statistica.it/gianluca/)
+`r icon::icon_style(icon::fontawesome("firefox"),scale=.8,fill="#EA7600")`  [https://egon.stats.ucl.ac.uk/research/statistics-health-economics/](https://egon.stats.ucl.ac.uk/research/statistics-health-economics/)
+`r icon::icon_style(icon::fontawesome("github"),scale=.8,fill="black")`  [https://github.com/giabaio](https://github.com/giabaio)
+`r icon::icon_style(icon::fontawesome("github"),scale=.8,fill="black")`  [https://github.com/StatisticsHealthEconomics](https://github.com/StatisticsHealthEconomics)
+`r icon::icon_style(icon::fontawesome("twitter"),scale=.8,fill="#00acee")`  [@gianlubaio](https://twitter.com/gianlubaio)     
+]
+
+### `r rmarkdown::metadata$params$conference` `r rmarkdown::metadata$params$location` 
+<!-- Can also separate the various components of the extra argument 'params', eg as in 
+### `r paste(rmarkdown::metadata$params, collapse=", ")`
+-->
+
+`r date`
+
+<!-- This adds a footer (optional and with other possibilities...) -->
+.footer-left[
+`r samptux()` <span style="position: relative; bottom: 5px; color: #D5D5D5;"> &nbsp; &copy; Gianluca Baio (UCL)</span>
+]
+
+---
+
+layout: true
+.footer-left[
+`r samptux()` <span style="position: relative; bottom: 5px; color: #D5D5D5;"> &nbsp; &copy; Gianluca Baio (UCL)</span>
+]
+<!-- Can also include social media icons & hyperlinks -->
+.footer-social[
+`r add_twitter()` `r add_email()` `r add_website()`
+]
+
+<!-- Can also add a center footer, eg to include the title of the talk -->
+.footer-center[
+`r rmarkdown::metadata$params$short_title`
+]
+<!-- And a right footer, to include the date -->
+.footer-right[
+`r rmarkdown::metadata$params$conference`, `r short_date`
+]
+
+---
+
+# Disclaimer...
+
+<center>
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Best opening sentence <a href="https://twitter.com/hashtag/ISPOREurope?src=hash&amp;ref_src=twsrc%5Etfw">#ISPOREurope</a> from Gianluca Baio: “statisticians should rule the world and Bayesian statisticians should rule all statisticians” <a href="https://t.co/GN2w7liAcR">https://t.co/GN2w7liAcR</a></p>&mdash; Manuela Joore (@ManuelaJoore) <a href="https://twitter.com/ManuelaJoore/status/1191397718930939904?ref_src=twsrc%5Etfw">November 4, 2019</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
+</center>
+
+`r vspace("10px")`
+...Just so you know what you're about to get into... `r emo::ji("wink")`
+
+---
+# So what *is* statistics?
+
+`r include_fig("googlesearch.png",width="100%",title="")`
+
+---
+
+count: false
+# So what *is* statistics?
+- Typically, we observe some data and we want to use them to learn about some unobservable feature of the general population in which we are interested
+
+- To do this, we use statistical models to describe the probabilistic mechanism by which (**we assume!**) that the data have arisen
+
+`r include_fig("unnamed-chunk-2-1.png",width="90%",title="")`
+
+**NB**: Roman letters $(y$ or $x)$ typically indicate **observable data**, while Greek letters $(\theta$, $\mu$, $\sigma$, $\ldots)$ indicate **population parameters**
+
+---
+
+# Sampling variability &ndash; *Probability calculus*
+
+`r include_fig("prob_calculus.png",width="80%",title="")`
+
+---
+
+# Sampling variability &ndash; *Statistics*
+
+`r include_fig("statistics.png",width="80%",title="")`
+
+
+In reality we observe **only one** such sample (out of the many possible &ndash; in fact there are **252** different ways of picking **at random** 5 units out of a population of size 10!) and we want to use the information contained in **that** sample to **infer** about the population parameters (e.g. the true mean and standard deviation)
+
+---
+
+count: false
+# So what *is* statistics?
+
+- Basically, this implies that Statistics is impossible! 
+
+   - There's so much we don't know and so many imperfect assumptions/measurements...
+   
+   .content-box-beamer[
+   ## 
+   
+   *"... All models are wrong, but some are useful"* (George Box)
+   ]
+   
+`r vspace("20px")`
+
+- So, really, Statistics is the .blue[**science of uncertainty**]
+
+   - And the job of the statistician is to embrace uncertainty
+   - (and, if you're lucky, try and give as a representation as possible of the complex, underlying reality...)
+
+--
+
+`r vspace("50px")`
+
+## So what am I doing here??...
+```{css echo=FALSE}
+.pull-right2 {
+  float: right;
+  width: 47%;
+  margin-right: -1em;
+}
+```
+.pull-left[
+`r include_fig("party3.jpg",width="80%",title="")` 
+]
+.pull-right2[
+Well... good news is: you can literally apply Statistics to *anything*! 
+]
+
+---
+
+# Covid-19 excess mortality in Italy
+
+`r include_fig("Fig.1.png",width="105%",title="")` 
+
+`r vspace("30px")`
+.alignleft[.small[`r icon::academicons$doi` [Blangiardo et al 2020](https://doi.org/%20https://doi.org/10.1371/journal.pone.0240286)]]
+
+---
+
+# Effects of interventions
+
+.pull-left[
+`r vspace("20px")`
+
+`r include_fig("its.jpg",width="100%",title="")`
+
+`r vspace("55px")`
+.alignleft[.small[`r icon::fontawesome("firefox")` [Project webpage](http://www.statistica.it/gianluca/project/its/)]]
+
+]
+.pull-right[
+`r include_fig("rdd.jpg",width="100%",title="")`
+
+`r vspace("50px")`
+.alignright[.small[`r icon::fontawesome("firefox")` [Project webpage](http://www.statistica.it/gianluca/project/causal/)]]
+]
+---
+
+# Predicting outcome of football games
+
+
+`r include_fig("net-aut.png",width="45%",title="")`
+
+---
+
+# Voting bias at the Eurovision 
+
+```{r eurovision,echo=FALSE,eval=TRUE,fig.width=12,fig.height=10,eval=FALSE}
+library(R2jags)
+library(tidyverse)
+data=readRDS("~/Dropbox/Blog/Eurovision21/data_28May2021.rds")
+m=readRDS("~/Dropbox/Blog/Eurovision21/JAGS_runs_hurdle.rds")
+all_countries=(data |> select(Voter,Subregion_voter) |> rename(country=Voter,Region=Subregion_voter)) |>
+  bind_rows((data |> select(Performer,Subregion_performer) |> rename(country=Performer,Region=Subregion_performer))) |>
+  group_by(country) |> slice(1) |> ungroup()
+source("~/Dropbox/Rstuff/myfns.R")
+plot_performer=function(performer) {
+  # Selects the relevant simulations and plots the distributions of the effects
+  perf=data %>% filter(Performer==performer) %>% select(VP) %>% with(sort(unique(VP)))
+  
+  #summaries=((m$BUGSoutput$sims.matrix %>% as_tibble() %>% select(contains("phi")))[,perf] %>% ilogit %>% 
+  #             mutate(across(.cols=everything(),~1-.)) %>% stats)$tab %>% as_tibble() %>% 
+  #  mutate(Voter=data %>% filter(VP%in%perf) %>% group_by(Voter) %>% slice(1) %>% ungroup() %>% pull(Voter) %>% as.character()) %>% 
+  #  left_join(all_countries,by=c("Voter"="country"))
+  ## This defines the "systematic" component of the probability of a 0 vote as the varying intercept (alpha+phi)
+  summaries=((m$BUGSoutput$sims.matrix %>% as_tibble() %>% mutate(across(contains("phi"),~ilogit(`alpha[1]`+.))) %>% 
+               select(contains("phi")))[,perf] %>% stats)$tab %>% as_tibble() %>% 
+    mutate(Voter=data %>% filter(VP%in%perf) %>% group_by(Voter) %>% slice(1) %>% ungroup() %>% pull(Voter) %>% as.character()) %>% 
+    left_join(all_countries,by=c("Voter"="country"))
+  
+  summaries %>% arrange(desc(mean)) %>% mutate(Voter=factor(Voter)) %>% ggplot(aes(x=mean,y=fct_reorder(Voter,mean),color=Region))+
+    geom_linerange(aes(xmin=`2.5%`,xmax=`97.5%`),position=position_dodge(.3),width=.2) +
+    geom_point(aes(mean,Voter),position = position_dodge(0.3)) +
+    xlab("Probability of 0 vote") + labs(title=paste0("Probability of 0 vote for ",performer)) + theme_gb() +
+    ylab("Voter")+
+    xlim(c(0,1)) + geom_vline(xintercept=.5,linetype="dashed",size=1.1)
+}
+
+plot_voter=function(voter) {
+  # Selects the relevant simulations and plots the distributions of the effects
+  vot=data %>% filter(Voter==voter) %>% select(VP) %>% with(sort(unique(VP)))
+  
+  # summaries=((m$BUGSoutput$sims.matrix %>% as_tibble() %>% select(contains("phi")))[,vot] %>% ilogit %>% 
+  #              mutate(across(.cols=everything(),~1-.)) %>% stats)$tab %>% as_tibble() %>% 
+  #   mutate(Voter=data %>% filter(VP%in%vot) %>% group_by(Performer) %>% slice(1) %>% ungroup() %>% pull(Performer) %>% as.character()) %>% 
+  #   left_join(all_countries,by=c("Voter"="country"))
+  ## NB: need 1-logit for the ZIP model (or change parameterisation!)
+  summaries=((m$BUGSoutput$sims.matrix %>% as_tibble() %>% mutate(across(contains("phi"),~ilogit(`alpha[1]`+.))) %>% 
+                select(contains("phi")))[,vot] %>% stats)$tab %>% as_tibble() %>% 
+    mutate(Voter=data %>% filter(VP%in%vot) %>% group_by(Performer) %>% slice(1) %>% ungroup() %>% pull(Performer) %>% as.character()) %>% 
+    left_join(all_countries,by=c("Voter"="country"))
+  
+  summaries %>% arrange(desc(mean)) %>% mutate(Voter=factor(Voter)) %>% ggplot(aes(x=mean,y=fct_reorder(Voter,mean),color=Region))+
+    geom_linerange(aes(xmin=`2.5%`,xmax=`97.5%`),position=position_dodge(.3)) +
+    geom_point(aes(mean,Voter),position = position_dodge(0.3),size=2.3) +
+    xlab("Probability of 0 vote") + labs(title=paste0("Probability of 0 vote from ",voter)) + theme_gb() +
+    ylab("Performer")+
+    xlim(c(0,1)) + geom_vline(xintercept=.5,linetype="dashed",size=1.1) 
+}
+
+plot_performer("United Kingdom")
+```
+
+`r include_fig("eurovision-1.png",width="55%",title="")`
+
+---
+
+class: thankyou-michelle 
