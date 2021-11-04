@@ -1,0 +1,2154 @@
+% !Rnw root = book.Rnw
+
+\chapter{Prior distributions}
+\label{chap:priors}
+
+\section{Introduction}
+\label{sec:priors-introduction}
+\index{prior distribution|(}
+
+  
+
+There is no denying that quantifiable prior beliefs exist in medicine. 
+\index{prior beliefs in medicine}  For example,
+in the context of clinical trials, 
+\citet{peto:baigent:98} \index{Peto, R.} \index{Baigent, C.}state that \textit{`it is generally unrealistic to
+hope for large treatment effects'} but that \textit{`it might be reasonable to
+hope that a new treatment for acute stroke or acute myocardial
+infarction could reduce recurrent stroke or death rates in hospital from 10\%
+to 9\% or 8\% , but not to hope that it could halve in-hospital
+mortality'}.
+However, turning informally expressed opinions into a mathematical  
+ prior distribution is perhaps
+the most difficult aspect of Bayesian analysis. Five broad approaches
+are outlined below:  elicitation of subjective opinion, summarising 
+past evidence, default priors, `robust' priors, and estimation of priors using
+hierarchical models.  The discussion mainly focusses on priors for the primary 
+treatment effects of interest, although we also consider the difficult issue
+of specifying a prior for the variance component in a hierarchical 
+model.  Finally we consider the criticism of prior assessments, both from
+an empirical and methodological perspective.  
+
+
+ 
+We should repeat the statements  made in \secref{sec:priors} concerning
+possible misconceptions about prior distributions: they are not
+necessarily pre-specified, unique, known or important.  Since  there is no `correct' prior, Bayesian analysis can be seen
+as a means of transforming prior  into posterior opinions, rather
+than   producing \textit{the} posterior distribution. It is therefore
+vital to take into account the context and audience for the assessment
+(\secref{sec:context}), and sensitivity analysis 
+\index{sensitivity analysis}
+to alternative assumptions should be considered essential.  \citet{kass:greenhouse:89} 
+introduced the term `community of priors'
+\index{prior distribution!community of} 
+\index{community of priors}
+to describe the range
+of viewpoints that should be considered when interpreting evidence, and
+the suggestions in this chapter represent possible members of that community.
+
+It is also important to keep in mind  that, in certain circumstances, it
+may be quite reasonable for  a prior to be elicited and used solely for
+\index{prior distribution!and design}
+design purposes, and   excluded when publicly reporting   a study. 
+However, when wishing to convince an
+audience of the benefits of an intervention,  it may be important to
+elicit their priors and possibly their utilities 
+\citep{kadane:wolfson:96}.\note[gb]{There are quite a few refs pre 90s in this opening section. But I'm unsure whether we want/need to simply remove them... I think in particular the ``community of priors'' terminology has become even more standard since v1 of this book and if people use it, they probably cite Spiegelhalter et al 2004 for this...}
+
+From a mathematical and computational perspective, we have seen
+in \secref{sec:conjugate} that it
+can be convenient if the prior distribution is a member
+of a family of distributions that is 
+conjugate 
+\index{prior distribution!conjugate}
+to the form of the likelihood, in the sense that
+they `fit together' to produce a  posterior distribution that 
+is in the same family as  the prior distribution.  We also
+saw in \secref{sec:meth-normlikes} that in many circumstances
+likelihoods for treatment effects 
+can be assumed to have an approximately 
+normal shape, 
+and thus in these circumstances it will
+be convenient to use a normal prior (the conjugate family), 
+\index{prior distribution!normal} provided it approximately summarises
+the appropriate external evidence.   
+Modern computing power
+is, however, reducing the need for conjugacy, and in
+this chapter we shall largely concentrate on the source and use of the prior rather
+than its precise mathematical form.
+
+
+
+ 
+\section{Elicitation of opinion: a brief review}\note[gb]{This will (probably) have some inevitable old citations still. Also DJS will change some of the text based on newer stuff (from Nicky Best + Tony O'Hagan)}
+\label{sec:priors-elicitation}
+\index{prior elicitation!statistical aspects}
+ 
+\subsection{Background to elicitation}
+A true subjectivist Bayesian approach requires only a prior distribution
+that expresses the personal opinions of an individual but, if the health-care 
+intervention is to be generally accepted by a wider community,
+it would appear to be essential that the prior distributions have some
+evidential or at least consensus support.  In some circumstances there
+may, however, be little `objective' evidence available and summaries of
+expert opinion may be indispensable.  We shall use the generic term `clinical prior' for such expert assessments.
+\index{prior distribution!clinical}
+
+There is an extensive   literature concerning the elicitation of subjective probability
+distributions from experts, with some good early references  on
+statistical \citep{savage:71} and psychological aspects \citep{tversky:74},
+as well as on methods for pooling distributions obtained from multiple
+experts \citep{genest:zidek:86}.  The fact that people are generally not
+good probability assessors is well-known, and the variety of biases they
+suffer are summarised by  \citet{kadane:wolfson:97}:
+\index{prior elicitation!potential biases in}
+\begin{enumerate}
+\item \textit{Availability:} easily recalled events are given higher probability, and 
+{\it vice versa.}
+\item {\it Adjustment and anchoring:} initial assessments tend to exert an inertia, so that further elicited quantities tend to be insufficiently adjusted. 
+For example, if a `best guess' is elicited first, then subsequent judgements about an interval may be too close to the first assessment.
+\item \textit{Overconfidence:} distributions are too tight.
+\item \textit{Conjunction fallacy:} a higher probability can be given to an event which is a subset
+of an event with a lower probability. 
+\index{conjunction fallacy}
+\item \textit{Hindsight bias:} if the prior is assessed after seeing the data, the expert 
+may be biassed. 
+\index{hindsight bias}
+\end{enumerate}
+
+
+
+
+Nevertheless it has been shown that   training can improve experts'
+ability to provide judgements that are `well-calibrated', in the
+sense that if a series of events are given a probability, say,
+0.6, then around 60\% of these events will occur: see, for example,
+\citet{murphy:winkler:77}      with regard to
+  weather forecasting.
+\index{prior elicitation!calibrated judgements}
+
+
+  
+\citet{chaloner:96} provides a thorough review of methods for prior
+elicitation in clinical trials, including interviews
+              with clinicians, postal questionnaires, and the use of an
+              interactive computer program to draw a prior distribution.
+She concludes that fairly simple methods are adequate, using interactive
+feedback with a scripted interview, providing
+              experts with a systematic literature review, basing
+              elicitation
+on  2.5\%  and 97.5\% percentiles, and using as many experts as
+              possible.
+Both \citet{kadane:wolfson:96} and \citet{berry:stangl:96}
+emphasise the potential benefits of two approaches:  eliciting predictive
+distributions of future events  from which an implicit prior distribution
+can be derived, and asking additional questions as a   consistency check.
+
+\subsection{Elicitation techniques}
+\label{sec:elicitation-methods}
+                 
+Methods used  in practice can be divided into four main categories of increasing formality, which are listed here with some experience of their use:
+\index{prior elicitation!methods for}
+\begin{enumerate}
+\item \textbf{Informal discussion:} 
+\index{prior elicitation!informal discussion}
+Prominent individuals can be informally interviewed for their opinion, as illustrated
+in \egref{eg:ex3great}.       \  In a trial of  paclitaxel in metastatic breast cancer, 
+  the study's principal clinical investigator expected 
+    the overall success rate 
+to be  25\% and had 50\% belief that the true
+success rate lay between 15\% and 35\% \citep{rosner:berry:95}, while  
+\egref{eg:ex6OC} features priors   obtained from two doctors  
+           for the relative risk of venous thrombosis associated with the use of  oral contraceptives \citep{lilford:braunholtz:96}.  There are clear difficulties in using such 
+individual opinions 
+in any formal context.     
+
+\item \textbf{Structured interviewing and formal pooling of opinion:} 
+\index{prior elicitation!structured interviewing}
+\index{prior elicitation!opinion pooling} 
+ \citet{freedman:spiegelhalter:83} describe an 
+interviewing technique in which a set of experts were individually interviewed and 
+hand-drawn plots of their prior distributions elicited, for which deliberate efforts were made
+to prevent the opinions being  over-confident (too `tight').  The distributions
+were converted to histograms and averaged to produce a composite prior.
+This technique was also used   for trials of Thiotepa in superficial bladder
+cancer   
+\citep{spiegelhalter:freedman:86} and  osteosarcoma
+ \citep{spiegelhalter:freedman:parmar:93}.     \citet{gore:87} introduced the
+concept of `trial roulette', in which 20 gaming chips, each representing 5\% belief, could be distributed
+amongst the bins of a histogram: in a trial of artificial surfactant in premature
+babies, 12 collaborators were interviewed using this technique to obtain their opinion on the
+possible benefits of the treatment \citep{ten:87}.  Using an electronic  
+tool so that individuals in a group could respond without attribution,
+  \citet{lilford:etal:94} presented collaborators in a trial with a series
+of imaginary patients in order to elicit their opinions on the benefit of early
+delivery.  
+
+The appropriate means of pooling   such opinions is discussed in \secref{sec:multiple-experts}.
+
+ 
+\item \textbf{Structured  questionnaires:} 
+\index{prior elicitation!questionnaire} 
+The `trial roulette' scheme described above was administered by post
+by   \citet{hughes:91}   for a trial in treatment of oesophageal varices
+and by     \citet{abrams:ashby:errington:94}   
+for a trial of neutron therapy.  
+ \citet{parmar:spiegelhalter:freedman:94}   elicited prior
+distributions for the effect of a new radiotherapy regime (CHART), in which
+the possible treatment effect  was discretised   into 5\% bands and the form was sent by post to each of nine clinicians.  Each provided a distribution over these bands  and an arithmetic 
+mean was then taken: see \egref{eg:ex4CHARTassess} for details. \citet{tan:etal:03} adapted this questionnaire, while  \citet{fayers:etal:00} provide a
+similar questionnaire and document the variability between the elicited responses.
+
+\citet{chaloner:rhame:01} provide a copy of the questionnaire they used to 
+elicit opinions from 58 practising HIV clinicians concerning the baseline event rates and the potential
+benefit of two prophylactic treatments.  This asks the minimum information 
+comprising a point estimate and an estimated 95\% interval.  They used
+both post and telephone to carry out the elicitations.
+
+     
+
+
+
+\item \textbf{Computer-based elicitation:}  
+\index{prior elicitation!computer-based} 
+\citet{chaloner:etal:93} provide
+a detailed case study of the use of a rather complex computer program that interactively elicited
+distributions from five clinicians for a trial of prophylactic therapy in AIDS.
+   \citet{kadane:96}  reports the results of an hour-long telephone interview with
+each of five clinicians, using software to estimate prior parameters from the 
+results of a series of questions   eliciting predictive probability distributions
+for responses of various patient types.  When a second round of elicitation became
+necessary, the proposal was met by {\it `little enthusiasm'}.   \citet{kadane:wolfson:96} provide an edited transcript of a
+computerised  elicitation session in a non-trial context.  
+
+
+\end{enumerate}
+
+
+We agree with  \citet{chaloner:96}   that extremely detailed
+elicitation methods have not yet been shown to have any advantage over
+simple methods.  However, it is feasible
+that complex policy problems, which necessarily may require substantial
+subjective input,  would justify a more sophisticated approach. In any case, \citet{chaloner:rhame:01}  
+\textit{`recommend documenting prior
+beliefs   irrespective of whether a Bayesian or
+frequentist approach is taken to data analysis and formal statistical monitoring'}.
+\index{Chaloner, K.}
+\index{Rhame, F.}
+ 
+\subsection{Elicitation from multiple experts}
+\label{sec:multiple-experts}
+\index{prior elicitation!multiple experts} 
+\index{prior distribution!multiple experts}
+
+Faced with varying prior distributions elicited from multiple experts, we could adopt one of a number of alternative strategies.
+\begin{itemize}
+\item \textbf{Elicit a consensus:}  If the aim is to produce a single assessment expressing the belief of the group as a whole, then a range of techniques exist for bringing diverse opinions into consensus, including both informal or more formal Delphi-like methods.  Care must of course be taken to avoid influence of dominant individuals.
+\item \textbf{Calculate a `pooled' prior:}  The choice of a method for pooling $K$ multiple opinions is not clear cut,
+and \citet{genest:zidek:86} provide a detailed annotated review of the issues.
+\textit{Arithmetic pooling} simply takes the average of the height of the
+prior distributions for each parameter value
+$\theta$, so that $p(\theta) = \sum_k p_k(\theta) / K$.  This has the property
+that   pooled probabilities for any event, such as tail areas, are also
+averages of the individually assessed tail areas.  An alternative is
+ \textit{logarithmic pooling}, which takes the average of the logarithms
+of the density, equivalent to using a geometric mean of the original
+densities, so $p(\theta) \propto \left[ \prod_k p_k(\theta) \right]^{1/K}$.  This has the apparently attractive property that the same
+pooled posterior  distribution is achieved, whether the pooling is done
+before or after the common likelihood is taken into account.  With both
+proposals there is an opportunity to apply unequal weights to experts,
+say dependent on their experience or past predictive ability.
+A further development is that of the \textit{supra-Bayesian}, that  
+takes the expressed opinions as data to manipulate using a statistical
+model.
+
+\item \textbf{Retain the individual priors:} The   diversity of opinion might be just as important   as the `average' opinion, in that we may be interested in whether current evidence is sufficient to convince a full range of observers as to the benefits of a treatment, and hence to bring them into consensus.  The extremes of opinion can be thought of as marking out the boundaries of the `community of priors' mentioned in \secref{sec:priors-introduction}.
+\end{itemize}
+
+Our preference is to take a simple supra-Bayesian view, and treat the
+expressed heights of the prior distributions as data.  Then, if we wish to assess the view of
+an `average, well-informed participating clinician', it seems reasonable to simply
+use   arithmetic pooling as in \egref{eg:ex4CHARTassess}.  Of course, we should not necessarily assume we have 
+a random sample of clinicians, and so our estimate may be inevitably `biased'.
+
+\begin{ExampleBox}
+\label{eg:ex4CHARTassess}
+
+\ecaption{CHART: eliciting subjective judgements before a trial } 
+
+{\slshape Reference:} \citet{parmar:spiegelhalter:freedman:94}, \citet{spiegelhalter:freedman:parmar:94}, \citet{parmar:etal:01}.
+
+{\slshape Intervention:}    In 1986 a new radiotherapy technique called CHART (Continuous
+Hyper-fractionated Accelerated RadioTherapy)
+was introduced.  Its concept was to give radiotherapy continuously (no weekend breaks),
+in many small fractions (three a day) and accelerated (the course completed in twelve
+days).  There are clearly considerable logistical problems in efficiently delivering
+CHART. %
+
+{\slshape Aim of studies:} Promising non-randomised and pilot studies led the UK Medical Research
+Council to instigate two large randomised trials to compare CHART   to conventional radiotherapy in both
+non-small-cell lung and head-and-neck cancer, and in particular assess whether CHART provides a clinically important difference in survival that compensates
+for any additional toxicity and problems of delivering the treatment. 
+
+{\slshape Study design:} The trials began in 1990, randomised in the proportion 60:40 in favour of CHART, with planned annual 
+meetings of the Data Monitoring
+Committee (DMC) to review efficacy and toxicity data.  No formal stopping procedure
+was specified in the protocol.
+
+{\slshape Outcome measure:}  Full data were to become available on 
+survival   (lung) or disease-free survival (head-and-neck), with results 
+presented in terms of estimates of the hazard ratio, $h$,    defined as the ratio of the hazard under CHART to the hazard under standard treatment : hence 
+hazard ratios less than one indicate superiority of CHART.    %
+
+{\slshape Planned sample sizes:}   Lung:   600 patients were to be entered, with 470 expected deaths, with 90\% power  to detect at the 5\% level a 10\% improvement (15\% to 25\% survival).  Using the 
+methods described in \secref{sec:outcomesurv}, this can be seen to be equivalent to an alternative hypothesis of $h_A = \log(0.25) / \log(0.15) = 0.73$.  Head-and-neck:   500 patients were to be entered, with 220 expected recurrences, 
+with 90\% power  to detect at the 5\% level a 15\% improvement (45\% to 60\% disease-free survival), equivalent to an alternative hypothesis of $h_A = \log(0.60) / \log(0.45) = 0.64$ .
+\index{log(hazard ratio)!example of inference on|emph}
+
+{\slshape Statistical model:} Proportional hazards model, providing an  approximate normal likelihood (\secref{sec:outcomesurv}) for $\delta = \log (h)$= log(hazard ratio), 
+$$   y_m \sim \mbox{N}\left(\theta, \frac{\sigma^2}{m} \right)$$
+where $y_m$ is the estimated log(hazard ratio), $\sigma=2$ and $m$ is the `equivalent number of events' in a trial  balanced in recruitment and follow-up.
+
+{\slshape Prospective analysis?:} Yes, the prior elicitations were conducted before the start of the trials, and
+the Bayesian results presented to the DMC at each of their meetings.
+
+{\slshape Prior distribution:}  Although the participating clinicians were
+enthusiastic about CHART, there was considerable scepticism expressed by oncologists who
+declined to participate in the trial.   
+\index{prior elicitation!CHART trials|emph}
+\index{CHART trials!clinical prior distribution|emph}
+\index{prior elicitation!questionnaire|emph}
+\index{prior elicitation!for log(hazard ratio)|emph}
+   Eleven  opinions were elicited for 
+the lung cancer trial and nine for the head-and-neck.  The questionnaire used is described in detail
+in  \citet{parmar:spiegelhalter:freedman:94} and  summarised in \figref{fig:chartquest}. 
+%
+\begin{figure}[!h]
+\extablebegin
+\fontsize{7}{8.5}\selectfont
+ \begin{center}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lllllllllll}
+\toprule
+%   & \multicolumn{3}{|c!{\vrule width 2pt}}{\bf CHART worse than } &
+   & \multicolumn{3}{c}{\bf CHART worse than } &
+   \multicolumn{6}{c}{\bf CHART better than }  &  \\
+   & \multicolumn{3}{c}{\bf  standard by \% } &
+%   & \multicolumn{3}{|c!{\vrule width 2pt}}{\bf  standard by \% } &
+   \multicolumn{6}{c}{\bf  standard by \% }  &  \\
+  \midrule
+        &   $10-15$ & $5-10$ & $0-5$ 
+       &  $0-5$ & $5-10$  &  $10-15$ & $15-20$ & $20-25$  & $25 +$ & Total \\
+  \midrule
+    &         &  &  &
+             &   &   &   &   &   &     \\
+   Lung Study &         &  &  &
+             &   &   &   &   &   &     \\
+    &         &  &  &
+             &   &   &   &   &   &     \\
+   Your Entry &          &  &  &
+             &   &   &   &   &   & 100 \\
+  \midrule
+    &         &  &  &
+             &   &   &   &   &   &     \\
+   Head \& Neck &          &  &  &
+             &   &   &   &   &   &     \\
+    &         &  &  &
+             &   &   &   &   &   &     \\
+   Study &   &         &  &
+             &   &   &   &   &   &     \\
+    &         &  &  &
+             &   &   &   &   &   &     \\
+   Your Entry &         &  &  &
+             &   &   &   &   &   & 100 \\
+  \midrule     
+    &         &  &  &
+             &   &   &   &   &   &     \\
+    &         &  &  &
+             &   &   &   &   &   &     \\
+   Hypothetical &           &  &  &
+             &   &   &   &   &   &     \\
+    &         &  &  &
+             &   &   &   &   &   &     \\
+   example &     0 &20 & 20 
+             & 20& 0 & 0 &20 & 20& 0& 100 \\
+  \botrule
+\end{tabular*}
+\caption{\label{fig:chartquest}  Part of the questionnaire used to elicit clinical opinions before the CHART trials.  Participants were invited to  distribute 100 points between the bins, indicating their `weight of belief'
+in the true benefit from CHART.  They were reminded to ignore the role of sampling variability - the hypothetical
+example was deliberately chosen to be a `rather eccentric' radiotherapist  so as not to provide an example
+that might inapprpriately `anchor' their opinions.}{}
+ \end{center}
+\extableend
+\end{figure}
+
+%\input{/homeo/davids/bayesbook/examples/chartquest}
+
+\figref{fig:ex4CHARTassess} shows the eleven lung cancer opinions as histograms. Note that subjects 7 and 11 have very different opinions and could be taken as extremes for a `community' of priors.  Here we use the arithmetic 
+average of the distributions as a summary, since we wish to represent an `average' clinician. The 
+prior distribution expressed a median anticipated 2-year survival benefit of 10\%, and a 10\% chance that CHART would offer no survival benefit at all.   The histogram was then transformed to  a log(hazard ratio) scale assuming a 15\% baseline survival: for example, the `bin' of the histogram with range 5\% to 10\% was transformed to one with upper limit $\log[\log(0.20)/\log(0.15)] = -0.16$ and lower limit $\log[\log(0.25) / \log (0.15)] = -0.31$.
+\index{prior distribution!transforming histogram|emph}
+This subjective prior distribution had a mean of -0.28 and standard deviation of  0.232 (corresponding to an estimated   hazard ratio of 0.76 with 95\% interval 0.48 to 1.19).   A Normal ${\rm N}(\mu, \sigma^2/n_0)$ distribution with these characteristics was fitted, with $\mu=-0.28, \sigma=2, \sigma/\sqrt{n_0}=0.23$, which implies $n_0=74.3$.  \index{prior distribution!Normal approximation to|emph} From \secref{sec:outcomesurv}, this prior could  also be thought of as a posterior having observed a   log-rank statistic ($L=O-E$) such that $ 4 L /n_0=-0.28$, and so $L = - 5.5$. The expected E under the null hypothesis is $n_0/2$ = 37.2 and so the observed O under CHART is $37.2 - 5.5 = 31.7$.  Thus the 
+prior can be interpreted as being  approximately equivalent to a balanced `imaginary' trial  in which 74  deaths had occurred (32 under CHART, 42  under standard).   
+
+For the head-and-neck trial, the fitted prior mean log(HR) is $\mu = -0.33$
+with standard deviation
+  0.26, equivalent to $n_0=61.0$.
+
+The clinical prior distributions are displayed in \figref{fig:ex4CHARTfitted}, which shows the average transformed onto a log(hazard ratio) scale for
+both lung and head-and-neck trials.   The fit of the normal distribution
+is quite reasonable, and the  similarity between the two set of opinions is clear, each supporting around a 25\% reduction in hazard, but associated with considerable uncertainty.
+
+<<ex4CHARTassess, fig.cap="Prior opinions for lung cancer trial elicited from 11 clinical participants in the trial. The arithmetic average is used as the `pooled' distribution\\label{fig:ex4CHARTassess}",fig.width=4,fig.height=3, out.width='35%', fig.ncol=3,fig.subcap=rep("",12)>>=
+Bins = seq(-.1,.3,.1)
+p=matrix(NA,nrow=11,ncol=9)
+p[1,] <- c(0.1, 0.1, 0.25, 0.25, 0.2, 0.1, 0, 0, NA)
+p[2,] <-  c(0.1, 0.35, 0.45, 0.1, 0, 0, 0, 0, NA)
+p[3,] <- c(0.1, 0.4, 0.4, 0.1, 0, 0, 0, 0, NA)
+p[4,] <- c(0, 0, 0.1, 0.1, 0.3, 0.3, 0.1, 0.1, NA)
+p[5,] <- c(0, 0, 0.1, 0.6, 0.2, 0.1, 0, 0, NA)
+p[6,] <- c(0, 0, 0.3, 0.5, 0.2, 0, 0, 0, NA)
+p[7,] <- c(0, 0, 0.6, 0.3, 0.1, 0, 0, 0, NA)
+p[8,] <- c(0, 0, 0, 0.1, 0.4, 0.4, 0.1, 0, NA)
+p[9,] <-  c(0, 0, 0, 0.1, 0.6, 0.2, 0.1, 0, NA)
+p[10,] <-  c(0, 0, 0, 0.2, 0.4, 0.4, 0, 0, NA)
+p[11,] <-  c(0, 0, 0, 0, 0.3, 0.5, 0.2, 0, NA)
+
+for (i in 1:11){
+  barplot(p[i,],ylim=c(0,.6),col="white",space=0,xlab="survival improvement from CHART")
+  axis(1,labels=Bins,at=seq(0,8,2))
+  text(-.1,.55,paste0("Expert No. ",i),pos=4)
+}
+barplot(apply(p,2,mean),ylim=c(0,.6),col="white",space=0,xlab="survival improvement from CHART")
+axis(1,labels=Bins,at=seq(0,8,2))
+text(-.1,.55,"Pooled average",pos=4)
+@
+
+
+<<ex4CHARTfitted, fig.cap="Average opinion for lung cancer and head-and-neck CHART trials with normal distributions fitted with matching mean and variance\\label{fig:ex4CHARTfitted}",out.width='50%', fig.ncol=2,fig.subcap=c("Lung trial","Head-and-neck trial"),fig.width=5,fig.height=6, out.width='50%'>>=
+# Calculate average histogram for Lung cancer
+Nexp<-11
+Nbins<-8
+p<-matrix(0,Nexp,Nbins)
+p[1,] <- c(0.1, 0.1, 0.25, 0.25, 0.2, 0.1, 0, 0)
+p[2,] <-  c(0.1, 0.35, 0.45, 0.1, 0, 0, 0, 0)
+p[3,] <- c(0.1, 0.4, 0.4, 0.1, 0, 0, 0, 0)
+p[4,] <- c(0, 0, 0.1, 0.1, 0.3, 0.3, 0.1, 0.1)
+p[5,] <- c(0, 0, 0.1, 0.6, 0.2, 0.1, 0, 0)
+p[6,] <- c(0, 0, 0.3, 0.5, 0.2, 0, 0, 0)
+p[7,] <- c(0, 0, 0.6, 0.3, 0.1, 0, 0, 0)
+p[8,] <- c(0, 0, 0, 0.1, 0.4, 0.4, 0.1, 0)
+p[9,] <-  c(0, 0, 0, 0.1, 0.6, 0.2, 0.1, 0)
+p[10,] <-  c(0, 0, 0, 0.2, 0.4, 0.4, 0, 0)
+p[11,] <-  c(0, 0, 0, 0, 0.3, 0.5, 0.2, 0)
+
+bins <- c(-0.1, -0.05, 0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3 )
+
+ave<-rep(0,Nbins)
+for(i in 1:Nbins){
+  ave[i]<-mean(p[,i])
+}
+
+base<-.15
+transbins<- log(log(base+bins)/ log(base))
+transbins<- log(log(base+bins)/ log(base))
+
+#  shift direction of histogram
+avelung<-ave[Nbins:1]
+transbinsX<-transbins[(Nbins+1):1] 
+
+heights<-rep(0,Nbins)
+mom1<-mom2<-0
+for(i in 1:Nbins){
+  heights[i]<-avelung[i]/(transbinsX[i+1]-transbinsX[i])
+  mom1<-mom1+heights[i]*(transbinsX[i+1]^2-transbinsX[i]^2)/2
+  mom2<-mom2+heights[i]*(transbinsX[i+1]^3-transbinsX[i]^3)/3
+}
+sd<-sqrt(mom2-mom1*mom1)
+n<-4/sd^2
+
+##Calculate average histogram for Head and Neck
+Nexp<-9
+Nbins<-8
+p<-matrix(0,Nexp,Nbins)
+p[1,] <- c(0.1, 0.3, 0.5, 0.1, 0, 0, 0, 0)
+p[2,] <- c(0.1, 0.1, 0.25, 0.25, 0.2, 0.1, 0, 0)
+p[3,] <- c(0, 0, 0.4, 0.4, 0.15, 0.05, 0, 0)
+p[4,] <- c(0, 0, 0.2, 0.3, 0.3, 0.1, 0, 0)
+p[5,] <- c(0, 0, 0.2, 0.2, 0.6, 0, 0, 0)
+p[6,] <- c(0.05, 0.05, 0.1, 0.15, 0.2, 0.25, 0.1, 0.05)
+p[7,] <- c(0, 0, 0, 0.1, 0.2, 0.4, 0.3, 0)
+p[8,] <- c(0, 0, 0, 0.1, 0.2, 0.4, 0.2, 0.1)
+p[9,] <- c(0, 0, 0, 0, 0.1, 0.5, 0.3, 0.1)
+bins <- c(-0.1, -0.05, 0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3 )
+
+ave<-rep(0,Nbins)
+for(i in 1:Nbins){
+  ave[i]<-mean(p[,i])
+}
+
+base<-.45
+transbins<- log(log(base+bins)/ log(base))
+
+#  shift direction of histogram
+aveneck<-ave[Nbins:1]
+transbinsX<-transbins[(Nbins+1):1] #########
+
+heights<-rep(0,Nbins)
+mom1<- mom2<- 0
+for(i in 1:Nbins){
+  heights[i]<-aveneck[i]/(transbinsX[i+1]-transbinsX[i])
+  mom1<-mom1+heights[i]*(transbinsX[i+1]^2-transbinsX[i]^2)/2
+  mom2<-mom2+heights[i]*(transbinsX[i+1]^3-transbinsX[i]^3)/3
+}
+sd<-sqrt(mom2-mom1*mom1)
+n<-4/sd^2
+
+# Make the plot
+s <- 2
+# clinical and histogram priors  for two trials
+mean <- c(-0.277, -.324 )  # fitted means 
+n <- c(74.6,59.8)          # fitted n's
+scept.n<-c(110,54)
+lab <- c("","") ##c("Lung trial", "Head-and-neck trial" )
+
+for(i in 1:2) {
+  x <- davidplot(ymax = 2, transformation = "log", x.label = 
+                   " favours CHART   <-     Hazard ratio     -> favours control ",
+                 x.ticks = seq(0.4, 1.7, by = 0.1), plot.label = lab[
+                   i], xm = mean[i], sigma = s, n = n[i], deltaI = 0,
+                 tail.areas=T,areastrings=c("Clinical prior: CHART superior survival",
+                                            "Clinical prior: Control superior survival"),legend=F,
+                 boxtoprightscale =   c(0.8,.95),
+                 boxbottomleftscale = c(0.1,.85),
+                 areadigits=3,
+                 box=N,cex=.9)
+  if(i==1){aveplot<-avelung}
+  if(i==2){aveplot<-aveneck} 
+  addhist(transbinsX,aveplot)
+}
+@
+\end{ExampleBox}
+
+\section{Critique of prior elicitation}
+\label{sec:priorcritique}
+\index{prior elicitation!critique of} 
+ There have been many criticisms of the process of eliciting subjective
+prior distributions in the  context of health-care evaluation, and  claims include:
+\begin{enumerate}
+
+\item \textit{Subjects are biased in their opinions:} 
+\index{prior elicitation!bias in subjects} 
+  \citet{gilbert:mcpeek:mosteller:77} state that \textit{`innovations brought to the stage of randomised trials are usually
+expected by the innovators to be sure winners'}, while the very fact that clinicians are
+participating in a trial is likely to suggest they expect the new
+therapy to be of benefit \citep{hughes:91} (we shall see that  this appears to be borne out in the
+results to be shown in \tabref{tab:priorcrit}).      \citet{altman:94}
+warns that investigators may even begin to exaggerate their prior
+beliefs in order to make their prospective trial appear more attractive
+(although we could   claim this   already happens both in public and
+industry-funded studies).
+  \citet{fisher:96} believes the effort put into elicitation is misplaced, since 
+the measured beliefs are likely to be based more on emotion than scientific evidence.
+
+
+\item \textit{The choice of subject biases results:}
+\index{prior elicitation!biased choice of subjects} 
+The biases discussed in \secref{sec:priors-elicitation} mean that the choice of subject for elicitation
+is likely to influence the results.   If we wish to know the distribution of
+opinions among well-informed clinicians, then   trial investigators 
+are not a random sample and may give biased conclusions.  \citet{fayers:etal:00}
+provide a detailed case study in which there is  clear over-optimism of   investigators (see \egref{eg:ex5gastric}).
+  \citet{lewis:94} says statisticians reviewing the literature may well provide much
+ better prior distributions than clinicians, while   \citet{chalmers:97} suggests
+even lay people also are biased towards believing new therapies will be advances, and 
+therefore we need empirical evidence on which to base the prior probability
+of superiority. 
+   \citet{pocock:94} states that the 
+\index{Pocock, S.}
+\textit{`hardened sceptical trialist, 
+the hopeful clinician and the optimistic
+pharmaceutical company will inevitably have grossly different priors'}.
+An extreme view is that       uncertainty as to whose prior to use militates 
+against any use of Bayesian methods \citep{fisher:96}.
+
+
+
+\index{prior elicitation!timing} 
+\item \textit{Timing of elicitation has an influence:}
+  \citet{senn:97} objects to any retrospective elicitation of priors
+as 
+\index{Senn, S.}
+\textit{`present remembrance of priors past is not the same as a true prior'},
+while    \citet{hughes:91} points out that opinions are likely to be biased 
+by what evidence has recently been presented and by whom.
+
+\end{enumerate}
+
+ 
+These concerns have led to a call for the evidential basis for priors
+to be made explicit, and for effort to go into identifying reasons for disagreement
+and attempting to resolve these \citep{fisher:96}.   
+  Even advocates
+of Bayesian methods have suggested that the biases in clinical priors suggest
+more attention should be paid to   empirical evidence from past trials, 
+possibly represented as   priors expressing a degree of scepticism concerning large effects:    \citet{fayers:94} asks,
+given the long experience of negative trials, \textit{`should we not be using
+priors strongly centred around 0, irrespective of initial opinions, beliefs and hopes of clinicians?'}.  
+\index{sceptical prior distribution} 
+\index{Fayers, P.}
+Our view is similar:     elicited priors from investigators show
+predictable positive bias and should  be supplemented, if not replaced,
+by priors that are either based on evidence or reflect archetypal views of `scepticism' or  `enthusiasm'.   Taking context into account
+  (\secref{sec:context}) means that it is quite
+reasonable to allow for differing perspectives, and in many cases substantial effort in careful 
+elicitation from representative clinicians may    not be worthwhile.
+ 
+  
+
+ 
+
+
+\section{Summary of external evidence *}
+\label{sec:priors-evidence}
+\index{prior distribution!use of external evidence}
+\label{sec:meth-historical}
+\index{historical evidence}
+\index{historical evidence!and prior distributions}
+
+
+If the results of previous similar studies are available it is clear they
+   may be used as the basis for a prior distribution.  
+Suppose, for example,  we have historical data $y_1,\ldots,y_H$ each assumed to \change[gb]{have a normal likelihood}{be associated with a normal sampling distribution}  $$y_h     \sim   \mathrm{N}(\theta_h  , \sigma^2_h),$$
+where each of these estimates could itself be   based on a pooled set of studies.
+Numerous options are available for specifying the relationship between $\theta_h, h=1,\ldots,H$ and $\theta$, the   parameter of interest, and we shall expand on the list given in \secref{sec:historical}.
+Each option is represented graphically in \figref{fig:histdata} using a similar convention as in \secref{sec:winbugs}: these approaches for handling historical data are also considered 
+when considering  historical controls   in randomised
+trials (\secref{sec:rct-histcontrols}), modelling the potential biases in observational studies (\secref{sec:bias}), and in pooling data from many sources in an evidence synthesis (\secref{sec:meta}). 
+
+\begin{figure}[!H]
+\centering
+\begin{tikzpicture}[color=black]
+\draw(0,.2) node[align=center,rectangle,text width=.5cm,draw=fill,font=\sffamily](1){$y_1$};
+\node[right=2cm of 1, align=center,circle,text width=.25cm,draw=fill,font=\sffamily](2){$\theta_1$};
+\node[below=.1cm of 1, align=center,rectangle,font=\sffamily](3){$\vdots$};
+\node[right=2.4cm of 3, align=center,rectangle,font=\sffamily](4){$\vdots$};
+\node[below=.24cm of 3, align=center,rectangle,text width=.5cm,draw=fill,tfont=\sffamily](5){$y_H$};
+\node[below=.1cm of 4, align=center,circle,text width=.25cm,draw=fill,font=\sffamily](6){$\theta_H$};
+\node[right=2.6cm of 4, align=center,circle,text width=.25cm,draw=fill,font=\sffamily](7){$\theta$};
+\node[right=2cm of 7, align=center,rectangle,dotted,text width=.5cm,draw=fill,thick,font=\sffamily](8){$y$};
+\node[left=1cm of 3,align=left,rectangle,rounded corners,text width=3cm,font=\sffamily\fontsize{9}{9}\selectfont](a){(a) Irrelevance};
+\node[above=.8cm of 1,align=center,rectangle,rounded corners,text width=1.5cm,font=\sffamily\fontsize{9}{9}\selectfont](b){Historical data};
+\node[right=of b,align=center,rectangle,rounded corners,text width=1.8cm,font=\sffamily\fontsize{9}{9}\selectfont](c){Historical parameters};
+\node[right=of c,align=center,rectangle,rounded corners,text width=1.8cm,font=\sffamily\fontsize{9}{9}\selectfont](d){Parameter of interest};
+\node[right=of d,align=center,rectangle,rounded corners,text width=1.4cm,font=\sffamily\fontsize{9}{9}\selectfont](e){(Current data)};
+
+\node[below=.8cm of 5, align=center,circle,text width=.25cm,draw=fill,font=\sffamily](9){$y_1$};
+\node[right=2cm of 9, align=center,circle,text width=.25cm,draw=fill,font=\sffamily](10){$\theta_1$};
+\node[below=.1cm of 9, align=center,rectangle,font=\sffamily](11){$\vdots$};
+\node[right=2.4cm of 11, align=center,rectangle,font=\sffamily](12){$\vdots$};
+\node[below=.24cm of 11, align=center,rectangle,text width=.5cm,draw=fill,tfont=\sffamily](13){$y_H$};
+\node[below=.1cm of 12, align=center,circle,text width=.25cm,draw=fill,font=\sffamily](14){$\theta_H$};
+\node[right=2.6cm of 12, align=center,circle,text width=.25cm,draw=fill,font=\sffamily](15){$\theta$};
+\node[right=2cm of 15, align=center,rectangle,text width=.5cm,dotted,thick,draw=fill,font=\sffamily](16){$y$};
+\node[left=1cm of 15, align=center,circle,text width=.25cm,draw=fill,font=\sffamily](17){$\mu$};
+\node[left=1cm of 11,align=left,rectangle,rounded corners,text width=3cm,font=\sffamily\fontsize{9}{9}\selectfont](f){(b) Exchangeable};
+
+\node[below=.8cm of 13, align=center,rectangle,text width=.5cm,draw=fill,font=\sffamily](18){$y_1$};
+\node[right=2cm of 18, align=center,circle,text width=.25cm,draw=fill,font=\sffamily](19){$\theta_1$};
+\node[below=.1cm of 18, align=center,rectangle,font=\sffamily](20){$\vdots$};
+\node[right=2.4cm of 20, align=center,rectangle,font=\sffamily](21){$\vdots$};
+\node[below=.24cm of 20, align=center,rectangle,text width=.5cm,draw=fill,tfont=\sffamily](22){$y_H$};
+\node[below=.1cm of 21, align=center,circle,text width=.25cm,draw=fill,font=\sffamily](23){$\theta_H$};
+\node[right=2.6cm of 21, align=center,circle,text width=.25cm,draw=fill,font=\sffamily](24){$\theta$};
+\node[right=2cm of 24, align=center,rectangle,text width=.5cm,draw=fill,thick,dotted,font=\sffamily](25){$y$};
+\node[left=1cm of 20,align=left,rectangle,rounded corners,text width=3cm,font=\sffamily\fontsize{9}{9}\selectfont](g){(c) Potential\par biases};
+
+\node[below=.8cm of 22, align=center,rectangle,text width=.5cm,draw=fill,font=\sffamily](26){$y_1$};
+\node[below=.1cm of 26, align=center,rectangle,font=\sffamily](27){$\vdots$};
+\node[below=.1cm of 27, align=center,rectangle,text width=.5cm,draw=fill,tfont=\sffamily](28){$y_H$};
+\node[right=5.4cm of 27, align=center,circle,text width=.25cm,draw=fill,font=\sffamily](29){$\theta$};
+\node[right=2cm of 29, align=center,rectangle,text width=.5cm,draw=fill,dotted,thick,font=\sffamily](30){$y$};
+\node[left=1cm of 27,align=left,rectangle,rounded corners,text width=3cm,font=\sffamily\fontsize{9}{9}\selectfont](h){(d) Equal but \par discounted};
+
+\node[below=.8cm of 28, align=center,rectangle,text width=.5cm,draw=fill,font=\sffamily](31){$y_1$};
+\node[right=2cm of 31, align=center,circle,text width=.25cm,draw=fill,font=\sffamily](32){$\theta_1$};
+\node[below=.1cm of 31, align=center,rectangle,font=\sffamily](33){$\vdots$};
+\node[right=2.4cm of 33, align=center,rectangle,font=\sffamily](34){$\vdots$};
+\node[below=.24cm of 33, align=center,rectangle,text width=.5cm,draw=fill,tfont=\sffamily](35){$y_H$};
+\node[below=.1cm of 34, align=center,circle,text width=.25cm,draw=fill,font=\sffamily](36){$\theta_H$};
+\node[right=2.6cm of 34, align=center,circle,text width=.25cm,draw=fill,font=\sffamily](37){$\theta$};
+\node[right=2cm of 37, align=center,rectangle,text width=.5cm,draw=fill,dotted,thick,font=\sffamily](38){$y$};
+\node[left=1cm of 33,align=left,rectangle,rounded corners,text width=3cm,font=\sffamily\fontsize{9}{9}\selectfont](i){(e) Functional\par dependence};
+
+\node[below=.8cm of 35, align=center,rectangle,text width=.5cm,draw=fill,font=\sffamily](39){$y_1$};
+\node[below=.1cm of 39, align=center,rectangle,font=\sffamily](40){$\vdots$};
+\node[below=.1cm of 40, align=center,rectangle,text width=.5cm,draw=fill,tfont=\sffamily](41){$y_H$};
+\node[right=5.4cm of 40, align=center,circle,text width=.25cm,draw=fill,font=\sffamily](42){$\theta$};
+\node[right=2cm of 42, align=center,rectangle,text width=.5cm,draw=fill,dotted,thick,font=\sffamily](43){$y$};
+\node[left=1cm of 40,align=left,rectangle,rounded corners,text width=3cm,font=\sffamily\fontsize{9}{9}\selectfont](l){(f) Equal};
+
+\draw [->,>=latex,shorten >=0pt,auto,node distance=3cm,ultra thin] (2.west) -- (1.east);
+\draw [->,>=latex,shorten >=0pt,auto,node distance=3cm,ultra thin] (6.west) -- (5.east);
+\draw [->,>=latex,dotted,shorten >=0pt,auto,node distance=3cm,thick] (7.east) -- (8.west);
+
+\draw [->,>=latex,shorten >=0pt,auto,node distance=3cm,ultra thin] (10.west) -- (9.east);
+\draw [->,>=latex,shorten >=0pt,auto,node distance=3cm,ultra thin] (14.west) -- (13.east);
+\draw [->,>=latex,dotted,shorten >=0pt,auto,node distance=3cm,thick] (15.east) -- (16.west);
+\draw [->,>=latex,shorten >=0pt,auto,node distance=3cm,ultra thin] (15.west) -- (17.east);
+\draw [->,>=latex,shorten >=0pt,auto,node distance=3cm,ultra thin] (17.150) -- (10.320);
+\draw [->,>=latex,shorten >=0pt,auto,node distance=3cm,ultra thin] (17.210) -- (14.30);
+
+\draw [->,>=latex,shorten >=0pt,auto,node distance=3cm,ultra thin] (19.west) -- (18.east);
+\draw [->,>=latex,shorten >=0pt,auto,node distance=3cm,ultra thin] (23.west) -- (22.east);
+\draw [->,>=latex,shorten >=0pt,auto,node distance=3cm,ultra thin] (24.200) -- (23.30);
+\draw [->,>=latex,shorten >=0pt,auto,node distance=3cm,ultra thin] (24.160) -- (19.340);
+\draw [->,>=latex,dotted,shorten >=0pt,auto,node distance=3cm,thick] (24.east) -- (25.west);
+
+\draw [->,>=latex,dotted,shorten >=0pt,auto,node distance=3cm,thick] (29.east) -- (30.west);
+\draw [->,>=latex,->,decorate,decoration=snake] (29.150) -- (26.0);
+\draw [->,>=latex,->,decorate,decoration=snake] (29.210) -- (28.0);
+
+\draw [->,>=latex,shorten >=0pt,auto,node distance=3cm,ultra thin] (32.west) -- (31.east);
+\draw [->,>=latex,shorten >=0pt,auto,node distance=3cm,ultra thin] (36.west) -- (35.east);
+\draw [->,>=latex,dotted,shorten >=0pt,auto,node distance=3cm,thick] (37.east) -- (38.west);
+\draw [->,>=latex,double,shorten >=0pt,auto,node distance=3cm,thick] (32.350) -- (37.160);
+\draw [->,>=latex,double,shorten >=0pt,auto,node distance=3cm,thick] (36.10) -- (37.200);
+
+\draw [->,>=latex,dotted,shorten >=0pt,auto,node distance=3cm,thick] (42.east) -- (43.west);
+\draw [->,>=latex,shorten >=0pt,auto,node distance=3cm,ultra thin] (42.160) -- (39.east);
+\draw [->,>=latex,shorten >=0pt,auto,node distance=3cm,ultra thin] (42.200) -- (41.east);
+
+\end{tikzpicture}
+\caption{Different assumptions relating parameters underlying historical data to parameter of current interest: single arrows represent a distribution, double arrows represent logical functions, and wobbly arrows represent discounting.}
+\label{fig:histdata}
+\end{figure}
+
+\newpage
+\begin{description}
+\item [(a) Irrelevance:] Each $\theta_h$ is of no relevance to $\theta$, and
+the prior will need to be formulated without references to previous studies.
+\item [(b) Exchangeable:] 
+
+\index{exchangeability!and historical data}
+We might be willing to assume
+$\theta_h, h=1,..,H$ and $\theta$ are exchangeable  so that, for example,
+ $$  \theta_h , \theta     \sim   \mathrm{N}(\mu , \tau^2).$$
+This leads to a direct use of a meta-analysis 
+of many previous studies.
+
+ It is important to note that the appropriate prior distribution 
+for $\theta$ is the 
+predictive distribution of the effect $\theta$ in a new study, and not the 
+posterior distribution of the `average' effect $\mu$. In particular,
+assuming $\tau$ is known and adopting a uniform prior for $\mu$ before the historical studies, we have from \secref{sec:profile} that the posterior
+distribution for $\mu$ given the historical studies is
+$$\mu \mid y_1,..,y_H  \sim {\rm N}\left( \frac{ \sum_h y_h w_h }{ \sum_h w_h}, \frac{1}{ \sum_h w_h} \right)$$
+where $w_h =1/(\sigma^2_h + \tau^2)$.  Hence the prior distribution for
+$\theta$ is $$\theta \mid y_1,..,y_H  \sim {\rm N}\left(  \frac{ \sum_h y_h w_h }{ \sum_h w_h}, \frac{1}{ \sum_h w_h} + \tau^2\right).$$
+If there is just a single historical study $h$, then
+$$\theta \mid y_h  \sim {\rm N}(  y_h, 2 \tau^2 + \sigma_h^2).$$
+In general  $\tau$ will be unknown and need to be estimated, although with few historical studies it will need to be assumed known or
+be given an informative prior distribution.
+\index{prior distribution!from exchangeable historical data}
+
+Exchangeability is quite a strong assumption, but 
+if this is reasonable then it is possible to use  
+databases 
+\index{prior distribution!using databases}
+to provide prior distributions  \citep{gilbert:mcpeek:mosteller:77}.
+\citet{lau:schmid:chalmers:95} point out that cumulative
+meta-analysis can be given a Bayesian interpretation 
+\index{meta-analysis!Bayesian interpretation of cumulative}
+ in which the prior
+for each trial is obtained from the meta-analysis of preceding studies, while   \citet{dersimonian:96} derives priors for a trial of
+the effectiveness of  calcium
+               supplementation in the  prevention of pre-eclampsia in
+               pregnant women by a   meta-analysis of previous trials
+               using both random effects and fixed effects models. 
+
+%\citep{schmid:cappelari:lau:98}
+
+
+\item [(c) Potential biases:] 
+\index{historical evidence!with potential biases}
+\index{prior distribution!from biased historical data} 
+\index{bias modelling!in prior}
+ We could assume that $\theta_h, h=1,\ldots ,H$ are functions of $\theta$. A common choice is the existence of a bias $\delta_h$
+so that $\theta_h=\theta + \delta_h$: possibilities   then include
+assuming -
+\begin{enumerate}
+\item $\delta_h$ is known.
+\item $\delta_h$ has a known distribution with mean 0, say $\delta_h   \sim   \mathrm{N}( 0, \sigma^2_{\delta h})$, and so   $\theta_h   \sim   \mathrm{N}( \theta, \sigma^2_{\delta h})$.  This is now almost identical to the exchangeability
+assumption, except that the previous study parameters are centred around the
+parameter of interest $\theta$ and not the population mean $\mu$, and the potential size of the bias may be study-specific.  Adapting the results for the 
+exchangeability case reveals that the posterior distribution for
+$\theta$ given the historical studies is
+$$\theta \mid y_1,\ldots,y_H  \sim {\rm N}\left(   \frac{ \sum_h y_h w_h' }{ \sum_h w_h'}, \frac{1}{ \sum_h w_h'}\right)$$
+where $w_h'  =1/(\sigma_h^2+\sigma^2_{\delta h})$, which follows by noting the 
+the predictive distribution $y_h  \sim {\rm N}(\theta, \sigma_h^2+\sigma^2_{\delta h} ).$
+If there is just a single historical study $h$, then
+$$\theta \mid y_h  \sim {\rm N}(  y_h, \sigma_h^2+\sigma^2_{\delta h}):$$
+again, with only one historical study $\sigma^2_\delta $ will need to be assumed known or
+have a strong prior distribution.
+
+\item  If we suspect systematic bias in one direction, we might take $\delta_h$ to have a known distribution with non-zero mean, say $\delta_h   \sim   \mathrm{N}(\mu_\delta, \sigma^2_{\delta h}).$ 
+We then obtain a prior distribution, for a single historical study,
+$$\theta     \sim   \mathrm{N}\left(y_h +\mu_\delta   , \sigma_h^2+\sigma^2_{\delta h} \right).$$
+
+\end{enumerate}
+
+
+\item [(d) Equal but discounted:]  
+\index{historical evidence!discounted}
+Previous  studies may not be   directly related to the one in question
+and we may wish to discount their influence: for example, in the context of control groups, \citet{kass:greenhouse:89} state that
+\index{Kass, R.}
+\index{Greenhouse, J.}
+\textit{`we wish to use this information, but we do not wish to use it as if the historical controls were simply a previous sample from the same population as the experimental controls'}.   
+\citet{ibrahim:chen:00} suggest the `power' prior,
+\index{prior distribution!power prior for discounting historical evidence@`power' prior for discounting historical evidence}
+ in which
+we assume $\theta_h$ = $\theta$, but  discount the historical evidence     by taking its
+likelihood $p(y_h\mid \theta_h) $ to a power $\alpha$.   For normal historical likelihoods this corresponds to 
+adopting a prior distribution for
+$\theta$ given the historical studies of
+$$\theta \mid y_1,..,y_H  \sim {\rm N}\left(  \frac{\sum_h y_h w_h'' }{ \sum_h w_h''}, \frac{1}{\alpha \sum_h w_h''}\right)$$
+where $w_h''  =1/\sigma^2_h$:
+$\alpha$ varies between  0 (totally discount past evidence)
+to 1 (include past evidence in its totality and at `face-value').
+If there is just a single historical study $h$, then
+$$\theta \mid y_h  \sim {\rm N}(  y_h,   \sigma_h^2/\alpha).$$
+
+%
+
+For example,    \citet{greenhouse:wasserman:95} downweight a previous trial
+with 176 subjects to be equivalent to only 10 subjects, and \citet{tan:etal:02} take $\alpha = 0.25$ in basing  a prior on a previous Phase III study:
+see \egref{eg:ex4GUSTO} for a detailed  illustration of using such 
+a `power' prior.  We note, however, that \citet{eddy:hasselblad:shachter:92}
+are very strong in their criticism of this method, claiming it does not 
+have any operational interpretation and hence no means of assessing a suitable value for $\alpha$.
+
+ 
+\item [(e) Functional dependence :] 
+\index{historical evidence!functional dependence}
+ It is possible that the parameter of interest may be logically expressed as a function of parameters from historical studies.  For example, suppose $\theta_1$ were the treatment effect 
+in men derived from a male-only study, and   $\theta_2$ were the treatment effect 
+in women derived from a female-only study.  Then the expected treatment effect in a
+study to be carried out in
+a population with proportion $p$ males would be $$\theta= p \theta_1 + (1-p) \theta_2,$$
+and a prior for $\theta$ could be derived from evidence on $\theta_1$ and
+$\theta_2$.
+
+
+\item [(f) Equal:] 
+This assumes the past studies have all been measuring
+identical parameters: if $\theta$ is a property of a single patient group rather than a treatment effect, this assumption
+ is essentially equivalent to direct pooling of the 
+past data with those in  the current study, and hence is based on the very strong assumption
+of exchangeability of individual patients. In our normal model  we would assume $\theta_h$ = $\theta$ and individuals are exchangeable, and so 
+completely pool the data to obtain a prior
+$$\theta \mid y_1,\ldots,y_H  \sim {\rm N}\left(  \frac{\sum_h y_h w_h'' }{ \sum_h w_h''}, \frac{1}{\sum_h w_h''}\right)$$
+where $w_h''  =1/\sigma^2_h$.  If there is just a single historical study $h$, then
+$$\theta \mid y_h  \sim {\rm N}(  y_h,   \sigma_h^2).$$
+
+Such a strong assumption may be more acceptable if a prior
+is to be used in the design and not the analysis, and  \citet{brown:etal:87}  provide such an example using data from a pilot trial.   
+
+
+\end{description}
+
+We note that, for the normal model, exchangeability (b), bias (c) and discounting (d) could under certain circumstances all lead to the same prior distribution for $\theta$ \textit{provided there is only one historical study.}  If there are multiple studies
+then these three approaches will generally all lead to different priors for
+$\theta.$
+
+Various combinations of these techniques are possible.
+For example,  \citet{berry:stangl:96}    assume a fixed probability $p$ that each historical patient 
+is exchangeable with  those in the current study, \ie either options (f) (complete pooling)
+\index{quality weights}
+\index{historical evidence!quality weights}
+with probability $p$, or option (a) (complete irrelevance)  with probability $1-p$.  \egref{eg:ex8HIPS1} illustrates the combination
+of an exchangeable and bias model:  a past parameter $\theta_h$ is assumed
+to have distribution $ \theta_h \sim \mbox{N}(\mu+\delta_h, \tau^2)$,
+where  the additional bias term has distribution   $\delta_h   \sim   \mathrm{N}( 0, \sigma^2_{\delta h})$.  Hence the overall likelihood
+contribution from the past study is
+$ \theta_h \sim {\rm N}(\mu, \tau^2+\sigma^2_{\delta h}):$
+the variance can also be expressed as $\tau^2/q_h$, where
+$ q_h = \tau^2/(\tau^2+\sigma^2_{\delta h})$ can be considered as
+a `quality weight' of the past study.  Values of $q_h$ near 1
+mean little bias, near 0 mean substantial bias.  This model formally justifies the use of `quality-weights' in random-effects meta-analysis.
+
+\begin{ExampleBox}
+\label{eg:ex4downw}\label{eg:ex4GUSTO}\index{GUSTO trial|emph}\ecaption{GUSTO: using previous results as a basis for prior opinion}
+
+{\slshape Reference:} \citet{brophy:joseph:95}, \citet{fryback:stout:rosenberg:01},
+\citet{harrell:shih:01}, 
+\citet{brophy:joseph:00},
+\citet{ibrahim:chen:00}.
+
+{\slshape Intervention:} Streptokinase (SK) compared to Tissue Plasminogen Activator (t-PA) to dissolve clots in occluded coronary arteries following a myocardial infarction.  t-PA is considerably more expensive than SK.
+
+{\slshape Aim of study:} Two previous trials of SK versus t-PA (GISSI-2
+and ISIS-3) showed minimal difference, although
+the stroke rate was consistently higher under t-PA.  %
+
+{\slshape Study design:} Parallel group unblinded randomised controlled trial, with
+two SK arms with different administrations of heparin (later pooled), t-PA arm
+and an arm with both SK and t-PA (ignored in this analysis).
+
+{\slshape Outcome measure:} Odds ratio (OR) of stroke and/or death, with OR $< 1$ 
+favouring t-PA.
+
+{\slshape Planned sample size:} The sample size of the GUSTO trial 
+was calculated on the basis of having 80\% power to detect a 15\% 
+relative reduction in the risk of death or a 1\% absolute decrease 
+at the 5\% significance level.
+
+{\slshape Statistical model:} 
+A normal likelihood was assumed based on the estimated log(odds-ratio) (\secref{sec:binary-normlike}) --- $\sigma$ has been taken as 2.
+
+{\slshape Prospective analysis?:} No.
+
+\index{prior distribution!power prior for discounting historical evidence@`power' prior for discounting historical evidence|emph}\index{log(odds ratio)!example of inference on|emph}It is natural to base, to some extent, a prior distribution on the two preceding trials, whose results are shown in \tabref{tab:GUSTOdata}, using data presented by \citet{brophy:joseph:95}. 
+
+\begin{table}[!h]
+\extablebegin
+\caption{Historical and observed data for GUSTO study. The $m$'s are the `effective number of events' in a balanced trial, obtained from setting the estimated variances of the log(OR)'s to $\sigma^2/m$: the $m$'s do not exactly match the actual number of events, particularly in GUSTO, due to imbalance in allocation.  The `pooled' results are obtained by  adding the $m$'s and weighting the log(OR)'s by their respective $m$'s: this pooled $m$ can be relabelled `$n_0$' if it is used as the basis for a prior distribution for GUSTO\label{tab:GUSTOdata}}{}{
+\fontsize{8}{9.5}\selectfont
+\begin{center}
+\begin{tabular*}{.95\textwidth}{@{\extracolsep{\fill}}lccccccc}
+\toprule
+Trial &  SK&\% &   TpA &\%  & OR &  log(OR) & $m$ (when\\
+      &  events/cases &&events/cases && &&$\sigma=2$)\\
+\midrule
+GISSI-2  & 985 / 10396 & 9.5\%& 1067 / 10372 & 10.3\% & 1.09 &0.09& 1847  \\
+ISIS-3   & 1596 / 13780 &11.6\%& 1513 / 13746 & 11.0\% &0.94& -0.06& 2757 \\
+\\
+Pooled & &&&   &   &0.0002 & $n_0$=4604  \\
+\\
+GUSTO  &  1574 / 20173 & 7.8\% & 714 / 10343& 6.9\%  & 0.88 & -0.13 & 1825  \\
+\botrule
+\end{tabular*}
+\end{center}}
+\extableend
+\end{table}
+%
+Taking the previous trials at full weight, the
+pooled previous trials give rise to a prior for GUSTO with mean
+0.0002 and standard deviation $\sigma/\sqrt{4604} =0.03$: a very sceptical prior indeed, with a 95\% interval for the OR of 0.94 to 1.06.
+ 
+However,  \citet{brophy:joseph:00} emphasise important 
+differences between the studies:   the GUSTO study
+featured an `accelerated' t-PA protocol, more aggressive use of intravenous heparin,
+increased revascularisation in the t-PA arm, and possible increased  
+t-PA benefit in US patients.  This suggests downweighting the prior
+evidence in some way, and different authors have subsequently used almost all the approaches outlined in
+\secref{sec:meth-historical}.  We shall focus on simple discounting (method (d)), but other methods
+are mentioned in {\slshape Comments}.
+
+\citet{brophy:joseph:95} `discounted' the 
+previous trials, essentially implementing the   power prior distributions of 
+\citet{ibrahim:chen:00}, which is equivalent to 
+adjusting the prior `number of events'
+  from $n_0$ to $\alpha n_0$.  They considered $\alpha$ to be 0, 0.1, 0.5, and 1.0,
+equivalent to taking the prior `number of events' to be 0, 460.4, 2302, and 4604.     
+Taking $\alpha=0$ is equivalent to treating the previous trials 
+as irrelevant (option (a)) and hence selecting a uniform prior on the
+log(OR), while taking $\alpha=1$ is equivalent to assuming the trials
+are measuring equal parameters (option (f)) - note that this is
+not equivalent to pooling the patients on each arm, but is equivalent to pooling
+the estimated treatment effects.
+
+{\slshape Loss function or demands:} The GUSTO trial was designed around a 15\% reduction in 
+mortality, so we might take an odds ratio of 0.85 to reflect a clinically important difference.
+
+{\slshape Computation/software:} Conjugate Normal model.
+
+{\slshape Evidence from study:} 
+This is provided in \tabref{tab:GUSTOdata}.  The standardised test 
+statistic based on the data alone is $z_m = y_m \sqrt{m}/\sigma = -0.13 \sqrt{1825}/2 = -2.78$, providing a two-sided $P$-value of 0.005.
+
+{\slshape Bayesian interpretation:}    
+\figref{fig:ex4GUSTO} shows   plots of prior, likelihood and posterior under different assumptions concerning $\alpha$, superimposed on
+a clinically important difference of 0.85.  The probability that t-PA is inferior to SK is very low unless the prior trials are considered at
+almost full weight.  However, it is clear that although GUSTO may show `statistical significance' in
+that the posterior probability that OR$<1$ is high, there is  not strong evidence of `practical significance', in that the
+  posterior probability that OR$<0.85$ is moderate even when the prior
+evidence is totally ignored.
+
+<<ex4GUSTO, fig.cap="Posterior estimate of the odds ratio for the GUSTO trial under different prior assumptions: weighting the previous trial results by a factor (a) 0\\% (\\ie the reference prior in which the posterior is proportional to the likelihood), (b) 10\\%, (c) 50\\% and (d) 100\\% (\\ie full pooling with the past data). The shaded area represents the posterior probability that the OR $> 1$ and hence favours SK, and is very low unless very high weight is given to the previous trials.  However, the chance of an odds ratio $<$ 0.85 is only moderate even when using the trial data alone, and drops severely for even 10\\% weighting of the past trial data.\\label{fig:ex4GUSTO}", fig.subcap=c('prior weight = 0\\%', 'prior weight = 10\\%','prior weight = 50\\%','prior weight = 100\\%'), fig.width=6,fig.height=5, out.width='50%', fig.ncol = 2>>=
+s <- 2
+lab<- rep(" ",4)
+torf <- c(T,F,F,F)
+# prior
+n0 <- c(0.001 , 460.4307, 2302.1535, 4604.3070)
+theta0 <- 0.00224304
+#likelihhod
+xm <- -0.132
+m <- 1824.6
+#posterior
+n  <- n0+m
+mean  <- (m * xm + n0 * theta0)/n 
+
+for (i in 1:4){
+  x <- davidplot(ymax = 16, transformation = "log",  x.label = 
+                   "favours t-PA  <-     Odds ratio        -> favours SK",
+                 x.ticks = seq(0.6, 1.3, by = 0.1), plot.label = lab[i],  xm = xm, sigma = s, n = m,deltaI = 0,deltaS=log(0.85),
+                 shade=0,density=30,angle=45,
+                 tail.areas=F, legend=torf[i],  boxtoprightscale =   c(0.4,1.00),
+                 boxbottomleftscale = c(0.0,0.95),
+                 legendlabelstring="Likelihood", 
+                 legendline=T,
+                 legendlabel=T,
+                 box=F,cex=.9)
+  
+  # prior printed second with big box
+  
+  addnorm(x=x, xm=theta0,   sigma=s,n=n0[i],  lty=2,   tail.areas=F,
+          legend=torf[i],  boxtoprightscale =   c(0.4,1.00),
+          boxbottomleftscale = c(0.0,0.75),
+          legendlabelstring="Prior",
+          legendline=T,
+          legendlabel=T,
+          box=F,cex=.9)
+  
+  #plot posterior
+  addnorm(x=x, xm=mean[i],  sigma=s,n=n[i],  lty=3,  tail.areas=F,
+          legend=torf[i],      boxtoprightscale =   c(0.4,0.90),
+          boxbottomleftscale = c(0.0,0.65),
+          legendlabelstring="Posterior", shade=3,density=30,angle=45,
+          legendline=T,
+          legendlabel=T,
+          box=F,cex=.9)
+} 
+@
+
+{\slshape Sensitivity analysis:}  
+\figref{fig:ex4GUSTOsens} shows changing conclusions as $\alpha$ ranges form 0 (ignore historical evidence) to 1 (completely pool with historical evidence).  This clearly shows evidence for benefit unless the past data is quite strongly weighted, but that even slight inclusion of past data serves to exclude a clinically important difference of 15\%.
+
+<<ex4GUSTOsens, fig.cap="Posterior estimate of the odds ratio for the GUSTO trial downweighting previous trial results by varying amounts ($\\alpha=0$ implies total discounting, whilst $\\alpha=1$ implies acceptance of previous evidence at `face-value')\\label{fig:ex4GUSTOsens}">>=
+X <- temp <- list()
+
+# Gissi data
+temp$sk.n <- 10396
+temp$tpa.n <- 10372
+temp$sk.d <- 929
+temp$tpa.d <- 993
+temp$sk.s <- 56
+temp$tpa.s <- 74
+temp$sk.ds <- 985
+temp$tpa.ds <- 1067
+X[[1]] <- temp
+
+# Isis data
+temp$sk.n <- 13780
+temp$tpa.n <- 13746
+temp$sk.d <- 1455
+temp$tpa.d <- 1418
+temp$sk.s <- 75
+temp$tpa.s <- 95
+temp$sk.ds <- 1596
+temp$tpa.ds <- 1513
+X[[2]] <- temp
+
+# Gusto data
+temp$sk.n <- 20173
+temp$tpa.n <- 10343
+temp$sk.d <- 1473
+temp$tpa.d <- 652
+temp$sk.s <- 101
+temp$tpa.s <- 62
+temp$sk.ds <- 1574
+temp$tpa.ds <- 714
+temp$tot.ds <- temp$sk.ds + temp$tpa.ds
+X[[3]] <- temp
+
+for (i in 1:3) {
+  X[[i]]$or.ds <- (X[[i]]$tpa.ds+.5) * (X[[i]]$sk.n-X[[i]]$sk.ds+.5) / ( (X[[i]]$sk.ds+0.5) *(X[[i]]$tpa.n-X[[i]]$tpa.ds+0.5) )
+  X[[i]]$lor.ds <-log( X[[i]]$or.ds )
+  X[[i]]$lor.se <- sqrt( 1/(X[[i]]$tpa.ds+0.5) + 1/(X[[i]]$sk.n-X[[i]]$sk.ds+0.5) + 1/(X[[i]]$sk.ds+0.5) + 1/(X[[i]]$tpa.n-X[[i]]$tpa.ds+0.5))
+  X[[i]]$lor.m<- (2/X[[i]]$lor.se)^2
+}
+
+# Marginal prior
+#With weight factor alpha, want prior, and posterior
+#Prior is weighteted average of first two trials
+
+alpha<-c(0,.1,.5,1)
+X$mprior$lor.ds <- (X[[1]]$lor.ds*X[[1]]$lor.m + X[[2]]$lor.ds*X[[2]]$lor.m)/(X[[1]]$lor.m + X[[2]]$lor.m)
+X$mprior$lor.m <- alpha *(X[[1]]$lor.m + X[[2]]$lor.m)
+X$mpost$lor.ds <- (X$mprior$lor.m*X$mprior$lor.ds + X[[3]]$lor.m*X[[3]]$lor.ds)/ (X$mprior$lor.m + X[[3]]$lor.m)
+X$mpost$lor.m <- X$mprior$lor.m + X[[3]]$lor.m
+##(These are figure to do plots of) 
+
+X$lor.x <- seq(-0.5,0.5,len=100)
+# plot(X$lor.x,dnorm(X$lor.x,mean=X[[3]]$lor.ds,sd=sqrt(X[[3]]$lor.var.ds)),type="l",xlab=" ",ylab=" ",axes=F)
+# lines(X$lor.x,dnorm(X$lor.x,mean=X$mprior$lor.ds,sd=sqrt(X$mprior$lor.var.ds)),lty=2)
+# lines(X$lor.x,dnorm(X$lor.x,mean=X$mpost$lor.ds,sd=sqrt(X$mpost$lor.var.ds)),lty=3)
+
+# Ibrahim method - using fixed alpha
+X$impost$alpha <- seq(0,1,len=100)
+### Hack to make the plot as the variable X$mprior$tot.ds is not there!!!
+X$mprior$tot.ds=temp$tot.ds+2400
+X$impost$lor.ds <- ((X$impost$alpha*X$mprior$tot.ds)*X$mprior$lor.ds + X[[3]]$tot.ds*X[[3]]$lor.ds)/((X$impost$alpha*X$mprior$tot.ds) + X[[3]]$tot.ds)
+X$impost$lor.var.ds <- 4/((X$impost$alpha*X$mprior$tot.ds) + X[[3]]$tot.ds)
+
+#plot(X$impost$alpha,X$impost$lor.ds,type="l",xlab=" ",ylab=" ",axes=F)
+#polygon(c(X$impost$alpha,rev(X$impost$alpha)),c(X$impost$lor.ds,rev(X$impost$lor.ds-1.96*sqrt(X$impost$lor.var.ds))),col=2)
+
+# odds ratio scale
+X$impost$or.ds <- exp(X$impost$lor.ds)
+X$impost$or.low.ds <- exp(X$impost$lor.ds-1.96*sqrt(X$impost$lor.var.ds))
+X$impost$or.up.ds <- exp(X$impost$lor.ds+1.96*sqrt(X$impost$lor.var.ds))
+
+plot(X$impost$alpha,X$impost$or.ds,type="l",xlab=expression(alpha),ylab="Odds ratio",axes=F,ylim=c(0.7,1.1))
+polygon(c(X$impost$alpha,rev(X$impost$alpha)),c(X$impost$or.up.ds,rev(X$impost$or.low.ds)),col="gray",border=F)
+lines(X$impost$alpha,X$impost$or.ds,lty=1)
+abline(h=1,lty=2)
+axis(side=1,at=c(0,0.25,0.5,0.75,1))
+axis(side=2,at=c(0.7,0.8,0.9,1.0,1.1))
+@
+
+{\slshape Comments:} 
+We can fit previous approaches to this problem within the structure outlined in
+\secref{sec:meth-historical}.
+\begin{enumerate}
+\item [\textbf{(a)}] \textbf{Irrelevance}:   \citet{harrell:shih:01} consider that the previous
+trials are entirely irrelevant to GUSTO due to the revised t-PA protocol, and so
+only consider a `reference'  and `sceptical' prior (\secref{sec:priors-default}):
+the reference prior is uniform on the log(OR) scale and hence the posterior distribution is the same shape as the likelihood, while the sceptical prior was centred on the null hypothesis of OR=1, and expressed 95\% belief that the true OR lay within 
+the bounds 0.75 to 1.33, \ie it is unlikely that there is more than a 25\% relative
+change between the treatments: this prior is even more diffuse than
+that shown in \figref{fig:ex4GUSTO}(b).  
+
+ \item[\textbf{(b)}] \textbf{Exchangeable}:  One of the models considered by \citet{brophy:joseph:00} assumes the treatment effects
+in the three trials are exchangeable, and place a normal population distribution on
+the three log(OR)'s - they use `diffuse' priors on the parameters of mean
+and variance of the normal population.  However, both the exchangeability assumption, and the attempt to estimate population parameters from just three trials (regardless of their size), make this prior formulation somewhat doubtful.
+%
+\item [\textbf{(c)}] \textbf{Potential biases}: In addition to acknowledging the possible systematic differences between the trials, \citet{brophy:joseph:00} also consider two possible sources of bias:  differences in revascularisation rates in GUSTO, and differences in t-PA administration between GUSTO and the previous trials.  These are applied to the hierarchical model described under `exchangeable'.
+
+\item [\textbf{(d)}] \textbf{Equal but discounted}:  In   a different application of the discounting approach,
+\citet{fryback:stout:rosenberg:01}  suggests the SK arm in GUSTO is reasonably compatible with the
+SK arm in previous trials, and so adopt $\alpha_C = 1/3$ for SK.  However
+they severely discount the t-PA arm from a sample size of around 24000 to one of 50, so that    $\alpha_T \approx 1/500$ for t-PA.  
+
+Now $\mbox{V}\left(\log(\rm{OR})\right) = \mbox{V}(\log O_C) + \mbox{V}(\log O_T) $, where $O_C, O_T$
+are the odds on death under SK and t-PA respectively.  With no discounting,
+$\mbox{V}(\log O_C) \approx \mbox{V}(\log O_T) =V$.  With differential discounting,
+$$\mbox{V}\left(\log(\rm{OR})\right) = \frac{\mbox{V}(\log O_C)}{\alpha_C} +  \frac{\mbox{V}(\log 
+O_T)}{\alpha_T}  \approx \mbox{V}   \left(\frac{1}{\alpha_C} +  
+\frac{1}{\alpha_T} \right).$$
+Thus the overall discount factor, relative to the 
+undiscounted variance of 2$V$,
+ is $\alpha = 2/(\alpha_C^{-1} + \alpha_T^{-1}) $
+which is the `harmonic mean' of the individual discounts.  
+%
+  Fryback \textit{et al}'s assumptions therefore lead to an overall discount factor of $2/(3 + 500) \approx 1/250$, which will have little impact on the likelihood. 
+%
+\item [\textbf{(f)}] \textbf{Equal}:  As an extreme of the discounting procedure, if we assume $\alpha=1$
+we are led  to completely pool   the results  of the three trials.
+
+\end{enumerate}
+
+\end{ExampleBox}
+\note[gb]{Here also some more on the new stuff with the people @ Novartis? (DJS?)}
+
+\section{Default priors} 
+\label{sec:priors-default}
+It would clearly be attractive to have
+prior distributions that could be taken `off-the-shelf', rather than
+having to consider all available evidence external to the
+study in their construction: such priors can, at a minimum, be considered as `baselines' against which to measure the impact of past evidence or subjective opinion.  Four main  suggestions can be identified:  
+ 
+
+\subsection{`Non-informative' or `reference' priors:} 
+\index{reference prior distribution!difficulty in specifying}
+\label{sec:priors-noninf}
+There has been a huge volume of
+research   into so-called \textit{non-informative} or \textit{reference} priors, that are intended to provide a 
+ kind of default or `objective' Bayesian analysis free from subjectivity.  \citet{kass:wasserman:96}  review the literature, but emphasise the 
+continuing difficulties in defining what is meant by `non-informative', and
+the lack of agreed reference priors in all but simple situations.
+
+In many situations we might adopt a uniform distribution over the range of interest, possibly on 
+a suitably transformed scale of the parameter \citep{box:tiao:73}.
+ Formally, a uniform distribution means the posterior distribution has
+the same shape as the likelihood function, which in turn means that the
+resulting Bayesian intervals and estimates will essentially match the
+traditional results.
+Results with   reference priors are generally quoted as one part of a  Bayesian
+analysis, and may even form the  main basis for inferences.  For example,   \citet{burton:94} suggests that most
+doctors interpret frequentist confidence intervals as credible intervals, and also that information external to a study tends to be vague, and that therefore results from a study should be presented by performing a Bayesian analysis with a non-informative prior and quoting posterior probabilities for the parameter of interest being in various regions. The fact that a reference prior may produce essentially identical conclusions to a classical analysis, and yet allow more flexible and intuitive presentations,  has led to  the use of what are essentially Bayesian methods but under names such as `confidence levels' \citep{shakespeare:etal:01}.
+
+\index{prior distribution!invariance arguments}  
+Invariance arguments may be used as a basis for reference priors \citep{jeffreys:61}: for example,
+if we feel a reference prior on an odds ratio OR should be the same whichever
+treatment is taken in the numerator of the odds ratio, then it means that the
+same prior should hold for OR and 1/OR, which means that we must be uniform
+on the log(OR) scale.  
+\index{prior distribution!for sampling variance}
+Similar arguments can be used to justify a uniform prior
+on log($\sigma^2$) for a sampling variance $\sigma^2$,  since this prior
+is also equivalent to a uniform prior on log($\sigma$) (or indeed any power of
+$\sigma$), and hence is invariant to whether one is working on the standard
+deviation or variance scale. This prior is equivalent
+to  assuming $ p(\sigma^2) \propto \sigma^{-2}$, or $ p(\sigma) \propto \sigma^{-1}$.  A standard result \citep{degroot:70,lee:97} is that, 
+for  normal likelihoods, this prior, combined with an independent uniform prior on the mean, gives rise to the familiar classical tail-areas based on a $t$-distribution.  
+
+\index{prior distribution!not uniform under transformation}  
+The real problem with `uniform' priors is that they are no longer uniform 
+if the parameter is transformed, which is well illustrated by the problem of assigning a reference prior to a probability $\theta$ of an event.   
+The classic solution, dating back to Bayes and Laplace in the 18th century, is to give a uniform prior for $\theta$, equivalent to a Beta(1,1).  From 
+the Beta-Binomial distribution (\secref{sec:predictions-binary})
+we can show this leads to a uniform distribution over the number $0,1,\ldots,n$ of 
+occurrences in $n$ Bernoulli trials, which might seem a 
+reasonable justification for its claim of `non-informative'.  However
+in many of our examples we place a uniform distribution over a log(odds)
+scale, \ie $\log[ \theta/(1-\theta)]$ has a uniform distribution (see Figure~\ref{fig:jeffreys}).  It can be shown 
+that this is equivalent to a Beta(0,0) distribution for $\theta$ --- an improper
+distribution that strongly favours values of $\theta$ near 0 or 1.  As an intermediate suggestion, invariance arguments \citep{box:tiao:73} have led to the use of a Beta(0.5,0.5) prior, which is proper but still favours extreme values of $\theta$ (\secref{sec:beta}).  Of course all these priors will give essentially the same result with reasonable size data, but could have some influence with rare events.
+
+<<jeffreys, fig.cap="Jeffreys' prior for the parameter $\\theta$, representing a probability of success in $n$ Bernoulli trials">>=
+plot(seq(0,1,.0001),dbeta(seq(0,1,.0001),.5,.5),t="l",axes=F,xlab=expression(theta),ylab="Jeffreys' prior")
+axis(1);axis(2)
+@
+
+
+Even when  one has chosen a suitable scale for a uniform prior, it may be
+inappropriate to term it `non-informative':    \citet{fisher:96}
+points out that \textit{`there is no such thing as a `noninformative' prior.  Even improper priors give information: all possible values are equally likely'}.
+There is a particular difficulty in assigning such a `reference' prior
+to random-effect variances in hierarchical models, and we shall consider this issue in 
+\secref{sec:prior-hierarchical}.
+
+\subsection{`Weakly informative' priors (NEW)}
+`Weakly informative' priors \citep{Gelman:2006,Gelmanetal:2008} are aimed at overcoming some of the limitations of reference priors. The basic idea is that even when it is perfectly plausible to assume that in practice the researcher may not have strong prior knowledge so as to turn it into a clearly defined and uncontroversional informative prior distribution, there still may be enough information on some basic features of the parameter of interest. 
+
+For instance, when setting up a model for a logistic regression, the parameters of interest are the coefficients $\beta_1,\ldots,\beta_K$ of the $K$ covariates included in the logit-linear predictor, each identifying the log odds ratio associated with the covariates. While there may not be strong information to determine their value precisely, the argument is that we can realistically (and relatively uncontroversially) assume that it is rather unlikely to observe `extreme' values for the resulting odds ratios. In practice, when assessing the effect of health care interventions, it is rare to imagine that the prior range of the log OR is in fact $(-\infty; \infty)$ as implied by \eg a normal prior with very large variance. 
+
+While avoding strong assumptions that may be difficult to justify, weakly informative effectively restrict the range of the underlying model parameters and are often sufficient to regularise the extreme inference that can be obtained using maximum likelihood estimates or reference priors in a Bayesian analysis. A typical example is that of `separation' in logistic regression \citep{Gelmanetal:2008}. 
+
+\subsection{`Penalised complexity' priors (NEW)}
+\citet{Simpsonetal:2017} have recently introduced the concept of `penalised complexity' (PC) prior. This is closely related to the idea of using ``default'' distributional assumptions and the basic idea is that PC priors can be constructed to penalise deviations from (\ie added complexity in comparison to) the simpler, base model. 
+
+PC priors are based on four principles, underlying the features that \citet{Simpsonetal:2017} regard as desirable for a prior distribution in order for it to not influence the results unduly (\ie over and above the impact of the data). The first principle is the philosophical idea of ``Occam's razor'', which suggests that modelling assumptions that are overlycomplicated should be discarded in favour of simpler ones, until there is enough support for the more complex version of the model. The way in which ``complexity'' is measured in the framework of PC priors is through the Kullback-Leibler divergence (KLD), generically defined as
+\[ \mbox{KLD}(f,g) = \int f(x)\log\left( \frac{f(x)}{g(x)} \right)dx \]
+which is a measure of the information lost when some base model $g$ is used as a, possibly rough, approximation to a more complex model $f$, which includes some additional parameter $\xi$.
+
+A scaled version of the KLD $d(f,g)=\sqrt{2\mbox{KLD}(f,g)}$ is used as a measure of \textit{distance} between two competing models. Assuming a constant rate of penalisation for increasingly complex models, essentially implies an Exponential distribution on the distance scale, $d$: $p(d) = \lambda \exp(-\lambda d)$. This corresponds to a prior on the parameter $\xi$, which can be constructed in the form
+\[ p(\xi) = \lambda e^{-\lambda d(\xi)}\left\lvert \frac{\partial d(\xi)}{\partial \xi} \right\rvert. \]
+\citet{Simpsonetal:2017} suggest that the parameter $\lambda$ could be selected so as to control the prior mass in the tail of the resulting distribution for $\xi$.
+
+As a simple example, consider a scenario in which binary data are recorded for a set of individuals, $y_i \sim \mbox{Bern}(\theta)$. We can consider as a ``base-case'' model the simple scenario in which $\theta=0.5$ and thus consider $g=\mbox{Bern}(0.5)$. We want to contrast this with the more flexible (and realistic) case in which $\theta$ is unknown and can take on the values in $[0; 1]$, \ie considering $f=\mbox{Bern}(\theta)$. 
+
+If we compute KLD$(f,g)$ and then rescale it to produce the distance, we obtain
+\[ d(\theta) = \sqrt{2\theta\log(2\theta)+2(1-\theta)\log(2(1-\theta))}. \]
+Differentiating $d(\theta)$ with respect to $\theta$, we can derive the PC prior for $\theta$ as 
+\[ p(\theta) = \lambda e^{-\lambda d(\theta)} \left\lvert \frac{1}{d(\theta)}\log\left(\frac{\theta}{1-\theta}\right) \right\rvert.\]
+Figure~\ref{fig:pc_prior} shows the resulting PC prior for a value of $\lambda=1$ --- we can use trial and error and numerical approximation to determine that this choice implies that about 30\% of the probability mass exceed some arbitrary threshold of 0.75. In other words, this prior encodes the assumption that we place around 70\% chance on the fact that the underlying probability for the observed binary data is below 0.75, while keeping the impact of this prior to a minimum --- this can be appreciated by considering the very high probability associated with the tails of the resulting PC prior (cfr.~this with the Jeffreys' prior in Figure~\ref{fig:jeffreys}). 
+
+<<pc_prior, fig.cap='Example of PC priors for the parameter $\\theta$, indicating a probability for a Bernoulli experiment. Assuming a scaling factor $\\lambda=1$, generates the distribution depicted in the graph, which implies that we believe that $\\Pr(\\theta>0.75)=0.3$'>>=
+#,fig.subcap=c('$\\lambda=0.01$','$\\lambda=1$'), fig.ncol=2,out.width='55%'
+theta=seq(0,1,.0001)
+pc_prior=function(theta){
+  lambda=1
+  d=sqrt(2*theta*log(2*theta) + 2*(1-theta)*log(2*(1-theta)))
+  deriv=abs((log(theta)-log(1-theta))/d)
+  x=lambda*exp(-lambda*d)*deriv
+  return(x)
+}
+u=seq(0.5,.99,.01)
+cond=lapply(u,function(x) integrate(pc_prior,x,1))
+probs=unlist(lapply(cond, `[[`,1))
+alpha=0.3
+uval=u[min(which(probs<=alpha))]
+plot(theta,pc_prior(theta),t="l",xlab=expression(theta),ylab="PC Prior",axes=F,col="white")
+polygon(c(uval,theta[theta>=uval & theta<=.97],1),c(0,pc_prior(theta)[theta>=uval & theta<=.97],0), col="dark grey",border=NA,lwd=2)
+polygon(c(1,theta[theta>=.97]),c(0,pc_prior(theta)[theta>=.97]), col="dark grey",border=NA,lwd=2)
+points(theta,pc_prior(theta),t="l",lwd=2)
+axis(1);axis(2)
+txt=bquote("Pr(" ~ theta ~ ">"~.(uval)~")="~.(alpha))
+text(.8,.65*par()$usr[4],txt)
+# 
+# pc_prior=function(theta){
+#   lambda=10
+#   d=sqrt(2*theta*log(2*theta) + 2*(1-theta)*log(2*(1-theta)))
+#   deriv=abs((log(theta)-log(1-theta))/d)
+#   x=lambda*exp(-lambda*d)*deriv
+#   return(x)
+# }
+# u=seq(0.5,.99,.01)
+# cond=lapply(u,function(x) integrate(pc_prior,x,1))
+# probs=unlist(lapply(cond, `[[`,1))
+# alpha=0.3
+# uval=u[min(which(probs<=alpha))]
+# plot(theta,pc_prior(theta),t="l",xlab=expression(theta),ylab="PC Prior",axes=F,col="white")
+# polygon(c(theta[theta>=uval],1),c(0,pc_prior(theta)[theta>=uval]), col="dark grey",border=NA)
+# points(theta,pc_prior(theta),t="l",lwd=2)
+# axis(1);axis(2)
+# txt=bquote("Pr(" ~ theta ~ ">"~.(uval)~")="~.(alpha))
+# text(.8,.65*par()$usr[4],txt)
+@
+
+
+Among other features (and unlike Jeffreys' formulation), PC priors have the advantage of being invariant to reparameterisation and provide a principled way of including ``minimal information'' in the prior for the model parameters. On the other hand, they may not be straightforward to think about and require the specification of a ``base case'' prior model. PC priors are implemented in \texttt{INLA} as one of the options.
+
+\subsection{`Sceptical' priors}
+\label{sec:scepticalprior}
+ 
+\index{sceptical prior distribution!suggested form}
+Informative priors that express scepticism about large treatment effects have been put forward both as a reasonable  expression of doubt, and as a way of controlling early stopping of trials on the basis of fortuitously positive results (\secref{sec:monitoringpost}). \citet{kass:greenhouse:89} suggest that a \textit{`cautious reasonable sceptic will recommend action only on the basis of fairly firm knowledge'}, but that these sceptical \textit{`beliefs we specify need not be our own, nor need they be the beliefs of any actual person we happen to know, nor derived in some way from any group of ``experts"'}. \index{Kass, R.} \index{Greenhouse, J.} 
+
+Mathematically speaking a sceptical prior about a treatment effect will have a mean of zero and a shape chosen    to include   plausible treatment differences which determines the degree of scepticism. \citet{spiegelhalter:freedman:parmar:94} argue that a reasonable degree of scepticism may be   feeling  that the trial has been designed around an alternative hypothesis that is \textit{optimistic}, formalised by a prior with only a small probability $\gamma$ (say 5\%) that the treatment effect is as large as the alternative hypothesis $\theta_A$: see \figref{fig:scept}. \label{sec:meth-sceptical} \index{prior distribution!enthusiastic}
+
+Assuming a prior distribution  $\theta \sim {\rm N}(0, \sigma^2/n_0)$ and such that $p(\theta > \theta_A)$ is a small value $ \gamma$ implies $ \gamma = 1-\Phi(\theta_A\sqrt{n_0}/\sigma)$ and so   %
+\begin{equation}
+\label{eq:scept-thetaA}
+ -\sigma \, \frac{ z_\gamma}{\sqrt{n_0}}  = \theta_A,
+\end{equation}
+where  $\Phi(z_\gamma) = \gamma$.  Now suppose the trial has been designed with size $\alpha$ and power $1-\beta$ to detect an alternative hypothesis $\theta_A$.  Then  we have the standard relation \eqref{eq:samplesize} 
+\begin{equation}
+\label{eq:scept-n}
+ \sigma^2 \frac{(z_{\alpha/2} + z_\beta)^2}{\theta_A^2} = n 
+\end{equation}
+between the proposed sample size $n$  and
+$\theta_A$.
+Equating $\theta_A$ in \eqref{eq:scept-thetaA} and \eqref{eq:scept-n} gives
+%
+$$
+\frac{n_0}{n} = \left[ \frac{z_\gamma}{z_{\alpha/2} + z_\beta} \right] 
+^2.
+$$
+Reasonable values might be $\alpha = 0.05, \beta = 0.1$ and $\gamma = 0.05$, which
+gives $n_0/n = 0.257$.  
+
+
+Thus in a trial designed with 5\% size and 90\% power, such a sceptical prior corresponds to adding 
+a `handicap' equivalent to already having run a `pseudo-trial' \index{pseudo-trial} with no observed treatment difference, and which contains around 26\% of the proposed sample size.
+
+<<rssscept, fig.cap="Sceptical and enthusiastic priors for a trial with alternative hypothesis $\\theta_A$. The sceptics' probability that the true difference is greater than $\\theta_A$ is $\\gamma$ (shown shaded).  This value has also been chosen for the enthusiasts' probability that the true difference is~less~than~0.} \\label{fig:scept}",fig.width=7.5>>=
+x=seq(-3,5,.1)
+plot(x,dnorm(x,0,1.5),t="l",axes=F,xlab="",ylab="")
+points(x,dnorm(x,2,1.5),t="l",lty=2)
+cord.x <- c(-3,seq(-3,0,0.01),0) 
+cord.y <- c(0,dnorm(seq(-3,0,0.01),2,1.5),0) 
+polygon(cord.x,cord.y,density = c(10, 20))
+
+cord.x <- c(2,seq(2,5,0.01),5) 
+cord.y <- c(0,dnorm(seq(2,5,0.01),0,1.5),0) 
+polygon(cord.x,cord.y,density = c(10, 20))
+axis(1,at=c(-3,0,2,5),labels=c("","0",expression(theta[A]),""))
+legend("topleft",c("sceptical prior","enthusiastic prior"),bty="n",lty=c(1,2))
+@
+
+This approach has been used in a number of case studies \citep{freedman:spiegelhalter:parmar:94,parmar:spiegelhalter:freedman:94} and\add[gb]{, more recently, \protect\citep{Negrinetal:2017,pmid25484132,pmid23820061,pmid19010642}. It has also} been suggested as a basis for monitoring trials (\secref{sec:monitoring}) and when considering whether or not a confirmatory study is justified (\secref{sec:confirmatory}). \remove[gb]{Other applications of sceptical priors include \protect\citet{fletcher:etal:93}, \protect\citet{dersimonian:96}, and \protect\citet{heitjan:97} in the context of phase II studies, while a senior FDA biostatistician \protect\citep{oneill:94} has stated that he \protect\index{O'Neill, R.}\textit{`would like to see [sceptical priors] applied in more routine fashion to provide insight into our decision making.'}}
+
+\begin{ExampleBox}
+\label{eg:ex4CHARTscept}
+
+\ecaption{CHART (continued): Sceptical priors}
+
+{\slshape Reference:} \citet{parmar:spiegelhalter:freedman:94}, \citet{spiegelhalter:freedman:parmar:94}, \citet{parmar:etal:01}.
+
+{\slshape Prior distribution:}   
+ A \textit{sceptical prior} was derived using the ideas in \secref{sec:scepticalprior}: the
+prior mean is 0 and the precision is such that
+the prior probability that the true benefit exceeds the alternative hypothesis
+is low (5\% in this case).  Thus a prior with mean 0 and standard deviation $\sigma/\sqrt{n_0}$ will show 5\% chance of
+being less than $\delta_A$  if $n_0 = (\sigma  1.65 /\theta_A )^2$ \eqref{eq:scept-thetaA}.
+\index{CHART trials!sceptical prior distribution|emph}
+\index{sceptical prior distribution!in CHART trials|emph}
+\index{log(hazard ratio)!example of inference on|emph}
+For the lung trial, the alternative hypothesis on the log(hazard ratio) scale is $\theta_A = \log(0.73) = -0.31$.
+Assuming $\sigma $ = 2 gives   $n_0 =  110$.
+For the head-and-neck, the alternative hypothesis  is $\theta_A = \log(0.64) = -0.45$, which gives    a sceptical prior with $n_0 =  54$.
+
+The sceptical prior distributions are displayed in \figref{fig:ex4CHARTsceptical}, with the clinical priors derived in \egref{eg:ex4CHARTassess}.
+
+<<ex4CHARTsceptical, fig.cap="Sceptical and clinical priors for both lung and head-and-neck CHART trials, showing prior probabilities that CHART has superior survival. The sceptical priors express a 5\\% prior probability that the true benefit will be more extreme than the alternative hypotheses of HR = 0.73 for the lung trial, and HR = 0.64 for the head-and-neck trial\\label{fig:ex4CHARTsceptical} ", fig.subcap=c('Lung trial', 'Head-and-neck trial'), out.width='55%',fig.width=5,fig.height=6,fig.ncol = 2>>=
+s <- 2
+# clinical and sceptical priors  for two trials
+mean <- c(-0.255, -.27 )
+n <- c(70, 83)
+scept.n<-c(110,54)
+lab <- c("","") #c("Lung trial", "Head-and-neck trial" )
+for(i in 1:2) {
+  x <- davidplot(ymax = 3, transformation = "log", x.label = 
+                   "favours CHART   <-     Hazard ratio     -> favours control",
+                 x.ticks = seq(0.4, 1.7, by = 0.1), plot.label = lab[
+                   i], xm = mean[i], sigma = s, n = n[i], deltaI = 0,
+                 tail.areas=T,
+                 areastrings=c("CHART superior survival",
+                               "Control superior survival"),legend=T,
+                 legendline=T,
+                 legendlabel=T,
+                 legendlabelstring="Clinical prior",
+                 boxtoprightscale =   c(0.9,1.0),
+                 boxbottomleftscale = c(0.0,0.89),
+                 areadigits=3,
+                 box=F,cex=.9,deltaheights=2.18)
+  
+  addnorm(x=x, xm=0,
+          sigma=2,
+          n=scept.n[i],
+          lty=2,
+          tail.areas=T,
+          boxtoprightscale =   c(0.9,0.85),
+          boxbottomleftscale = c(0.0,0.74),
+          legendlabelstring="Sceptical prior",
+          areastrings=c("CHART superior survival",
+                        "Control superior survival"),legend=T,
+          legendline=T,
+          legendlabel=T,
+          areadigits=3,
+          box=F,cex=.9)
+}
+@
+
+\end{ExampleBox}
+
+\subsection{`Enthusiastic' priors:} 
+\index{prior distribution!enthusiastic} 
+\label{sec:enthusiasticprior}
+As a counter-balance to the pessimism expressed by the sceptical prior, \citet{spiegelhalter:freedman:parmar:94} suggest an `enthusiastic' prior centred on the alternative hypothesis and with a low chance (say 5\%) that the true treatment benefit is negative. Use of such a prior has been reported in case studies \citep{freedman:spiegelhalter:parmar:94,heitjan:97,vail:etal:01,tan:etal:02,pmid27450203,pmid23820061,pmid19010642} and as a basis for conservatism in the face of early negative results \citep{fayers:ashby:parmar:97} (\secref{sec:monitoringpost}). \citet{dignam:etal:98} provide an example of such a prior but call it `optimistic' (\egref{eg:ex5B14}).  Such a prior is intended to represent the opinion of an archetypal enthusiast and does not represent the opinion of an identifiable individual.
+
+\remove[gb]{Other options for default priors are possible: for example, \protect\citet{cronin:etal:99} adopt an `indifference' prior that lies halfway between `sceptical' and `enthusiastic'. \protect\index{prior distribution!indifference}}
+
+
+\subsection{Priors with a point mass at the null hypothesis (`lump-and-smear' priors) *}
+\label{sec:lumpprior}
+\index{prior distribution!lump and smear}
+The traditional statistical approach expresses a qualitative distinction between the role of a null hypothesis, generally of no treatment effect, and alternative hypotheses.  A prior distribution that retains this distinction would place a `lump' of probability on the null hypothesis, and `smear' the remaining probability over the whole range of alternatives:   for example \citet{cornfield:69} uses a normal distribution centred on the null hypothesis, while \citet{hughes:93} uses a uniform prior over  a suitably restricted range. The resulting posterior distribution retains this structure, giving rise to a posterior probability of the truth of the null hypothesis: this
+is  apparently analogous to a  $P$-value  but is neither numerically  nor conceptually equivalent.  
+
+A specific assumption used  in our examples is the following:
+\begin{eqnarray*}
+\begin{array}{ll}
+\displaystyle H_0: \theta = \theta_0 & \mbox{with probability $p$}\\
+\displaystyle H_1: \theta \sim \mbox{N}\left( \theta_0,\frac{\sigma^2}{n_0} \right) & \mbox{with probability $1- p$}
+\end{array}
+\end{eqnarray*} 
+%%%% 
+%%%%\begin{center}
+%%%%\begin{tabular}{cccl}
+%%%% $H_0: \theta$ & $=$ & $\theta_0$ & with probability $p$  
+%%%%\\
+%%%%$H_A: \theta$ & $\sim$  &    $\displaystyle{\rm N}\left(\theta_0,\frac{\sigma^2}{n_0}\right) $   & with probability $1- p$  
+%%%% \end{tabular}
+%%%%\end{center}
+where we label the `lump' and the `smear' as null and alternative hypotheses, respectively \add[gb]{(an alternative terminology is `spike' and `slab' is often used in the context of `variable selection' --- see for instance \protect\citep{bugsbook,lesaffre:lawson:2012,ntzoufras2011} for technical discussions on the general principles and their implementation in software \eg \texttt{BUGS}).}
+
+Cornfield repeatedly argued for this approach, which naturally gives rise to
+  the `relative betting odds' or Bayes factor (\secref{sec:bayesfactors}) as a sequential monitoring tool,  defined as the ratio of the
+\index{Bayes factor!and lump-and-smear priors} 
+likelihood of the data under the null hypothesis to the average likelihood
+(with respect to the prior) under the alternative.
+If we assume a normal likelihood $y_m \sim {\rm N}(\theta,\sigma^2/m)$, then
+we have shown in \secref{sec:meth-bayesfactors} that the Bayes factor 
+is
+\begin{equation}
+\label{eq:lumpBF}
+ \mbox{BF}  = \frac{p(y_m\mid H_0)}{p(y_m\mid H_A)} = \sqrt{
+1 + \frac{m}{n_0}} \,\,\,\,   \exp\left[\frac{-z_m^2}{2 (1+n_0/m)} \right].
+\end{equation}
+Since 
+$$  \frac{p(H_0\mid y_m)}{p(H_A\mid y_m)} = {\rm BF} \frac{p}{1-p}$$
+  we can obtain the posterior probability $p(H_0\mid y_m)$.
+
+The relative betting odds is independent of the
+`lump' of prior probability placed on the null (although does depend
+on the shape of the `smear' over the alternatives), and  does not suffer from the problem of
+  `sampling to a foregone 
+conclusion' 
+\index{sampling to a foregone conclusion}
+(\secref{sec:freqprops}).   Cornfield suggests a `default'  
+ prior under the alternative as a normal distribution centred
+on the null hypothesis and with expectation (conditional on the effect being positive),
+equal to the alternative hypothesis $\theta_A$.  Then from the properties
+of the half-normal distribution (\secref{sec:hn}) it follows that
+\begin{equation}
+\label{eq:lumpexp}
+\mbox{E} ( \theta\mid  \theta>0) = \sqrt{ \frac{2 \sigma^2}{\pi n_0} }.     
+\end{equation}
+Equating this to $\theta_A$ leads to assuming a prior standard deviation under the alternative hypothesis of $\sqrt{\pi/2} \, \theta_A$ .  This is similar to the formulation of a sceptical prior described in \secref{sec:scepticalprior}, but with probability of exceeding the alternative
+hypothesis of $\gamma = \Phi(-\sqrt{2/\pi}) = 0.21  $  --  this is larger than the value of 5\%  often used for sceptical priors, but the lump of probability on the null hypothesis is already expressing considerable scepticism.  Values for these prior distributions for 11 outcome measures are reported for the Urokinase Pulmonary Embolism Trial  \citep{sasahara:etal:73}[page II-27], and  \egref{eg:ex4urokinase} considers one of these outcomes.  
+\remove[gb]{This method was used in a number of major studies alongside more standard approaches \protect\citep{cdprg:70,ugdp:70}, although
+relative betting odds were later dropped from the analysis \protect\citep{cdprg:75}. A mass of probability on the null hypothesis has also been used in a cancer trial \protect\citep{freedman:spiegelhalter:92} and for sensitivity analysis in trial reporting \protect\citep{hughes:93}.}\note[gb]{I have removed this bit as it was pointing out to very old examples. I *personally* don't think it adds too much, but I can find more recent papers, if we feel it's necessary...}  
+
+Although such an analysis provides an explicit probability that the null hypothesis is true, and so appears to answer a question of interest, the prior might be somewhat more realistic were the lump to be placed on a small range of values representing the more plausible null hypothesis of `no clinically effective difference'.    \citet{lachin:81} has extended the approach to this situation where the null hypothesis forms an interval, although   \citet{cornfield:69} points out that the `lump' is in any case just a mathematical approximation to such a prior. 
+ 
+\begin{ExampleBox}
+  
+\label{eg:ex4urokinase}
+\index{Urokinase Pulmonary Embolism Trial|emph} 
+
+\ecaption{Urokinase: `lump and smear' prior distributions} 
+
+{\slshape Reference:}  \citet{sasahara:etal:73}.
+
+{\slshape Intervention:}   Urokinase treatment for pulmonary embolism.
+
+{\slshape Aim of study:} To compare thrombolytic capability in urokinase (new) with heparin (standard). 
+
+{\slshape Study design:} Randomised controlled trial
+ entering 160 patients between 1968 and 1970.  There were no pre-specified sample size or stopping rule, although
+data were examined four-times yearly by an advisory committee but not released to the investigators.  
+
+{\slshape Outcome measure:}   
+Eleven  endpoints based on continuous measures from angiograms, lung scans and haemodynamics.    
+
+{\slshape Statistical model:} Normal likelihoods assumed for    an estimate $ y_m$ of treatment effect $\theta$ based on $m$ pairs of randomised patients.
+
+{\slshape Prospective analysis?:} Yes, the prior elicitations were conducted before the start of the trials, and
+the Bayesian results presented to the advisory committee at each of their meetings.
+
+{\slshape Prior distribution:}   
+\index{prior distribution!lump and smear|emph}
+\index{Half-Normal distribution!as prior for Normal mean|emph}
+\index{Normal mean!example of inference on|emph}
+A `lump-and-smear' prior was assessed for each outcome (\secref{sec:lumpprior}).
+To select $n_0$, \citet{cornfield:69} suggests setting the expectation, given there is a positive effect, to the alternative hypothesis, so from \eqref{eq:lumpexp}  
+the prior standard deviation  $\sigma/\sqrt{n_0}$ is $\sqrt{\pi/2} \theta_A$, and hence $n_0 = 2 \sigma^2/ (\pi \theta_A^2).$  Alternative hypotheses were assessed by members of the
+advisory committee
+  \textit{`based on what appeared reasonable from previous experience with thrombolytics'}.
+
+For the outcome `Absolute improvement in resolution on lung scan',
+we take $\sigma$ to be  the value observed in the study, 9.35 (see below).  The alternative hypothesis  was selected to be $\theta=8$, slightly less than a 1 standard deviation effect.
+giving rise to $n_0 = 0.87$.  Thus the prior under the alternative hypothesis is approximately equivalent to 
+having observed a single pair of patients, each with the same response.  
+This is a weak prior, but remarkably corresponds almost precisely to that 
+recommended in recent theoretical work on Bayes factors \cite{kass:wasserman:95} --- see~\secref{sec:meth-bayesfactors}.    %
+
+{\slshape Loss function or demands:}  None specified.
+
+{\slshape Computation/software:} Conjugate normal analysis.
+
+{\slshape Evidence from study:}
+For   
+`Absolute improvement in resolution on 24-hour lung scan', outcomes were available on 72 patients treated with
+urokinase and 70 with heparin.  The difference in mean responses was $y_m= 3.61$ with standard error 1.11.  Assuming $m=71$ pairs, we have $\sigma = 1.11 \sqrt{m} = 9.35$, as mentioned above. 
+\index{Bayes factor!in Urokinase trial|emph}
+Using \eqref{eq:lumpBF} the `relative betting odds' (Bayes factor) can be calculated to be 0.052 - from \tabref{tab:bayesfactor} this corresponds to `strong' evidence against the
+null hypothesis.  Setting
+$p=0.5$ to represent equal prior belief in the null and alternative hypotheses, this leads  to
+a probability 0.052/(1 + 0.052) = 0.049 that the null hypothesis is true.
+
+{\slshape Bayesian interpretation:}    \figref{fig:ex4urokinase} shows the
+size of the `lump' dropping dramatically from its prior level. The result
+is highly significant classically, with,
+$z$= 3.61/1.11 = 3.25 with a two-sided $P$-value of 0.001:  \citet{sasahara:etal:73} report that due to many outcome measures and
+sequential analysis, only $z>3$ would be taken as `significant'.   Note that the Bayesian posterior
+on null is only 0.047, and so is not as extreme as the $P$-value (\secref{sec:meth-bayesfactors}).  
+
+<<ex4urokinase, fig.cap="Results from the Urokinase trial analysed by Cornfield using `relative betting odds' (Bayes factors).  Data which is classically `highly significant' ($z$ = 3.25, 2-sided $P$-value 0.001) only provides `strong' evidence against the null hypothesis (Bayes factor $\\approx$ 1/20)\\label{fig:ex4urokinase} ", fig.subcap=c('prior distribution', 'likelihood','posterior distribution'), fig.width=8,fig.height=6, out.width='55%', fig.ncol = 2>>=
+sigma <- 9.35
+mean <- c(0,3.61, NA)
+n <- c(.87, 71, NA)
+n[3] <- n[1] + n[2]
+lumps<-c(.5,NA,0.049) 
+placelumps<-c(0,0,0) 
+mean[3] <- (n[2] * mean[2] + n[1] * mean[1])/n[3]
+lab <- c("","","") #c("(a) prior distribution", "\n(b) likelihood", "\n(c) posterior distribution")
+for(i in 1:3) {
+  x <- davidplot(ymax = .4 , x.label = 
+                   "Improvement with urokinase in absolute resolution at 24-hour lung scan",
+                 x.ticks = seq(-5, 10, by =  1), plot.label = lab[i], 
+                 xm = mean[i], sigma = sigma, n = n[i], deltaI = 0,tail.areas=T,
+                 areastrings=c("Urokinase inferior","Urokinase superior"),legend=T,
+                 legendline=F,
+                 legendlabel=F,
+                 boxtoprightscale = c(.95,1.0),
+                 boxbottomleftscale = c(0.6,0.75),
+                 areadigits=3,
+                 box=F,cex=.9,deltaheights=3.5)
+  
+  if(i != 2){
+    addlump(x, position=placelumps[i],height=lumps[i],widthfrac=0.02,textgap =0.05)
+  }
+}
+@
+           
+{\slshape Comments:}  In this application, $m/n_0$ = 71/0.87 = 82:
+ \figref{fig:ex3BFvsR} shows that for such results with
+a classical two-sided $P$-value of 0.001, the Bayes factor only 
+provides `strong' evidence against the null hypothesis.  The 
+prior drawn in \figref{fig:ex4urokinase}(a) provides a clue as to
+the difference between the two approaches: although the
+data 
+observed is unlikely under the null hypothesis, the prior under the alternative is so diffuse that it gives little weight to the parameter values suggested  by the data.  Hence the data is not strongly supported by either hypothesis, although 
+the alternative receives the benefit of the doubt.
+  
+\end{ExampleBox}
+
+
+\section{Sensitivity analysis and `robust' priors}
+\label{sec:prior-robust}
+
+\index{prior distribution!sensitivity analysis}
+
+
+ 
+An integral part of any good statistical report is a sensitivity analysis of assumptions concerning the form of the model (\add[gb]{\protect\ie the resuling} likelihood).  Bayesian approaches have the additional concern of sensitivity to the prior distribution, both in view of its controversial nature and because it is by definition a subjective assumption that is open to valid disagreement.  We reiterate  that this fits naturally into the idea of a `community of priors' \citep{kass:greenhouse:89}. \index{community of priors!and sensitivity analysis}
+
+A natural development when carrying out a Bayesian post-hoc analysis, rather than a full Bayesian pre-study design, is to avoid all pre-specification of priors and simply report the impact of the data on a suitable range of opinion\change{: \protect\citet{orourke:96} emphasises that posterior probabilities \textit{`should be clearly and primarily stressed as being a `function' of the prior probabilities and not \textbf{the} probability of treatment effects'}. \protect\index{O'Rourke, K.}}{.}
+We can therefore take the following steps after having observed the data:
+\begin{enumerate}
+\item Select a suitably flexible class of priors.
+\item Examine how the conclusions depend on the choice of prior.
+\item Identify the subsets of priors that, if seriously held, would lead to
+posterior conclusions of specific interest (say the clinical superiority of an intervention).
+\item Report the results  and hence allow the audience to judge whether
+their  own prior lies in the identified `critical' subsets.
+\end{enumerate}
+\index{prior distribution!robust approach}
+
+This is known as the `robust' approach, and is also known as
+`prior partitioning' \citep{carlin:sargent:96,sargent:carlin:96}. See \secref{sec:monitoringpost}  for further discussion
+of this approach to monitoring clinical trials.
+
+
+Three increasing complex `communities' of priors have been considered: 
+\begin{enumerate}
+\item \textbf{Discrete set:}
+Many case studies carry out sensitivity analysis to a limited list of possible priors, possibly embodying
+scepticism, enthusiasm, clinical opinion and `ignorance': see, for
+example, \egref{eg:ex5CHARTmon} and \egref{eg:ex5B14}.  It is also possible to consider sensitivity to the opinions of multiple experts, perhaps summarised by their extremes of opinion (\secref{sec:multiple-experts}).
+
+\item \textbf{Parametric family:}
+If the community of priors can be described by one varying parameter, then it is 
+possible to graphically display the dependence of the main conclusion to that 
+parameter. \remove[gb]{\protect\citet{hughes:91} suggested examining sensitivity of conclusions to priors based on previous trial results and that reflecting investigators' opinions, and later \protect\citet{hughes:93} gives an example which features a point-mass prior on zero, and  an explicit plot of the posterior probability against the prior probability of this null hypothesis.}\note[gb]{I've removed this --- it's in the 2004 version but doesn't seem to add much now?} \egref{eg:ex4GUSTO} carries out a similar analysis in which the `discount' parameter is continuously varied, and the `credibility' analysis described in \secref{sec:matthews} provides such a tool for the class of normal sceptical priors.
+
+\item \textbf{Non-parametric family:}
+The `robust' Bayesian approach has been further explored by allowing the community of priors to be a non-parametric family in the neighbourhood of an initial prior. \remove[gb]{For example, \protect\citet{gustafson:89}, considers the ECMO study (\protect\egref{eg:ex5ECMO}) with a community centred around a `noninformative' prior but 20\% `contaminated' with a  prior with minimal restrictions, such as being unimodal.  The maximum and minimum posterior probability of the treatment's superiority within such a class can be plotted, providing a sensitivity analysis.A similar approach has also been taken by  \protect\citet{greenhouse:wasserman:95} and  \protect\citet{carlin:sargent:96}.}\note[gb]{I've removed this as we do not use the ECMO study anymore...}
+\end{enumerate} 
+
+
+One should, however, beware of carrying out too restricted a sensitivity analysis.  \citet{stangl:berry:98} emphasise the need for a fairly broad community, taking into account not just  the spread of the prior but also its location.  They also stress that sensitivity to exchangeability and independence assumptions should be examined  and that, while sensitivity analysis is important, it should not serve as a substitute for careful thought about the form of the prior distribution.
+
+\remove[gb]{There is limited experience of reporting such analyses in the medical literature, and it has been suggested  \protect\citep{koch:91,hughes:91,spiegelhalter:freedman:parmar:94} that a separate `interpretation' section is required to display how the data in a study would add to a  range of currently held opinions (\protect\secref{sec:bayeswatch}). It would be attractive for people to be able to carry out their own sensitivity analysis to their own prior opinion:  \protect\citet{lehmann:goodman:00} describe a computing architecture for this and available software and web pages are described in \protect\secref{sec:websites}.}\note[gb]{I couldn't find examples of practical use of community of priors, so I have removed this bit. You happy with this?}
+
+
+\section{Hierarchical priors}
+\label{sec:prior-hierarchical}
+\index{hierarchical models!prior distributions}
+\index{prior distribution!in hierarchical models}
+The essence of hierarchical models was summarised in \secref{sec:multiplicity}:
+by assuming multiple parameters of interest are drawn from some common
+prior distribution, \ie they are exchangeable, we can `borrow strength'
+between multiple substudies and improve the precision for each parameter.
+These models form an essential component of much of Bayesian analysis, but their added power does not come freely. The three essential assumptions are: exchangeability of parameters $\theta_i$, a form   for the `random effects' distribution of the  $\theta_i$'s, and a `hyper-prior' distribution for the parameters of the random effects distribution of the $\theta_i$'s.  All these assumptions can be important, and
+none can be made lightly.   
+
+ 
+\subsection{The judgement of exchangeability.}   
+\index{exchangeability!judgement of and hierarchical models}
+An assumption of exchangeability underlies any random effects analysis, whether Bayesian or classical.  Nevertheless, \citet{tukey:77}   says that \index{Tukey, J.} \textit{`to treat the true improvements for the classes concerned as a sample from a nicely behaved population ..  does not seem to me to be near enough the real world to be a satisfactory and trustworthy basis for the careful assessment of strength of evidence'}. But, as noted in \secref{sec:exchangeability}, there does not need to be any actual population from which units are sampled, and the very fact that we are carrying out simultaneous analysis on a number of units suggests some relationship between them. In addition, if  there are known reasons to suspect specific units are systematically different, then those reasons might be modelled by including relevant covariates  and then the residual variability   more  plausibly reflects exchangeability\change[gb]{: for example, \protect\citet{dixon:simon:91} discuss the reasonableness of exchangeability assumptions in the context of subset analysis (\protect\secref{sec:subsets}), and observe that any subsets of prior interest should be considered separately.}{.}
+
+\subsection{The form for the `random effects' distribution}\label{prior_random_effect}
+\index{hierarchical models!random effects distribution for} 
+This is generally taken to be normal until evidence shows otherwise: if there is no reason to suspect systematic difference between units, a central limit theorem argument could be used to justify normality as arising from the sum of many small unobserved differences between units.
+Normality is computationally helpful, although with the advent of MCMC methods has less importance, and `heavier-tailed' distributions such as the Student's $t$ can be adopted \citep{smith:spiegelhalter:thomas:95}.\note[gb]{I have a more recent example, where we used a 3-component mixture of t distributions for random effects --- but the application was prediction of football results (so we had ``good'', ``medium'' and ``poor'' teams)... It's a bit outside the remit of what we're doing here, I think, so haven't included it. But if you think it is useful, can add the citation...}
+
+\add[gb]{More recently, following work on Bayesian non- and semi-parametric inference \protect\citep{BurrDoss:2005}, \protect\citet{pmid16906554} have considered modelling random effects using flexible structures based on mixtures of Normal distributions. These can be used to relax assumptions about the underlying homogeneity of the units associated with the random effects, \protect\eg to allow for outliers and extra variation.}
+
+\remove[gb]{Unlike other prior assumptions the form of the random effects distribution can be empirically checked from the data, although strategies for this are outside the scope of this book: see, for example, \protect\citet{lange:ryan:89} and \protect\citet{christiansen:morris:96} and \protect\citet{hardy:thompson:98}.}\note[gb]{I think this is an interesting point, but we don't seem to say much about it, so perhaps just remove it?}
+
+\index{random effects variability!prior for} 
+ \subsection{The prior for the standard deviation of the random effects *}\note[gb]{Should we discuss what to modify in this section? I think perhaps some of the choices presented (eg Dumuchel) could be discarded? And possibly, the example in the 2.\ Summary of evidence is may be a bit old? But if so, I think we need to either modify or get rid of Figure 4.12... I think all the text is valid and valuable, but I am not sure many of these are actually considered in practice --- I think Gelman et al make a huge deal of the HC and other ideas particularly in their development of \texttt{Stan}, so may be we want to give more prominence to that?} 
+\label{sec:tauprior}
+
+In a hierarchical model $\theta \sim {\rm N}(\mu, \tau^2)$, the random effects standard deviation $\tau$ plays an important role, and its value can be very influential in assessing the uncertainty concerning $\mu$ or in predicting future $\theta$'s.  However,    there may be   limited information in the data to provide a precise estimate of $\tau$ due to there either being few  units, or each unit providing little information, or both.  This can make the prior for $\tau$ particularly important, and yet there is neither any generally accepted reference prior for $\tau$, not are there formally established techniques for assessing a subjective prior distribution.
+
+Three strategies have been adopted which broadly follow the ideas for parameters of primary interest described earlier: elicitation (\secref{sec:priors-elicitation}), summary of evidence (\secref{sec:priors-evidence}), and reference priors (\secref{sec:priors-default}).
+
+\begin{enumerate}
+\item \textbf{Elicitation of opinion:} 
+In order to be able to make judgements about their relative plausibility, 
+we need to have a   clear interpretation of what different
+values of $\tau$ signify.  We can first note that 95\% of values of
+$\theta$ will lie in the interval $\mu \pm 1.96\tau$, and hence the 
+ 97.5\% and 2.5\% values of $\theta$ are
+$2 \times 1.96 \times \tau$ apart.  $\theta$ will often be measured on
+a logarithmic scale, for example as a log(odds ratio), and hence
+the ratio of the 97.5\% odds ratio to the 2.5\% odds ratio is $\exp(3.92 \tau)$,
+roughly representing the `range' of odds ratios.  For example, in the context of meta-analysis,   \citet{smith:spiegelhalter:thomas:95}   thought that it was unlikely 
+that the between-study odds ratios would vary by more than an order of magnitude, and hence considered $\exp(3.92 \tau)$ = 10, or $\tau= \log(10)/3.92 = 0.59$ to represent  a `high' value of the standard deviation $\tau$.
+
+An alternative approach is to imagine two randomly chosen $\theta$'s drawn 
+from the random effects distribution, whose difference  will have distribution
+$\theta_1 - \theta_2 \sim {\rm N}(0, 2\tau^2)$ \eqref{eq:normdif}.  Their
+absolute difference $|\theta_1 - \theta_2|$ therefore has a normal distribution
+constrained to be greater than 0, which is a half-normal distribution ${\rm HN}(2\tau^2)$ (\secref{sec:hn}).  This distribution has median $\Phi^{-1}(0.75) \times \sqrt{2}\tau = 1.09 \tau$, which is therefore the median difference between the maximum and minimum of a random pair of $\theta$s \citep{larsen:etal:00}.  If $\theta$ is, for example,
+a log(odds ratio), then $\exp(1.09 \tau)$,
+is the median ratio of the maximum to the minimum of any random pair of odds ratios  drawn from the distribution.
+
+\tabref{tab:tau} illustrates these two interpretations for a range of values
+of $\tau$ when $\theta$ represents a log(odds ratio).  It is apparent that 
+$\tau=1$ corresponds to a substantial heterogeneity, with a random
+pair having a median ratio of 3, for example one trial showing no effect
+and another showing an odds ratio of 3.  $\tau=2$ means the trials are
+effectively independent.  
+
+In conclusion, values of $\tau$ around 0.1 to 0.5 may appear
+reasonable in many contexts, from 0.5 to 1.0 might be considered as
+fairly high, and values above 1.0 would represent fairly extreme
+heterogeneity.
+
+\begin{table}[!h]
+\caption{Possible interpretations of $\tau$, the standard deviation
+of $\theta$=log(odds ratio) in a hierarchical model $\theta \sim {\rm N}(\mu, \tau^2)$.  The `range' $\exp(3.92\tau)$ is actually the ratio of the 97.5\% to the 2.5\% point of the distribution of odds ratios, while $\exp(1.09\tau)$ is the median ratio of the maximum to minimum 
+odds ratio in a random pair of $\theta$s drawn from the distribution.\label{tab:tau}}{}{
+\begin{center}
+\fontsize{9}{10.5}\selectfont
+\begin{tabular*}{.85\textwidth}{@{\extracolsep{\fill}}rrr} 
+\toprule
+$\tau$  &  $\exp(3.92\tau)$ : `range' of  & $\exp(1.09\tau)$: median ratio       \\
+&  odds ratios & of random pair \\
+\midrule
+   0.0  &   1.00 & 1.00 \\
+   0.1  &   1.48 & 1.11 \\
+   0.2 &    2.19 & 1.24 \\
+   0.3 &    3.24 & 1.39\\
+    0.4 &    4.80 & 1.55\\
+    0.5  &   7.10 & 1.72\\
+   0.6  &  10.51 & 1.92\\
+    0.7&    15.55 & 2.14\\
+   0.8 &   23.01 & 2.39\\
+   0.9 &   34.06 & 2.67\\
+   1.0 &   50.40 & 2.97\\
+   1.5 &  357.81 & 5.13\\
+   2.0&  2540.20 & 8.84 \\
+\botrule
+\end{tabular*} 
+\end{center}}
+\end{table}
+
+ 
+
+When assessing a subjective prior distribution for $\tau$, we first need to consider whether
+$\tau=0$ is a plausible value, representing no variability between $\theta$s.
+At the other extreme, we should think of an `upper' value for $\tau$
+which we shall label $\tau_u$: \tabref{tab:tau} may be useful for this.
+A possible prior distribution is then a half-normal' distribution \index{half-normal distribution!as prior for random effects variability}\index{prior elicitation!for random effects variability}\index{random effects variability!prior elicitation}${\rm HN}( [\tau_u/1.96]^2)$ \citep{pauler:wakefield:00}.  This will have its mode at 0 and be steadily declining in $\tau$, with an upper 95\% point at $\tau_u$.  Its median will be   $ \Phi^{-1}(0.75) \times \tau_u/1.96 = 0.39 \tau_u$.  This is illustrated in \figref{fig:taupriors}(a) for $\tau_u =1$, which may be a 
+reasonable prior in many situations - see \egref{eg:ex7screen}.
+
+ 
+\item \textbf{Summary of evidence:} 
+It is natural to construct a prior distribution for $\tau$ from an analysis of past hierarchical models in the context
+being considered, in order to determine reasonable values of $\tau$ experienced in practice. Thus we could, for example, study the typical variability between subgroups, between institutions in their clinical performance, or between centres in multi-centre clinical trials.  
+In the field of meta-analysis, \protect\citet{higgins:whitehead:96} and \protect\citet{smith:spiegelhalter:parmar:96} both consider empirical distributions of past $\tau$s: essentially they are carrying out a meta-analysis of meta-analyses.  \protect\citet{higgins:whitehead:96} go on to formally construct an additional level in the hierarchical model in which $\tau$ is a random effect with a distribution.  They restrict attention to Gamma distributions for $\tau^{-2}$, and estimate that a $\tau^{-2}$ for a new meta-analysis  has a Gamma(1.0,0.35) distribution. Transforming this onto the $\tau$ scale using standard theory for probability distributions yields a Root-inverse-Gamma distribution ${\rm RIG}(1, 0.35)$ (\protect\secref{sec:rig}). This has its mode at $\tau=0.48$, mean $\sqrt{0.35 \pi} = 1.05$ and a standard deviation of $\infty$. \protect\figref{fig:taupriors}(b) reveals it to rule out low values of $\tau$. \protect\index{random effects variability!Gamma prior}\protect\index{random effects variability!Root-Inverse-Gamma prior}\protect\index{Gamma distribution!as prior for random effects variability}\protect\index{Root-Inverse-Gamma distribution!as prior for random effects variability}.
+
+<<ex4tau, fig.cap="Alternative prior distributions on the between-unit standard deviation $\tau$: see the text for discussion of each possible choice.  (a) supports equality between units ($\\tau=0$) and discounts substantial heterogeneity ($\\tau=1$); (b) is based on an empirical summary of past meta-analyses and forces heterogeneity; (c) is an `almost' improper prior that has been widely used but gives strong preference for small $\\tau$, (f) to (i) depend on the amount of evidence in the data, with $s_0=1$ representing weak evidence, and $s_0=0.2$ strong evidence.\\label{fig:taupriors}", fig.subcap=c("Half-Normal","Gamma(1, 0.35) on $1/\\tau^2","Gamma(0.001,0.001) on $1/\\tau^2$","Uniform on $\\tau^2$","Uniform on $\\tau$","Uniform shrinkage, $s_0=0.2$","Uniform shrinkage, $s_0=1.0","Dumouchel, $s_0=0.2$","Dumouchel, $s_0=1.0$"), fig.width=5,fig.height=5, out.width='32%',fig.ncol = 3>>=
+
+s<-c(.1,.2,.5,1,2)
+xmax=1.5
+N<-101
+scale=0.7
+tau <- seq(0,xmax, length = N)
+#par(mfrow = c(3,3), oma = c(0, 0, 4, 0))
+xlabel<-c("","","","","","","tau","tau","tau")
+  
+#  a) half normal
+ymax<-2
+tau.u<-1 
+tau.sigma<-tau.u/1.96
+p<- 2*exp(-0.5*tau^2/tau.sigma^2)/(sqrt(2*3.14159)*tau.sigma)
+plot(tau, p , type = "l", axes =T, ylim = c(0,ymax), xlab =  xlabel[1], ylab =  "", cex = scale,lty=1,main="")
+
+#  b) higgins gamma(1, 0.35)
+ymax<-2
+p<- 0.7*exp(-0.35/tau^2)/tau^3
+plot(tau, p , type = "l", axes =T, ylim = c(0,ymax), xlab =  xlabel[2], ylab =  "", cex = scale,lty=1,main="")
+
+#  c) tau^-2  gamma(0.001,0.001)
+ymax<-0.03
+a<-0.001
+b<-0.001
+p<- 2*b^a*exp(-b/tau^2)/(gamma(a) *tau^(2*a+1))
+plot(tau, p , type = "l", axes =T, ylim = c(0,ymax), xlab =  xlabel[3], ylab =  "", cex = scale,lty=1,main="")
+
+#  d) tau2 unif
+ymax<-xmax
+p<- tau
+plot(tau, p , type = "l", axes =T, ylim = c(0,ymax), xlab =  xlabel[4], ylab =  "", cex = scale,lty=1,main="")
+
+#  e) tau unif
+ymax<-xmax
+p<- rep(xmax/2,N)
+plot(tau, p , type = "l", axes =T, ylim = c(0,ymax), xlab =  xlabel[5], ylab =  "", cex = scale,lty=1,main="")
+
+#  f) shrink 0.2
+ymax<-4
+s0=0.2
+p<-2*tau*s0^2/(s0^2+tau^2)^2
+plot(tau, p , type = "l", axes =T, ylim = c(0,ymax), xlab =  xlabel[6], ylab =  "", cex = scale,lty=1,main="")
+
+#  g) shrink 1
+ymax<-1
+s0=1.0
+p<-2*tau*s0^2/(s0^2+tau^2)^2
+plot(tau, p , type = "l", axes =T, ylim = c(0,ymax), xlab =  xlabel[7], ylab =  "", cex = scale,lty=1,main="")
+
+#  h) Dum 0.2
+ymax<-6
+s0=0.2
+p<-s0/(s0+tau)^2
+plot(tau, p , type = "l", axes =T, ylim = c(0,ymax), xlab =  xlabel[8], ylab =  "", cex = scale,lty=1,main="")
+
+#  i) Dum 1
+ymax<-1
+s0=1.0
+p<-s0/(s0+tau)^2
+plot(tau, p , type = "l", axes =T, ylim = c(0,ymax), xlab =  xlabel[9], ylab =  "", cex = scale,lty=1,main="")
+@
+\item \textbf{Default `non-informative' priors:}    
+\index{reference prior distribution!for random effects variability} 
+\index{random effects variability!reference prior distribution} 
+A number of suggestions have been made for placing a `default' prior distribution on $\tau$ or, equivalently, $\tau^2$.  The standard reference prior for a sampling variance,  $ p(\sigma^2) \propto \sigma^{-2}$ (\secref{sec:priors-noninf},  is inappropriate at the random effects level as it gives an \textbf{improper} posterior distribution \citep{berger:85}.
+
+Some of the main contenders are listed below.
+
+\begin{enumerate}
+\item \textit{A `just proper' prior}: 
+An inverse Gamma distribution such as
+\index{random effects variability!Gamma prior} 
+$$ \tau^{-2} \sim {\rm Gamma}(0.001,.001)$$
+ is proper and close to being uniform on $\log (\tau)$.  \figref{fig:taupriors}(c) shows that  it gives a   high weight near $\tau=0$ and so, if the 
+likelihood supports low values of $\tau$, it could show   preference for a low variance.  This may be
+  reasonable behaviour but should be acknowledged.  
+
+
+\item \textit{Uniform on $\tau^2$}: the uniform prior
+\index{random effects variability!Uniform prior} 
+$$ p(\tau^2) \propto   {\rm constant}$$is
+can be restricted to a suitable range to make it a proper distribution.  \figref{fig:taupriors}(d) shows its preference for
+high values of $\tau$, which does not appear~attractive.  
+
+\item \textit{Uniform on $\tau$}: the uniform prior
+$$ p(\tau ) \propto   {\rm constant}.$$
+is
+a natural contender and is shown in   \figref{fig:taupriors}(e).  Nevertheless it
+would be inappropriate to term this `non-informative', as it is a fairly strong
+statement to declare that small values of $\tau$ are as likely as large values.
+
+
+
+ 
+\item \textit{Uniform shrinkage priors}: 
+\index{random effects variability!Uniform shrinkage prior}
+\index{Uniform shrinkage prior!for random effects variability}
+Following \secref{sec:hierarchical}, we assume an approximate
+normal likelihood with      
+$y_k \sim {\rm N}(\theta_k, s_k^2)$.  A number of authors \citep{christiansen:morris:97a,natarajan:kass:00,daniels:99,spiegelhalter:01}
+have investigated a prior on $\tau^2$  that 
+is equivalent to a uniform prior on the `average' shrinkage
+\index{shrinkage}
+$$B_0 = s^2_0 / (s^2_0 + \tau^2)$$
+where $s^2_0$ is the harmonic mean of the $s_k^2$s, \ie
+$$  \frac{1}{s^{2}_0} = \frac{1}{K} \sum_k \frac{1}{s^{2}_k}.$$ 
+ 
+%\begin{figure}[htbp]
+%\centering
+%\scalebox{1}[0.9]
+%{
+%\includegraphics[2.5in,2.6in][6.5in,8.5in]{../figs/uniform-shrinkage.ps}
+%}
+%\caption{Uniform shrinkage priors for the random effects variance $\tau^2$ and standard deviation $\tau$ for %different values of $s_0$.}
+%\label{fig:shrinkage-prior} 
+%\end{figure}
+
+
+Placing a uniform distribution on $B_0$ is equivalent to   
+$1-B_0 =\tau^2 / (s^2_0 + \tau^2)$ having a uniform distribution.  This leads to 
+\begin{eqnarray*}
+ p(\tau^2) & = & \frac{s^2_0}{(s^2_0 + \tau^2)^2}\\
+p(\tau) & = & \frac{2 \tau s^2_0}{(s^2_0 + \tau^2)^2}
+\end{eqnarray*}
+
+
+
+
+The uniform shrinkage prior distributions have the properties described in Table~\ref{tab:shrink_prior}.
+
+\begin{table}[!h]
+\caption{Summary statistics for the shrinkage prior distributions.\label{tab:shrink_prior}}{}{
+\begin{center}
+\fontsize{9}{10.5}\selectfont
+\begin{tabular*}{.75\textwidth}{@{\extracolsep{\fill}}lcc}
+\toprule
+& $\tau^2$ & $\tau $\\ 
+\midrule
+Mode & 0 & $s_0/ 3=  0.57 s_0$\\
+1st quartile&$s_0^2 /\sqrt{3}$& $s_0/\sqrt{3}= 0.57 s_0$\\
+Median& $s_0^2$ & $s_0$\\
+Mean&  - & $\pi s_0/2 = 1.57 s_0$ \\
+3rd quartile& $ 3s_0^2$ & $\sqrt{3}s_0= 1.73 s_0$\\
+Variance & --- & ---\\
+\botrule
+\end{tabular*}
+\end{center}}
+\end{table}
+
+%%%
+%%%\begin{center}
+%%%\begin{tabular*}{.75\textwidth}{@{\extracolsep{\fill}}lcc}
+%%%\hline
+%%%& $\tau^2$ & $\tau $\\ \hline
+%%%Mode & 0 & $s_0/ 3=  0.57 s_0$\\
+%%%1st quartile&$s_0^2 /\sqrt{3}$& $s_0/\sqrt{3}= 0.57 s_0$\\
+%%%Median& $s_0^2$ & $s_0$\\
+%%%Mean&  - & $\pi s_0/2 = 1.57 s_0$ \\
+%%%3rd quartile& $ 3s_0^2$ & $\sqrt{3}s_0= 1.73 s_0$\\
+%%%Variance & --- & ---\\\hline
+%%%\end{tabular*}
+%%%\end{center}
+The prior on $\tau^2$ has an asymptote at 0, but the implied prior on $\tau$ returns to 0
+at the origin.  
+
+
+Suppose $s^{2}_k = \sigma^2_k/n_k$, so that
+$$y_k \sim {\rm N}(\theta_k, \sigma_k^2/n_k).$$
+Three situations can be distinguished.
+\begin{enumerate}
+\item $\sigma_k^2=\sigma^2$, which is assumed known, such as the frequent
+adoption of $\sigma^2=4$.  Then   $  s^{ 2}_0 = \sigma^2/\overline{n}$.
+\item $\sigma_k^2=\sigma^2$, which is unknown.  $\sigma^2$  could then be given a standard Jeffreys' prior
+$p(\sigma^{2}) \propto \sigma^{-2}$ - this induces an appropriate
+dependency between $\tau^2$ and $\sigma^2$.
+\item Each $\sigma_k^2$ is unknown.  The $\sigma_k^2$s could
+then be assumed either exchangeable or independent.   
+Within-unit empirical estimates $\hat{\sigma}_k^2$ can be used
+to estimate $s_0^{-2}$ by
+$$  \frac{1}{s^{2}_0} = \frac{1}{K} \sum_k \frac{n_k}{\hat{\sigma}^{2}_k}.$$ 
+Essentially,   fixed effects are fitted first and then the average precision
+is used as an estimate of $s_0^{-2}$.  
+This approach is illustrated in \egref{eg:ex5Nof1} and \egref{eg:ex7ISIS}.
+
+\end{enumerate}
+
+
+In   studies based on events we might equate $s^{2}_0$ to $4/n_0$, where $n_0$ here
+represents the mean number of events in each study.  Hence  $s_0=0.2 $ corresponds to   
+large studies with an average of 100 events each, while $s_0=1.0$ corresponds to   
+very small studies with an average of 4 events each. These priors are shown
+in   \figref{fig:taupriors}(f) and \figref{fig:taupriors}(g), showing that
+large studies lead to strong prior weight on low values of $\tau$ and hence
+an expectation of the studies showing  `similar' results.
+
+ 
+
+\item \textit{Dumouchel priors}: 
+\index{random effects variability!Dumouchel prior}
+\index{Dumouchel prior!for random effects variability}
+ Dumouchel \citep{dumouchel:normand:00} has suggested a similar form 
+to the uniform shrinkage prior but assuming
+a uniform prior for  $s_0/(s_0+\tau)$, which implies
+\begin{eqnarray*}
+ p(\tau) = \frac{  s_0}{(s_0 + \tau)^2} \qquad \mbox{and} \qquad p(\tau^2)= \frac{s_0}{2\tau(s_0 + \tau)^2}.
+%
+\end{eqnarray*}
+The distributions have the following properties.
+
+\begin{table}[!h]
+\caption{Summary statistics for the Doumuchel prior distributions.\label{tab:dumouchel_prior}}{}{
+\begin{center}
+\begin{tabular*}{.75\textwidth}{@{\extracolsep{\fill}}lcc}
+\toprule
+& Variance $\tau^2$ & SD $\tau $\\
+\midrule
+Mode & 0 & 0\\
+1st quartile&$s_0^2 /9$& $s_0/3$\\
+Median& $s_0^2$ & $s_0$\\
+Mean&  --- & --- \\
+3rd quartile& $9s_0^2$ & $3s_0$\\
+Variance & --- & --- \\
+\botrule
+\end{tabular*}
+\end{center}}
+\end{table}
+
+Note that
+ the quartiles are at $B_0 = 0.1 , 0.5 , 0.9,$ showing the Dumouchel prior 
+gives preference
+to either strong or weak shrinkage.
+\figref{fig:taupriors}(h) and \figref{fig:taupriors}(i)
+show the Dumouchel priors for $s_0=0.2$ and $s_0=1.0$, revealing the preference
+of these priors for both low and high values of $\tau$.
+
+\item \add[gb]{\textit{Half-Cauchy prior on $\tau$}:\protect\index{Half-Cauchy distribution!definition and uses}
+As mentioned in \protect\secref{sec:Cauchy}, recent work \protect\citep{Gelman:2006} has suggested that using a Half-Cauchy distribution for the standard deviation of the random effects, $\tau$, to encode a ``minimally informative'' prior. Specifically, we can use a model $\tau \sim \rm{Half-Cauchy}(0,B)$, where $B$ represents the median of the distribution; this means that prior \textit{information} can be included in a reasonably straightforward way in the overall assumptions of the model. When using a Half-Cauchy distribution, both zero and large random effects variances can be accommodated, if the data point to either of these results.}
+
+It is possible to also expand on this basic structure to include in the formulation a model to express uncertainty on the value $B$ --- for example, \citet[Example 10.4.1]{bugsbook} consider $B\sim\rm{Uniform}(0,100)$ as a ``vague'' specification.
+ \end{enumerate} 
+
+ 
+\end{enumerate} 
+
+In general our preference will be to use a uniform   prior on $\tau$ as a baseline when there is reasonable information from the data. \add[gb]{It is important, however, to assess sensitivity to the choice of this prior, because when little information is present in the data, it is possible (in fact, likely) that the posterior distribution is entirely driven by the assumptions encoded in the model specification. One obvious way of assessing this situation is to compare the posterior with the prior distribution for $\tau$: in particular, if the extreme quantiles of the posterior (\protect\eg the upper extreme of the 95\% credible interval) is very close to the range assigned to the prior Uniform distribution, this is typically an indication that the information in the data is very little and thus it is a good idea to assess the robustness of the results to different choices. 
+}\index{credible interval!one-sided}
+
+When prior information is strong or important a suitably informative prior can be chosen: the half-normal and the Half-Cauchy appear particularly attractive. \add[gb]{These have the important characteristic of allowing the specification of the prior information in a reasonably easy way (\protect\eg in terms of the mean or median).
+}
+
+
+
+These points serve to underline the importance of 
+carefully choosing and justifying the prior distributions used within a hierarchical 
+setting, and subjecting those used to the type of sensitivity analysis
+adopted in \egref{eg:ex5Nof1},  \remove[gb]{\protect\egref{eg:ex6IVF},}\note[gb]{We don't do this any more} \egref{eg:ex7ISIS}, \egref{eg:ex7hyper} and \egref{eg:ex7screen}.
+
+\section{Empirical criticism of priors}
+\label{sec:priorcrit}
+\label{sec:meth-BoxP}
+\index{prior distribution!empirical criticism of} 
+\index{prior distribution!comparison with observed data}
+
+
+The ability of subjective prior distributions to predict the true benefits of
+interventions is  clearly of great interest, and  \citet{box:80} suggested a  methodology for comparing priors with subsequent data. 
+The prior is used to derive a predictive
+distribution
+ for future observations, and thus to calculate the chance
+of a result with lower predictive ordinate than that    
+actually observed: when the predictive distribution is symmetric and unimodal
+this is analagous to  a traditional two-sided $P$-value in measuring the predictive 
+probability of
+getting a result at least as extreme as that observed.  With normal assumptions we can use   
+\eqref{eq:normpred0} but substituting $m$
+for $n$, to give a pre-trial predictive distribution
+%
+ \begin{equation}
+\label{eq:predm}
+%
+              Y_m    \sim {\rm N}\left( \mu ,\sigma^2 
+                      \left( \frac{1}{n_0} + \frac{1}{m} \right)    \right) .    
+\end{equation} 
+%
+Given observed $y_m$, the predictive probability of observing a $Y_m$ 
+less than that observed is
+\begin{equation}
+ P(Y_m<y_m) = \Phi\left(  \frac{(y_m-\mu)}{\sigma \sqrt{\frac{1}{n_0} + \frac{1}{m}}}  \right),
+\label{eq:BoxP}
+\end{equation}
+and hence Box's generalised significance test is   given by
+\index{Box's measure of conflict}
+$$  2 \min [P(Y_m<y_m), 1-P(Y_m<y_m)] .$$ 
+
+
+Another way of obtaining \eqref{eq:BoxP}
+ is as  the tail area associated with 
+    a standardised test statistic 
+contrasting the prior and the likelihood: \ie
+$$ z_m = \frac{ y_m - \mu}{\sigma \sqrt{ \frac{1}{n_0} + \frac{1}{m}} },$$
+showing that Box's statistic explicitly acts as a measure of \textit{conflict}
+between prior and data.   
+
+\begin{ExampleBox}
+\label{eg:greatcrit}
+\ecaption{GREAT (continued): criticism of the prior} 
+\index{GREAT trial!prior criticism|emph}
+\index{log(odds ratio)!example of inference on}
+ 
+In \egref{eg:ex3great}, $\mu = 
+-0.26, n_0 = 236.7, m=30.5,\sigma=2$ and hence the predictive 
+distribution for the observed log(OR) has mean -0.26 and standard deviation 0.39.  This is 
+ shown in \figref{fig:greatconflict} with the observed OR = 0.48 ($y_m$ = log(OR) = -0.74) marked.
+Box's measure is twice the shaded area, which is $2 \mathnormal{\Phi}\left( (-0.74+0.26)/0.39\right )= 0.21$.
+We may also obtain this result as the standardised test statistic between prior
+and likelihood   $z =  -1.25$, with a 2-sided $P$-value of 0.21.
+
+Thus there is no strong evidence for prior/data conflict in the GREAT example.
+
+<<ex3greatconflict, fig.cap="Predictive distribution for observed OR in the GREAT trial  with observed OR = 0.48 (log(OR)= $-$0.74) marked.  Box's measure of prior/data conflict is twice the shaded area = 0.21.\\label{fig:greatconflict}",fig.width=7>>=
+s <- 6.38
+mean <- -.255
+n <- 1/( 1/1411 +1/311)
+lab <- c(" ")
+d<-  -.736
+x <- davidplot(ymax = 1, transformation = "log", x.label = 
+               "Predicted odds ratio of 30-day mortality on home therapy to control",
+               x.ticks = seq(0.2, 1.4, by = 0.1), plot.label = lab ,  xm = mean , sigma = s, 
+               n = n  ,deltaS=d, shade=1,density=30,angle=45,
+               tail.areas=F,legend=F,cex=.9 )
+@
+
+\end{ExampleBox}
+
+There have been a number of prospective elicitation exercises for clinical trials,
+and many of these trials have now reported their results.  \tabref{tab:priorcrit}
+shows a selection of results, including the intervals for the prior distributions for treatment effects, the evidence from
+the likelihood, and Box's  $P$-value summarising the conflict between the prior and
+the likelihood.  The references for the prior assessments and the data are provided
+at the end of the section.
+
+\begin{table}[!h]
+\caption{A   comparison of some elicited subjective prior distributions and the consequent results of the clinical trials.  In each case a pooled prior was provided, assumed normal on a log(hazard ratio) scale - Box's  $P$-value is calculated on this scale.  This is transformed to a hazard ratio (HR) scale where HR $<$ 1 corresponds to   benefit of the new treatment: median and 95\% intervals are given (note the Gastric cancer results are reported with the inverse hazard ratio in \egref{eg:ex5gastric})\label{tab:priorcrit}}{}{
+\begin{center}
+\begin{tabular*}{.95\textwidth}{@{\extracolsep{\fill}}lrrrrrr} 
+\toprule
+ & \multicolumn{2}{c}{Prior} & \multicolumn{2}{c}{Likelihood} & & \\
+ Study &    HR  &   95\% interval  &       HR   & 95\% interval   & Z & $P$ \\
+\midrule
+CHART (Lung) &   0.76    & (0.48 - 1.19)     &0.76        &( 0.63  - 0.90)    & 0.00 & 1.00  \\
+CHART (HN) &     0.72    & (0.44 - 1.20)     &0.95        &( 0.79  - 1.14)    & 1.02 & 0.31  \\
+Thiotepa X1      & 0.61 & (0.37 - 1.01)     & 1.11      &  (0.78 - 1.59)  & 1.91 & 0.06\\       
+Osteosarcoma  & 0.90     & (0.55 - 1.50)     &1.07       & (0.79 - 1.45)   & 0.58 & 0.56\\        
+%Neutron (clinical prior)   &0.84 & (0.48 - 2.08) 
+%& 1.52  & (0.91 - 2.50)   & 1.31       & 0.19\\
+Gastric cancer  & 0.88 & (0.61 - 1.28)      &1.10& (0.87 - 1.39)  &          1.00 &  0.32 \\     
+\botrule
+\end{tabular*} 
+\end{center}}
+\end{table}
+
+%Chart (HN)      & 1.38 & (0.88-2.15)   & \citep{parmar:spiegelhalter:freedman:94} & ?&? & ? &&\\
+%Thiotepa X5     & & & & 0.92   & (0.64 -1.32)  &\citep{richards:etal:94}   & &\\         
+%Neutron (overview prior)        & 0.56 & (0.40-0.78)   &\citep{spiegelhalter:freedman:parmar:94}   & 0.66& (0.4 -1.1)   & -0.50 &  .62\\
+
+
+ 
+
+
+\tabref{tab:priorcrit} shows the generally poor experience obtained from
+prior elicitation.  The clinicians are universally optimistic about the
+new treatments (median of prior HR's $<$ 1), whereas only two of the
+trials -- the CHART trials -- eventually showed any evidence  of benefit
+\index{CHART trials!criticism of prior}
+from the new treatment (likelihood HR $<$ 1), and only the CHART lung
+trial showed `significant' benefit.  The Thiotepa trial shows 
+particularly high conflict between data and prior, with the clinicians
+expecting a substantial benefit from Thiotepa which failed to materialise.
+\remove[gb]{This also reflects the experience of  \protect\citet{carlin:etal:93} in their elicitation exercise.}
+
+Far from invalidating the Bayesian approach, such a conflict between prior and data only serves to emphasise the importance
+of pre-trial elicitation of belief:    having these opinions explicitly recorded will help a monitoring committee \index{Data Monitoring Committee}  to focus on the difference between anticipated and actual results.  Of course,  the precise action to be taken in the face of 
+considerable conflict will depend on the circumstances. 
+
+\remove[gb]{References for prior and data are: CHART trials - \protect\egref{eg:ex5CHARTmon}; Thiotepa X1 -  \protect\citet{spiegelhalter:freedman:86,richards:etal:94} ;  Osteosarcoma - \protect\citet{spiegelhalter:freedman:parmar:93,souhami:etal:97}; %Neutron (clinical prior) - \citet{spiegelhalter:freedman:parmar:94}; 
+Gastric cancer - \protect\egref{eg:ex5gastric}.}
+
+
+
+
+
+
+
+
+\section{Key points}
+\index{key points!prior distributions}
+\begin{enumerate}
+\item The use of a  prior is based on    judgement and hence a degree of
+subjectivity cannot be avoided.
+\item The prior may be  important and is not unique, and so   a range of options should be examined in a sensitivity analysis.
+ \item The quality of subjective priors (as assessed by predictions) show
+predictable biases in terms of enthusiasm.
+\item For a prior to be taken seriously by an external audience, its basis must be explicitly given.   A variety of models exist for using historical data
+as a basis for prior distributions.
+\item Archetypal priors, expressing both scepticism and enthusiasm, may be useful for identifying a reasonable range of prior opinion.
+\item Great care is required in using default priors intended to be minimally informative.
+\item Exchangeability assumptions lead to hierarchical models that
+are valuable in manyh situations, but such judgements should not be made casually.
+\item Sensitivity analysis plays a crucial role in assessing the impact of particular prior distributions, whether elicited, derived from evidence, or reference, on the conclusions of an analysis.
+\end{enumerate}

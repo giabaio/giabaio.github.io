@@ -1,0 +1,709 @@
+library(tidyverse)
+library(rvest)
+
+# Some relevant sources
+# https://data.world/rhubarbarosa/eurovisionvotingstats
+# https://data.world/datagraver/eurovision-song-contest-scores-1975-2019/workspace/file?filename=eurovision_song_contest_1975_2021.xlsx
+
+# Loads data from Wikipedia on various editions
+# Sets up a datalist to manipulate later
+datawiki=list()
+# Vector of relevant years
+year=c(1998:2019,2021)
+# Vector of positions in which the relevant tables are stored in the various html Wiki pages
+relevant_table=c(3,4,4,3,5,5,4,5,5,4,6,7,7,6,5,6,6,6,6,6,6,6,7)
+# Scrapes the tables
+for (i in 1:length(year)) {
+  url=paste0("https://en.wikipedia.org/wiki/Eurovision_Song_Contest_",year[i])
+  xpath=paste0('//*[@id="mw-content-text"]/div/table[',relevant_table[i],']')
+  datawiki[[i]] = url %>% read_html() %>% html_node(xpath=xpath) %>% 
+    html_table(fill=T) %>% mutate(Year=year[i]) %>% 
+    # Standardises the naming of the variables across the tables
+    rename(
+      Draw=contains("Draw"),Country=contains("Country"),Artist=contains("Artist"),
+      Song=contains("Song"),Language=contains("Language"),Place=contains("Place"),Points=contains("Points")
+    ) %>% 
+    # Removes cross-ref to notes in the Wiki page
+    mutate(
+      Draw=gsub("\\[|\\]|[a-zA-Z]","",Draw),
+      Place=gsub("\\[|\\]|[a-zA-Z]","",Place)
+    )
+}
+# Combines into a single dataset of songs and artists characteristics
+datawiki=datawiki %>% bind_rows() %>% 
+  # Fixes a problem with coding of countries (again to do with Wiki notes)
+  mutate(
+    Country=gsub("\\[[^\\]]","",Country),
+    # Country=case_when(
+    #   Country=="Iceland[l]"~"Iceland",
+    #   TRUE~Country
+    # ),
+    # Cleans some columns from footnotes
+    Language=gsub("\\[[^\\]]","",Language),
+    Artist=gsub("\\[[^\\]]","",Artist),
+    # Fixes a weird entry
+    Language=case_when(
+      Language=="Spanish{{efn|Contains some words in English}"~"Spanish",
+      TRUE~Language
+    )
+  )
+
+datawiki=datawiki %>% mutate(
+  song_language=case_when(
+    (Country%in%c("United Kingdom","Ireland","Australia") & Language=="English")~"Own",
+    (Country%in%c("France","Switzerland","Belgium") & Language=="French")~"Own",
+    (Country%in%c("Germany","Austria","Switzerland") & Language=="German")~"Own",
+    (Country%in%c("Italy","Switzerland") & Language=="Italian")~"Own",
+    (Country%in%c("Greece","Cyprus") & Language=="Greek")~"Own",
+    (Country%in%c("Netherlands","Belgium") & Language=="Dutch")~"Own",
+    grepl(",",Language)~"Mixed",
+    (!(Country%in%c("United Kingdom","Ireland")) & Language=="English")~"English",
+    (Country=="Albania" & Language=="Albanian")~"Own",
+    (Country=="Bosnia and Herzegovina" & Language=="Bosnian")~"Own",
+    (Country=="Belarus" & Language=="Belarusian")~"Own",
+    (Country=="Bulgaria" & Language=="Bulgarian")~"Own",
+    (Country=="Croatia" & Language=="Croatian")~"Own",
+    (Country=="Estonia" & Language=="Estonian")~"Own",
+    (Country=="Finland" & Language=="Finnish")~"Own",
+    (Country=="Israel" & Language=="Hebrew")~"Own",
+    (Country=="Lithuania" & Language=="Lithuanian")~"Own",
+    (Country=="Hungary" & Language=="Hungarian")~"Own",
+    (Country=="Iceland" & Language=="Icelandic")~"Own",
+    (Country=="Macedonia" & Language=="Macedonian")~"Own",
+    (Country%in%c("Montenegro","Serbia and Montenegro") & Language=="Montenegrin")~"Own",
+    (Country=="Norway" & Language=="Norwegian")~"Own",
+    (Country=="Poland" & Language=="Polish")~"Own",
+    (Country=="Portugal" & Language=="Portuguese")~"Own",
+    (Country%in%c("Romania","Moldova") & Language=="Romanian")~"Own",
+    (Country=="Russia" & Language=="Russian")~"Own",
+    (Country%in%c("Serbia","Serbia and Montenegro","Bosnia and Herzegovina") & Language=="Serbian")~"Own",
+    (Country=="Slovakia" & Language=="Slovak")~"Own",
+    (Country=="Slovenia" & Language=="Slovene")~"Own",
+    (Country=="Spain" & Language=="Spanish")~"Own",
+    (Country=="Sweden" & Language=="Swedish")~"Own",
+    (Country=="Turkey" & Language=="Turkish")~"Own",
+    (Country=="Ukraine" & Language=="Ukrainian")~"Own",
+    TRUE~"Other"
+  ),
+  Country=as.factor(Country)
+) 
+# Fix the variable 'Song'
+datawiki=datawiki %>% mutate(Song=gsub('["\\"]',"",Song))
+
+
+###################################################################################################################################
+# Some data from Spotify
+# Song-specific data: the file '~/Dropbox/UCL/Projects/Danni/all_data.Rdata' contains data from Spotify on the songs features
+# from 2012 to 2018 (so would only need to merge the last two years!). Some of these may be used to add as covariates to 
+# explain the voting patterns as a function of "objective" musical features (tempo, danceability, energy, key, loudness,...)
+
+library(Rspotify)
+keys=spotifyOAuth(app_id="https://developer.spotify.com/dashboard/applications/8fbab9d527f04f4fbd6b13a9940efd6f",
+                  client_id="8fbab9d527f04f4fbd6b13a9940efd6f",
+                  client_secret="bd6ececadac64e7b9b371f1bbf39667a")
+
+#search=searchPlaylist("Eurovision official",token=keys)
+songs00=getPlaylistSongs(playlist_id="6IN88dlkyXGuDYY6wpcFZX",user_id="victortronx",token=keys)
+
+songs=list()
+offset=c(0,100,200,300,350,500)
+for (i in 1:length(offset)) {
+  songs[[i]]=getPlaylistSongs(playlist_id = "7KL2JUGEGuCJU53TuDs8xk",token = keys,user_id="victortronx",offset = offset[i]) %>% 
+    # Cleans up the title of the song
+    mutate(tracks=gsub("-.*", "", tracks)) %>% mutate(tracks=str_trim(tracks,side="right")) %>% rename(Song=tracks) %>% 
+    mutate(Song=str_to_title(Song))
+}
+songs=bind_rows(songs)
+
+datawiki %>% mutate(Song=str_to_title(Song)) %>% left_join(songs)
+
+
+############################################################################################################################
+# Data on migration stocks
+# Source: https://stats.oecd.org/Index.aspx?DataSetCode=MIG#
+migration=read.csv("International_migration_stocks_time_series.csv") %>% as_tibble()
+migration=migration %>% filter(Variable!="Inflows of asylum seekers by nationality") %>% 
+  group_by(Country.of.birth.nationality,Country) %>% summarise(Avg_migration=mean(Value,na.rm=T)) %>% ungroup() %>% 
+  rename(From=Country.of.birth.nationality,To=Country)
+
+# Gets overall population by country
+url="https://en.wikipedia.org/wiki/List_of_countries_by_population_(United_Nations)"
+population=url %>% read_html() %>% html_node(xpath='//*[@id="mw-content-text"]/div/table[1]') %>% 
+  html_table(fill=T) %>% mutate(
+    across(.cols=everything(),~gsub("\\[[^\\]]","",.))
+  )
+
+migration=migration %>% left_join(population,by=c("From"="Country/Territory")) %>% 
+  rename(Region_from="UN continentalregion[4]",Subregion_from="UN statisticalsubregion[4]",population_2019_from="Population(1 July 2019)") %>% 
+  select(-c(Change,"Population(1 July 2018)")) %>% 
+  mutate(
+    population_2019_from=as.numeric(gsub(",","",population_2019_from)),
+    migration_rate_100k=case_when(
+      !is.na(Avg_migration)~100000*Avg_migration/population_2019_from,
+      TRUE~0
+    )
+  ) %>% left_join(population,by=c("To"="Country/Territory")) %>% 
+  rename(Region_to="UN continentalregion[4]",Subregion_to="UN statisticalsubregion[4]",population_2019_to="Population(1 July 2019)") %>% 
+  select(-c(Change,"Population(1 July 2018)")) %>% 
+  mutate(
+    population_2019_to=as.numeric(gsub(",","",population_2019_to))
+  ) %>% select(From,Region_from,Subregion_from,population_2019_from,To,Region_to,Subregion_to,population_2019_to,Avg_migration,migration_rate_100k)
+
+## Source of UN data for migration
+# https://www.un.org/en/development/desa/population/migration/data/estimates2/estimates19.asp
+UN_migration=readxl::read_xlsx("UN_MigrantStockByOriginAndDestination_2019.xlsx",range="A16:IG1997",sheet="Table 1") %>% 
+  rename(Year=`...1`,Sort_order=`...2`,Major_area=`...3`,Notes=`...4`,Code=`...5`,Type_of_data=`...6`,
+         Russia="Russian Federation",Moldova="Republic of Moldova","Czech Republic"="Czechia") %>% 
+  mutate(Major_area=case_when(
+    Major_area=="Russian Federation"~"Russia",
+    Major_area=="Republic of Moldova"~"Moldova",
+    Major_area=="Czechia"~"Czech Republic",
+    TRUE~Major_area
+  ))
+
+# Selects only the relevant countries: NB THIS REQUIRES THE LIST OF VOTER/PERFORMERS!!
+UN_migration=UN_migration %>% select(Year,Major_area,Total,one_of(colnames(UN_migration)[colnames(UN_migration)%in%union(data$Voter,data$Performer)])) %>% 
+  filter(Major_area%in%union(data$Voter,data$Performer)) %>% 
+  mutate(across(one_of(colnames(UN_migration)[colnames(UN_migration)%in%union(data$Voter,data$Performer)]),~as.numeric(.))) %>% 
+  mutate(across(one_of(colnames(UN_migration)[colnames(UN_migration)%in%union(data$Voter,data$Performer)]),~case_when(is.na(.)~0,TRUE~.))) %>% 
+  filter(Year>=2010) %>% rename(Voter=Major_area) %>% 
+  gather(Performer,Migration,one_of(colnames(UN_migration)[colnames(UN_migration)%in%union(data$Voter,data$Performer)])) %>% 
+  select(Year,Voter,Performer,Migration,Total) %>% mutate(Total=as.numeric(Total))
+UN_migration=UN_migration %>% group_by(Voter,Performer) %>% summarise(Migration=mean(Migration),Total=mean(Total,na.rm=T)) %>% arrange(Performer) %>% 
+  filter(Voter!=Performer) %>% mutate(migration_rate_100k=Migration/Total*100000)
+# Adds Macedonia (with the same values as North Macedonia)
+UN_migration=UN_migration %>% bind_rows(UN_migration %>% filter(Performer=="North Macedonia") %>% mutate(Performer="Macedonia"))
+UN_migration=UN_migration %>% bind_rows(UN_migration %>% filter(Voter=="North Macedonia") %>% mutate(Voter="Macedonia")) 
+
+
+############################################################################################################################
+# Linguistic data
+# Source: http://www.elinguistics.net/Compare_Languages.aspx
+#         https://osf.io/v6tz3/
+
+lang=read.csv2("/tmp/mozilla_gianluca0/Details_List_EXCEL.csv")
+lang=lang %>% as_tibble()
+colnames(lang)=c("Language1","Language2","Distance","NbrWords")
+lang=lang %>% filter(grepl("Ura\\.FINNIC|IE\\.|Alt\\.TURKIC\\.|Krt\\.KARTVELIAN|Ura\\.UGRIC|AA\\.SEMITIC\\.HEBREW",Language1)) %>% 
+  filter(grepl("Ura\\.FINNIC|IE\\.|Alt\\.TURKIC\\.|Krt\\.KARTVELIAN|Ura\\.UGRIC|AA\\.SEMITIC\\.HEBREW",Language2)) %>% 
+  filter(
+    Language1%in%c(
+      "AA.SEMITIC.HEBREW","Alt.TURKIC.AZERBAIJANI_NORTH","Alt.TURKIC.TURKISH","IE.ALBANIAN.ALBANIAN_GHEG","IE.ALBANIAN.ALBANIAN_TOSK",
+      "IE.ARMENIAN.EASTERN_ARMENIAN","IE.ARMENIAN.WESTERN_ARMENIAN","IE.BALTIC.LATVIAN","IE.BALTIC.LITHUANIAN","IE.GERMANIC.DANISH",
+      "IE.GERMANIC.DUTCH","IE.GERMANIC.ENGLISH","IE.GERMANIC.ICELANDIC","IE.GERMANIC.LUXEMBOURGISH","IE.GERMANIC.NORWEGIAN_BOKMAAL",
+      "IE.GERMANIC.STANDARD_GERMAN","IE.GERMANIC.SWEDISH","IE.GREEK.GREEK","IE.ROMANCE.FRENCH","IE.ROMANCE.ITALIAN","IE.ROMANCE.PORTUGUESE",
+      "IE.ROMANCE.ROMANIAN","IE.ROMANCE.SPANISH","IE.SLAVIC.BELARUSIAN","IE.SLAVIC.BULGARIAN","IE.SLAVIC.CROATIAN","IE.SLAVIC.CZECH",
+      "IE.SLAVIC.MACEDONIAN","IE.SLAVIC.POLISH","IE.SLAVIC.RUSSIAN","IE.SLAVIC.SERBOCROATIAN","IE.SLAVIC.SLOVAK","IE.SLAVIC.SLOVENIAN",
+      "IE.SLAVIC.UKRAINIAN","Krt.KARTVELIAN.GEORGIAN","Ura.FINNIC.ESTONIAN","Ura.FINNIC.FINNISH","Ura.UGRIC.HUNGARIAN"
+    ),
+    Language2%in%c(
+      "AA.SEMITIC.HEBREW","Alt.TURKIC.AZERBAIJANI_NORTH","Alt.TURKIC.TURKISH","IE.ALBANIAN.ALBANIAN_GHEG","IE.ALBANIAN.ALBANIAN_TOSK",
+      "IE.ARMENIAN.EASTERN_ARMENIAN","IE.ARMENIAN.WESTERN_ARMENIAN","IE.BALTIC.LATVIAN","IE.BALTIC.LITHUANIAN","IE.GERMANIC.DANISH",
+      "IE.GERMANIC.DUTCH","IE.GERMANIC.ENGLISH","IE.GERMANIC.ICELANDIC","IE.GERMANIC.LUXEMBOURGISH","IE.GERMANIC.NORWEGIAN_BOKMAAL",
+      "IE.GERMANIC.STANDARD_GERMAN","IE.GERMANIC.SWEDISH","IE.GREEK.GREEK","IE.ROMANCE.FRENCH","IE.ROMANCE.ITALIAN","IE.ROMANCE.PORTUGUESE",
+      "IE.ROMANCE.ROMANIAN","IE.ROMANCE.SPANISH","IE.SLAVIC.BELARUSIAN","IE.SLAVIC.BULGARIAN","IE.SLAVIC.CROATIAN","IE.SLAVIC.CZECH",
+      "IE.SLAVIC.MACEDONIAN","IE.SLAVIC.POLISH","IE.SLAVIC.RUSSIAN","IE.SLAVIC.SERBOCROATIAN","IE.SLAVIC.SLOVAK","IE.SLAVIC.SLOVENIAN",
+      "IE.SLAVIC.UKRAINIAN","Krt.KARTVELIAN.GEORGIAN","Ura.FINNIC.ESTONIAN","Ura.FINNIC.FINNISH","Ura.UGRIC.HUNGARIAN"
+    )
+  )
+
+lang=lang %>% separate(Language1,c("A1","B1","C1"),"\\.") %>% 
+  separate(Language2,c("A2","B2","C2"),"\\.") %>% 
+  mutate(
+    C1=case_when(
+      C1%in%c("ALBANIAN_GHEG","ALBANIAN_TOSK")~"Albanian",
+      C1=="AZERBAIJANI_NORTH"~"Azerbaijani",
+      C1%in%c("EASTERN_ARMENIAN","WESTERN_ARMENIAN")~"Armenian",
+      C1=="NORWEGIAN_BOKMAAL"~"Norwegian",
+      C1=="STANDARD_GERMAN"~"German",
+      TRUE~str_to_title(C1)
+    ),
+    C2=case_when(
+      C2%in%c("ALBANIAN_GHEG","ALBANIAN_TOSK")~"Albanian",
+      C2=="AZERBAIJANI_NORTH"~"Azerbaijani",
+      C2%in%c("EASTERN_ARMENIAN","WESTERN ARMENIAN")~"Armenian",
+      C2=="NORWEGIAN_BOKMAAL"~"Norwegian",
+      C2=="STANDARD_GERMAN"~"German",
+      TRUE~str_to_title(C2)
+    )
+  ) %>% 
+  group_by(C1,C2) %>% summarise(Distance=mean(Distance)) %>% rename(Language1=C1,Language2=C2)
+
+lang=lang %>% bind_rows(tibble(Language1=lang$Language2,Language2=lang$Language1,Distance=lang$Distance)) %>% 
+  group_by(Language1,Language2) %>% slice(1) %>% ungroup() %>% filter(Language1!=Language2)
+# Need to add low distance for same languages so that matches with multiple languages countries make sense
+lang=lang %>% bind_rows(
+  tibble(
+    Language1=lang %>% with(sort(unique(union(Language1,Language2)))),
+    Language2=lang %>% with(sort(unique(union(Language1,Language2)))),
+    Distance=rep(min(lang$Distance),length(lang %>% with(sort(unique(union(Language1,Language2))))))
+  )
+) %>% arrange(Language1,Language2)
+
+
+lang_countries=tibble(
+  Country=data %>% with(sort(union(Voter,Performer))),
+  Language=c("Albanian","Armenian","English","German","Azerbaijani","Belarusian","Dutch, French",
+             "Serbocroatian","Bulgarian","Croatian","Greek","Czech","Danish","Estonian","Finnish",
+             "French","Georgian","German","Greek","Hungarian","Icelandic","English","Hebrew",
+             "Italian","Latvian","Lithuanian","Macedonian","English, Italian","Romanian","Serbocroatian",
+             "Dutch","Macedonian","Norwegian","Polish","Portuguese","Romanian","Russian","Italian","Serbocroatian",
+             "Slovak","Slovenian","Spanish","Swedish","German, French, Italian","Turkish","Ukrainian","English")
+)
+lang_countries=lang_countries %>% separate_rows(Language,sep=", ")
+
+lang=lang %>% left_join(lang_countries,by=c("Language1"="Language")) %>% rename(Country1=Country)
+lang=lang %>% left_join(lang_countries,by=c("Language2"="Language")) %>% rename(Country2=Country) %>% 
+  select(Country1,Language1,Country2,Language2,everything()) %>% 
+  group_by(Country1,Country2) %>% mutate(Distance=mean(Distance)) %>% slice(1) %>% ungroup() %>% 
+  filter(Country1!=Country2)
+
+############################################################################################################################
+# Data on historical participation 
+url="https://en.wikipedia.org/wiki/List_of_countries_in_the_Eurovision_Song_Contest"
+participation=url %>% read_html() %>% html_node(xpath='//*[@id="mw-content-text"]/div/table[2]') %>% 
+  html_table(fill=T) %>% mutate(
+    across(.cols=everything(),~gsub("\\[[^\\]]","",.)),
+    across(.cols=everything(),~gsub(" †","",.))
+  ) %>% rename(
+    Performer=Country,
+    Debut=`Debut year`,
+    Latest_entry=`Latest entry`,
+    Participations=`Entries[a]`,
+    Finals=`Finals[a]`,
+    Latest_final=`Latest final[a]`,
+  ) %>% select(-c(`Broadcaster(s)[10]`)) %>% 
+  mutate(across(c(Debut,Latest_entry,Participations,Finals,Latest_final,Wins),~as.numeric(.)))
+
+url="https://en.wikipedia.org/wiki/List_of_Eurovision_Song_Contest_winners"
+winners=url %>% read_html() %>% html_node(xpath='//*[@id="mw-content-text"]/div/table[4]') %>% 
+  html_table(fill=T) %>% mutate(
+    across(.cols=everything(),~gsub("\\[[^\\]]","",.)),
+    across(.cols=everything(),~gsub(" †","",.))
+  ) %>% mutate(All_years=paste(1956:2021,collapse=",")) %>% separate_rows(All_years,sep=",") %>% 
+  separate(Years,paste0(rep("Years_win",max(.$Wins)),1:max(.$Wins)), sep=", ") %>% 
+  mutate(across(contains("Year"),~as.numeric(.))) %>% 
+  mutate(across(contains("_win"),~.<All_years)) %>% mutate(across(where(is.logical),as.numeric)) %>% 
+  mutate(nwin=rowSums(across(contains("_win")),na.rm=TRUE)) %>% select(-contains("_win")) %>% rename(Year=All_years,Performer=Country)
+
+year_last_win=url %>% read_html() %>% html_node(xpath='//*[@id="mw-content-text"]/div/table[4]') %>% 
+  html_table(fill=T) %>% mutate(
+    across(.cols=everything(),~gsub("\\[[^\\]]","",.)),
+    across(.cols=everything(),~gsub(" †","",.))
+  ) %>% mutate(All_years=paste(1956:2021,collapse=",")) %>% separate_rows(All_years,sep=",") %>% 
+  separate(Years,paste0(rep("Years_win",max(.$Wins)),1:max(.$Wins)), sep=", ") %>% 
+  mutate(across(contains("Year"),~as.numeric(.))) %>% 
+  mutate(Years_win0=1955) %>% mutate(across(contains("_win"),~case_when((.>=All_years)~NA_real_,TRUE~.))) %>% 
+  select(Wins,Country,All_years,Years_win0,everything()) %>% 
+  mutate(across(contains("_win"),~All_years-.)) %>% 
+  mutate(since_last_win=select(.,contains("_win")) %>% reduce(pmin,na.rm=T)) %>% 
+  select(Country,All_years,since_last_win) %>% rename(Year=All_years) %>% arrange(Year,Country) %>% filter(!is.na(Country))
+
+
+url="https://en.wikipedia.org/wiki/List_of_Eurovision_Song_Contest_host_cities" 
+hosts=url %>% read_html() %>% html_node(xpath='//*[@id="mw-content-text"]/div/table[1]') %>% 
+  html_table(fill=T) %>% mutate(
+    across(.cols=everything(),~gsub("\\[[^\\]]","",.)),
+    across(.cols=everything(),~gsub(" †","",.))
+  ) %>% separate_rows(Years,sep=", ") %>% select(-`Ref.`) %>% mutate(Years=as.numeric(Years)) %>% rename(Year=Years) %>% 
+  arrange(Year) 
+
+
+############################################################################################################################
+# Loads the official data on voting over various editions (1975-2021)
+all_data=as_tibble(readxl::read_xlsx("eurovision_song_contest_1975_2021.xlsx",1))
+
+# Select year from which to start the data collection
+year0=2012
+data=all_data %>% 
+  # Filters only finals from 'year0' onwards and jury votes only
+  filter(`(semi-) final`=="f",Year>=year0,`Jury or Televoting`=="J") %>% 
+  # Removes irrelevant rows (voter v to performer v)
+  filter(is.na(Duplicate)) %>% filter(`From country`!=`To country`) %>% 
+  # Fix some inconsistencies with country names
+  mutate(
+    `From country`=case_when(
+      `From country`=="F.Y.R. Macedonia"~"Macedonia",
+      `From country`=="The Netherlands"~"Netherlands",
+      `From country`=="Bosnia & Herzegovina"~"Bosnia and Herzegovina",
+      `From country`=="Serbia & Montenegro"~"Serbia and Montenegro",
+      TRUE~`From country`
+    ),
+    `To country`=case_when(
+      `To country`=="F.Y.R. Macedonia"~"Macedonia",
+      `To country`=="The Netherlands"~"Netherlands",
+      `To country`=="Bosnia & Herzegovina"~"Bosnia and Herzegovina",
+      `To country`=="Serbia & Montenegro"~"Serbia and Montenegro",
+      # There's a mistake in the original data - in 2003, **Latvia**, not Lithuania participated!
+      (`To country`=="Lithuania" & Year==2003)~"Latvia",
+      TRUE~`To country`
+    )
+  ) %>% 
+  # Recodes the countries as factors
+  mutate(`From country`=as.factor(`From country`),`To country`=as.factor(`To country`)) %>% 
+  # Creates an interaction between voter and performer
+  mutate(VP=as.numeric(droplevels(`From country`:`To country`))) %>% 
+  # Removes irrelevant columns
+  select(-c(`(semi-) final`,`Edition`,`Jury or Televoting`,Duplicate)) %>% 
+  # Renames voter/performer
+  rename(Voter=`From country`,Performer=`To country`) 
+
+# Merges the data on song language into the main dataset
+data=data %>% left_join((datawiki %>% rename(Performer=Country) %>% select(Year,Performer,song_language,Language))) %>% 
+  arrange(Year,Performer,Voter) 
+
+
+###################################################################################################################################
+# Uses shapefile to determine adjacency. NB Needs to filter off Europe and the other relevant countries
+library(rgdal)
+shpfile = readOGR("~/Dropbox/UCL/Projects/Dee/Shapefile/countries.shp")
+# Selects only the relevant countries
+all_countries=tibble(
+  country=data %>% with(union(Voter,Performer)) %>% sort()
+) %>% mutate(
+  country_num=row_number(),
+  Region=case_when(
+    country %in% c("Czech Republic","Hungary","Liechtenstein","Poland","Slovakia")~"Central Europe",
+    country %in% c("Albania","Bosnia and Herzegovina","Bulgaria","Croatia","Greece","Moldova","Montenegro","North Macedonia",
+                 "Romania","Serbia","Slovenia","Turkey")~"SouthEastern Europe",
+    country %in% c("Denmark","Estonia","Finland","Iceland","Ireland","Latvia","Lithuania","Norway","Sweden","United Kingdom")~"Northern Europe",
+    country %in% c("Austria","Belgium","France","Germany","Luxembourg","Monaco","Netherlands","Switzerland")~"Western Europe",
+    country %in% c("Italy","Spain","Portugal")~"Southern Europe",
+    country %in% c("Israel","Australia")~"Other",
+    TRUE~"Eastern Europe"
+  )
+)
+eurovision_countries=subset(shpfile,NAME %in% all_countries)
+# NB: 'North Macedonia' does not match the list of countries - should do something about that?...
+
+# Creates adjacency file - this can be used directly for spatial modelling, or be included more simply after turning it into
+# a matrix of data for the various pairs of voter/performer (giving 1 if they are neighbours and 0 otherwise...)
+tmp=spdep::poly2nb(eurovision_countries)
+spdep::nb2INLA("test.graph",tmp)
+# Creates a list of values for the adjacencies (like would be inputted in BUGS)
+tt=spdep::nb2WB(tmp)
+adj_mat=tibble(country=rep(eurovision_countries$NAME,tt$num),country_num=rep(1:length(tt$num),tt$num),adj=tt$adj)
+adj_mat=adj_mat %>% left_join(all_countries,by=c("adj"="country_num")) %>% 
+  rename(country=country.x,neighbour=country.y,neighbour_num=adj) %>% select(country,country_num,neighbour,neighbour_num)
+
+# Now links the adjacency data to the main dataset & adds migration stocks
+data=data %>% left_join(migration %>% select(From,To,migration_rate_100k),by=c("Performer"="From","Voter"="To")) %>% 
+  mutate(migration_rate_100k=case_when(is.na(migration_rate_100k)~0,TRUE~migration_rate_100k))
+
+data=(data %>% left_join(
+  (migration %>% select(From,Subregion_from,population_2019_from) %>% 
+     rename(Country=From,Subregion=Subregion_from,population_2019=population_2019_from) %>% group_by(Country) %>% slice(1) %>% ungroup()) %>% 
+    bind_rows(
+      migration %>% select(To,Subregion_to,population_2019_to) %>% rename(Country=To,Subregion=Subregion_to,population_2019=population_2019_to) %>% 
+        group_by(Country) %>% slice(1) %>% ungroup()
+    ) %>% group_by(Country,Subregion) %>% slice(1) %>% ungroup(),by=c("Voter"="Country")) %>% 
+  rename(Subregion_voter=Subregion,population_2019_voter=population_2019)) %>% 
+  left_join(
+    (migration %>% select(From,Subregion_from,population_2019_from) %>% 
+       rename(Country=From,Subregion=Subregion_from,population_2019=population_2019_from) %>% group_by(Country) %>% slice(1) %>% ungroup()) %>% 
+      bind_rows(
+        migration %>% select(To,Subregion_to,population_2019_to) %>% rename(Country=To,Subregion=Subregion_to,population_2019=population_2019_to) %>% 
+          group_by(Country) %>% slice(1) %>% ungroup()
+      ) %>% group_by(Country,Subregion) %>% slice(1) %>% ungroup(),by=c("Performer"="Country")) %>% 
+  rename(Subregion_performer=Subregion,population_2019_performer=population_2019) 
+
+data=data %>% left_join(adj_mat,by=c("Voter"="country","Performer"="neighbour")) %>% 
+  mutate(Neighbour=case_when(!is.na(country_num)~1,TRUE~0)) %>% select(-c(country_num,neighbour_num)) 
+
+data=data %>% mutate(
+  same_region=factor(case_when(
+    (Subregion_voter==Subregion_performer)~"same region",
+    TRUE~"different region"
+  )),
+  big_four=factor(case_when(
+    Performer%in%c("Italy","United Kingdom","Germany","France")~"yes",
+    TRUE~"no"
+  ))
+) %>% 
+  select(Year,Voter,Subregion_voter,Performer,Subregion_performer,Points,VP,Neighbour,song_language,same_region,big_four,migration_rate_100k,everything())
+
+data=data %>% left_join(winners) %>% 
+  select(Year,Voter,Performer,Points,VP,song_language,migration_rate_100k,Neighbour,same_region,big_four,nwin,everything()) %>% 
+  mutate(nwin=case_when(is.na(nwin)~0,TRUE~nwin))
+data=data %>% left_join(hosts %>% select(Year,Country)) %>% 
+  mutate(Incumbent=case_when(Country==Performer~1,TRUE~0)) %>% 
+  left_join(participation %>% select(Performer,Debut)) %>% 
+  select(Year,Incumbent,Voter,Performer,Points,VP,song_language,migration_rate_100k,Neighbour,same_region,big_four,Debut,nwin,everything())
+data=data %>% left_join(year_last_win,c("Performer"="Country","Year"="Year")) %>% 
+  mutate(since_last_win=case_when(is.na(since_last_win)~Year-(Debut-1),TRUE~since_last_win)) %>% 
+  select(Year,Incumbent,Voter,Performer,Points,VP,song_language,migration_rate_100k,Neighbour,same_region,big_four,since_last_win,everything())
+
+##
+data %>% left_join(UN_migration) %>% 
+  select(Year,Incumbent,Voter,Performer,Points,VP,Distance,migration_rate_100k,everything())
+data=data %>% 
+  mutate(Debut=case_when(Performer=="Macedonia"~1998,TRUE~Debut),since_last_win=case_when(is.na(since_last_win)~Year-Debut,TRUE~since_last_win)) 
+
+saveRDS(data,file="data_28May2021.rds")
+
+all_countries=(data |> select(Voter,Subregion_voter) |> rename(country=Voter,Region=Subregion_voter)) |>
+  bind_rows((data |> select(Performer,Subregion_performer) |> rename(country=Performer,Region=Subregion_performer))) |>
+  group_by(country) |> slice(1) |> ungroup()
+  
+
+###################################################################################################################################
+# Runs the model
+# Works relatively fast in JAGS (so possibly will do even better in Nimble?)
+# Source: https://github.com/biometry/APES/blob/master/LectureNotes/2016-JAGS/ZeroInflation/ZeroInflation_JAGS.md
+
+library(R2jags)
+## Call the **basic** version of the model directly as a function
+model=function() {
+  for (i in 1:N) {
+    # Defines the model for the sampling distribution
+    y[i] ~ dpois(mu[i])
+    # Defines the mixture making up the hurdle model
+    mu[i] <- lambda[i]*z[i] + 0.00001
+    # Latent indicator (=1 if non zero; =0 if zero vote). NB: so we're actually interested in 1-psi!
+    z[i] ~ dbern(psi[i])
+    # Logistic regression for the *positive* vote
+    logit(psi[i]) <- X_zero[i,]%*%alpha+phi[vp[i]]
+    
+    # Log-linear model for the positive votes
+    log(lambda[i]) <- X_plus[i,]%*%beta+gamma[vp[i]]
+  }
+  
+  # Prior distributions for the fixed effects
+  for (h in 1:H) {
+    alpha[h] ~ dnorm(0,0.25)
+  }
+  for (k in 1:K) {
+    beta[k] ~ dnorm(0,0.25)
+  }
+  
+  # Random effects
+  for (i in 1:nvp) {
+    phi[i] ~ dnorm(0,tau.phi)
+    gamma[i] ~ dnorm(0,tau.gamma)
+  }
+  tau.phi ~ dgamma(.1,.1)
+  tau.gamma ~ dgamma(.1,.1)
+  sigma.phi <- pow(tau.phi,-.5)
+  sigma.gamma <- pow(tau.gamma,-.5)
+}
+##
+
+
+###############################################################################################################################
+# Categorical model
+params=c("alpha","beta","sigma.phi","sigma.gamma","phi","gamma","pi","lambda")
+# Model specification
+formula=Points~as.factor(song_language)+Neighbour+Incumbent+Distance+migration_rate_100k+same_region+big_four+since_last_win
+X_zero=model.matrix(
+  formula,
+  data %>% mutate(
+    song_language=case_when(Language=="English"~"English",TRUE~"Other"),
+    Distance=scale(Distance/100,scale=F),
+    migration_rate_100k=scale(migration_rate_100k/1000,scale=F),
+    since_last_win=scale(since_last_win,scale=F)
+  )
+) %>% as_tibble()
+X_plus=model.matrix(
+  formula,
+  data %>% mutate(
+    song_language=case_when(Language=="English"~"English",TRUE~"Other"),
+    Distance=scale(Distance/100,scale=T),
+    migration_rate_100k=scale(migration_rate_100k,scale=T),
+    since_last_win=scale(since_last_win,scale=T)
+  )
+) %>% as_tibble()
+dataJags=list(
+  # Rescales the data so that:
+  # a) the range of values is in (1,2,...,S) (as required by JAGS/BUGS)
+  # b) there are S=11 distinct and *consecutive* categories
+  y=data %>% mutate(Points=Points+1) %>% mutate(Points=case_when(Points==11~10,Points==13~11,TRUE~Points)) %>% pull(Points),
+  N=nrow(data),
+  X_zero=X_zero,
+  X_plus=X_plus,
+  nvp=data %>% with(length(unique(VP))),
+  vp=data %>% pull(VP),
+  S=data %>% with(length(unique(Points)))
+)
+dataJags$H=ncol(dataJags$X_zero)
+dataJags$K=ncol(dataJags$X_plus)
+
+# Initial values
+inits=function() {
+  list(
+    beta=rnorm(dataJags$H,0,1),
+    gamma=rnorm(dataJags$nvp,0,1),
+    lambda0=runif((dataJags$S-1),.1,.5),
+    sigma.gamma=runif(1,0,2)
+  )
+}
+
+# Runs the model
+m=jags(dataJags,inits=inits,parameters.to.save=params,model.file="model_categorical.txt",
+       n.chains=2,n.thin=1,n.iter=5000,n.burnin=4500,working.directory=getwd())
+
+
+
+###############################################################################################################################
+### Poisson model data/running
+
+# Defines the parameters and data list
+params=c("alpha","beta","sigma.phi","sigma.gamma","phi","gamma")
+formula=Points~as.factor(song_language)+Neighbour+Incumbent+Distance+migration_rate_100k+same_region+big_four+since_last_win
+X_zero=model.matrix(
+  formula,
+  data %>% mutate(
+    song_language=case_when(Language=="English"~"English",TRUE~"Other"),
+    Distance=scale(Distance/100,scale=F),
+    migration_rate_100k=scale(migration_rate_100k/1000,scale=F),
+    since_last_win=scale(since_last_win,scale=F)
+  )
+) %>% as_tibble()
+X_plus=model.matrix(
+  formula,
+  data %>% mutate(
+    song_language=case_when(Language=="English"~"English",TRUE~"Other"),
+    Distance=scale(Distance/100,scale=T),
+    migration_rate_100k=scale(migration_rate_100k,scale=T),
+    since_last_win=scale(since_last_win,scale=T)
+  )
+) %>% as_tibble()
+dataJags=list(
+  # Rescales the data so that there are S=11 distinct and consecutive categories
+  y=data %>% mutate(Points=case_when(Points==10~9,Points==12~10,TRUE~Points)) %>% pull(Points),
+  N=nrow(data),
+  X_zero=X_zero,
+  X_plus=X_plus,
+  nvp=data %>% with(length(unique(VP))),
+  vp=data %>% pull(VP)
+)
+dataJags$H=ncol(dataJags$X_zero)
+dataJags$K=ncol(dataJags$X_plus)
+# Needed for the hurdle model
+dataJags$ones=rep(1,dataJags$N)
+dataJags$z=ifelse(dataJags$y==0,1,0)
+dataJags$C=10000
+
+# Runs the model
+m=jags(dataJags,inits=inits,parameters.to.save=params,model.file=model,
+       n.chains=2,n.thin=1,n.iter=5000,n.burnin=4500,working.directory=getwd())
+
+# Diagnostic plots
+what="Rhat" # can choose 'n.eff' or 'Rhat'
+m$BUGSoutput$summary %>% as_tibble() %>% ggplot(aes(1:nrow(.),!!sym(what))) + 
+  geom_point() + geom_hline(yintercept=ifelse(what=="Rhat",1.1,m$BUGSoutput$n.sims),linetype="dashed",size=2) + 
+  theme_gb() + labs(x="Parameters",title=ifelse(what=="Rhat","Potential scale reduction","Effective sample size"))
+# Selected summary stats
+m$BUGSoutput$summary %>% as_tibble() %>% mutate(Parameter=rownames(m$BUGSoutput$summary)) %>% 
+  filter(grepl("alpha|beta|sigma",Parameter)) |> mutate(Parameter_name=c(names(X_zero),names(X_plus),"sigma.gamma","sigma.phi")) |> 
+  select(Parameter,Parameter_name,everything()) |>
+  select(-c("25%","50%","75%")) %>% print(n=100)
+
+
+# Output plots
+plot_performer=function(performer) {
+  # Selects the relevant simulations and plots the distributions of the effects
+  perf=data %>% filter(Performer==performer) %>% select(VP) %>% with(sort(unique(VP)))
+  
+  #summaries=((m$BUGSoutput$sims.matrix %>% as_tibble() %>% select(contains("phi")))[,perf] %>% ilogit %>% 
+  #             mutate(across(.cols=everything(),~1-.)) %>% stats)$tab %>% as_tibble() %>% 
+  #  mutate(Voter=data %>% filter(VP%in%perf) %>% group_by(Voter) %>% slice(1) %>% ungroup() %>% pull(Voter) %>% as.character()) %>% 
+  #  left_join(all_countries,by=c("Voter"="country"))
+  ## This defines the "systematic" component of the probability of a 0 vote as the varying intercept (alpha+phi)
+  summaries=((m$BUGSoutput$sims.matrix %>% as_tibble() %>% mutate(across(contains("phi"),~ilogit(`alpha[1]`+.))) %>% 
+               select(contains("phi")))[,perf] %>% stats)$tab %>% as_tibble() %>% 
+    mutate(Voter=data %>% filter(VP%in%perf) %>% group_by(Voter) %>% slice(1) %>% ungroup() %>% pull(Voter) %>% as.character()) %>% 
+    left_join(all_countries,by=c("Voter"="country"))
+  
+  summaries %>% arrange(desc(mean)) %>% mutate(Voter=factor(Voter)) %>% ggplot(aes(x=mean,y=fct_reorder(Voter,mean),color=Region))+
+    geom_linerange(aes(xmin=`2.5%`,xmax=`97.5%`),position=position_dodge(.3),width=.2) +
+    geom_point(aes(mean,Voter),position = position_dodge(0.3)) +
+    xlab("Probability of 0 vote") + labs(title=paste0("Probability of 0 vote for ",performer)) + theme_gb() +
+    ylab("Voter")+
+    xlim(c(0,1)) + geom_vline(xintercept=.5,linetype="dashed",size=1.1)
+}
+
+plot_voter=function(voter) {
+  # Selects the relevant simulations and plots the distributions of the effects
+  vot=data %>% filter(Voter==voter) %>% select(VP) %>% with(sort(unique(VP)))
+  
+  # summaries=((m$BUGSoutput$sims.matrix %>% as_tibble() %>% select(contains("phi")))[,vot] %>% ilogit %>% 
+  #              mutate(across(.cols=everything(),~1-.)) %>% stats)$tab %>% as_tibble() %>% 
+  #   mutate(Voter=data %>% filter(VP%in%vot) %>% group_by(Performer) %>% slice(1) %>% ungroup() %>% pull(Performer) %>% as.character()) %>% 
+  #   left_join(all_countries,by=c("Voter"="country"))
+  ## NB: need 1-logit for the ZIP model (or change parameterisation!)
+  summaries=((m$BUGSoutput$sims.matrix %>% as_tibble() %>% mutate(across(contains("phi"),~ilogit(`alpha[1]`+.))) %>% 
+                select(contains("phi")))[,vot] %>% stats)$tab %>% as_tibble() %>% 
+    mutate(Voter=data %>% filter(VP%in%vot) %>% group_by(Performer) %>% slice(1) %>% ungroup() %>% pull(Performer) %>% as.character()) %>% 
+    left_join(all_countries,by=c("Voter"="country"))
+  
+  summaries %>% arrange(desc(mean)) %>% mutate(Voter=factor(Voter)) %>% ggplot(aes(x=mean,y=fct_reorder(Voter,mean),color=Region))+
+    geom_linerange(aes(xmin=`2.5%`,xmax=`97.5%`),position=position_dodge(.3)) +
+    geom_point(aes(mean,Voter),position = position_dodge(0.3),size=2.3) +
+    xlab("Probability of 0 vote") + labs(title=paste0("Probability of 0 vote from ",voter)) + theme_gb() +
+    ylab("Performer")+
+    xlim(c(0,1)) + geom_vline(xintercept=.5,linetype="dashed",size=1.1) 
+}
+
+ 
+plot_performer("Italy")
+plot_performer("Russia")
+plot_performer("United Kingdom")
+plot_performer("Sweden")
+plot_performer("Australia")
+
+plot_voter("United Kingdom")
+plot_voter("Lithuania")
+plot_voter("Italy")
+
+
+# Ridge plot 
+library(ggridges)
+((m$BUGSoutput$sims.matrix %>% as_tibble() %>% select(contains("phi")))[,vot] %>% ilogit %>%
+    mutate(across(.cols=everything(),~1-.))) %>% unlist %>% as_tibble() %>% 
+  mutate(Performer=rep(data %>% filter(VP %in% vot) %>% group_by(Performer) %>% slice(1) %>% ungroup() %>% select(Performer) %>% pull,each=1000)) %>% 
+  rename(phi=value) %>% mutate(Performer=factor(Performer)) %>% ggplot(aes(phi,fct_reorder(Performer,phi,mean))) + 
+  geom_density_ridges() + geom_vline(xintercept=0.5,linetype="dashed",size=1.2) +
+  labs(x="Probability of 0 votes")
+
+
+
+# To get something meaningful, should also add the baseline (beta[1])???
+plot_performer2=function(performer,threshold=8,lower=FALSE) {
+  # Selects the relevant simulations and plots the distributions of the effects
+  perf=data %>% filter(Performer==performer) %>% select(VP) %>% with(sort(unique(VP)))
+  
+  # summaries=((m$BUGSoutput$sims.matrix %>% as_tibble() %>% select(contains("gamma")))[,perf] %>% exp %>% 
+  #              mutate(across(.cols=everything(),~ppois(7,.,lower.tail=F))) %>% stats)$tab %>% as_tibble() %>% 
+  #   mutate(Voter=data %>% filter(VP%in%perf) %>% group_by(Voter) %>% slice(1) %>% ungroup() %>% pull(Voter) %>% as.character()) %>% 
+  #   left_join(all_countries,by=c("Voter"="country"))
+  summaries=((m$BUGSoutput$sims.matrix %>% as_tibble() %>% mutate(across(contains("gamma"),~ppois(threshold,exp(`beta[1]`+.),lower.tail=lower))) %>% 
+                select(contains("gamma")))[,perf] %>% stats)$tab %>% as_tibble() %>% 
+    mutate(Voter=data %>% filter(VP%in%perf) %>% group_by(Voter) %>% slice(1) %>% ungroup() %>% pull(Voter) %>% as.character()) %>% 
+    left_join(all_countries,by=c("Voter"="country"))
+  
+  txt=paste0("Probability of systematically scoring ",performer," ≥ ",threshold," votes")
+  summaries %>% arrange(desc(mean)) %>% mutate(Voter=factor(Voter)) %>% ggplot(aes(x=mean,y=fct_reorder(Voter,mean),color=Region))+
+    geom_linerange(aes(xmin=`2.5%`,xmax=`97.5%`),position=position_dodge(.3),width=.2) +
+    geom_point(aes(mean,Voter),position = position_dodge(0.3)) +
+    xlab(paste0("Probability of systematic vote ≥ ",threshold)) + labs(title=txt) + theme_gb() +
+    ylab("Voter")+
+    xlim(c(0,1)) + geom_vline(xintercept=.5,linetype="dashed",size=1.1)
+}
+
+plot_voter2=function(voter,threshold=8,lower=FALSE) {
+  # Selects the relevant simulations and plots the distributions of the effects
+  vot=data %>% filter(Voter==voter) %>% select(VP) %>% with(sort(unique(VP)))
+  
+  summaries=((m$BUGSoutput$sims.matrix %>% as_tibble() %>% mutate(across(contains("gamma"),~ppois(threshold,exp(`beta[1]`+.),lower.tail=lower))) %>% 
+                select(contains("gamma")))[,vot] %>% stats)$tab %>% as_tibble() %>% 
+    mutate(Voter=data %>% filter(VP%in%vot) %>% group_by(Performer) %>% slice(1) %>% ungroup() %>% pull(Performer) %>% as.character()) %>% 
+    left_join(all_countries,by=c("Voter"="country"))
+  
+  txt=paste0("Probability that ",voter," scores systematically ≥ ",threshold," votes")
+  summaries %>% arrange(desc(mean)) %>% mutate(Voter=factor(Voter)) %>% ggplot(aes(x=mean,y=fct_reorder(Voter,mean),color=Region))+
+    geom_linerange(aes(xmin=`2.5%`,xmax=`97.5%`),position=position_dodge(.3),width=.2) +
+    geom_point(aes(mean,Voter),position = position_dodge(0.3)) +
+    xlab(paste0("Probability of systematic vote ≥ ",threshold)) + labs(title=txt) + theme_gb() +
+    ylab("Performer")+
+    xlim(c(0,1)) + geom_vline(xintercept=.5,linetype="dashed",size=1.1)
+}

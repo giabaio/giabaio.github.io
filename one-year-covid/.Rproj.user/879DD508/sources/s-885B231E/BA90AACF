@@ -1,0 +1,26 @@
+{
+    "id": "BA90AACF",
+    "path": "~/Dropbox/BACTHTA/book_new/priors.Rnw",
+    "project_path": null,
+    "type": "sweave",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1635980269554.0,
+    "source_on_save": false,
+    "relative_order": 5,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "1239,100",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1556027777,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1556027777,
+    "read_only": false,
+    "read_only_alternatives": []
+}
