@@ -1,0 +1,697 @@
+\documentclass[9pt]{beamer}
+%\usepackage{ucltemplate}
+\usepackage{etex}
+\usepackage{graphicx,hyperref,epsfig,bm,xspace}%pst-node,pst-text,pst-3d,pifont,pstricks,
+\usepackage{xcolor,wasysym}
+\usepackage[UKenglish]{babel}
+\usepackage{tikz,verbatim,inconsolata,listings}
+\usepackage[position=top]{subfig}
+\usetikzlibrary{shapes,arrows,decorations.pathreplacing,spy}
+
+\lstset{basicstyle=\ttfamily\fontsize{6}{7}\selectfont,breaklines=true,tabsize=2,
+keywords={},linewidth=1\textwidth,backgroundcolor=\color{black!5},
+moredelim=[is][\color{red}]{_+}{_+},
+%%moredelim=[is][\textbf]{**}{**},
+%%moredelim=[is][\color{blue}]{*!}{*!},
+%%moredelim=[is][\color{green}]{'_}{'_}
+} 
+
+\newcommand{\UCL}{
+\logo{\includegraphics[height=.37cm]{/home/gianluca/Dropbox/EcSan/ShortCourses/BSU-UCL/LaTeX/UCL.jpg}} 
+\setbeamertemplate{sidebar right}{% 
+  \vfill%
+  \llap{\insertlogo\hskip0.0cm}\vskip0.015cm%
+}
+}
+\newcommand{\nologo}{
+\logo{}
+}
+
+\input{/home/gianluca/Dropbox/EcSan/MSVES/utils2}
+
+\graphicspath{{/home/gianluca/Dropbox/EcSan/ShortCourses/BSU-UCL/LaTeX/}{/home/gianluca/Dropbox/UCL/3021/Lectures/figs/}{/home/gianluca/Dropbox/HE/NICE_workshop/}{/home/gianluca/Dropbox/UCL/Mapi/Projects/Survival/Graphs/}{/home/gianluca/Dropbox/EcSan/ShortCourses/Training/}}
+
+\mode<presentation>
+%\usetheme{default} %Boadilla Singapore Warsaw
+\usetheme{Boadilla}
+\usecolortheme{whale} 
+\usefonttheme[onlymath]{serif}
+%\setbeamercovered{transparent} %
+\setbeamertemplate{itemize item}{$\bullet$} %
+\setbeamertemplate{itemize subitem}{--} %
+\setbeamertemplate{navigation symbols}{}
+
+%% This customises the part page to show arabic numbering
+\setbeamertemplate{part page}{
+  \begin{centering}
+    {\usebeamerfont{part name}\usebeamercolor[fg]{part name}\partname~\insertpartnumber}
+    \vskip1em
+    \begin{beamercolorbox}[sep=8pt,center,rounded=true]{part title}
+      \usebeamerfont{part title}\insertpart\par
+    \end{beamercolorbox}
+  \end{centering}
+}
+
+\setbeamertemplate{itemize subsubitem}{$\bullet$}
+
+\definecolor{myblue}{rgb}{0.14 0.34 0.55}
+\definecolor{olive}{rgb}{.2 .31 .09}
+\definecolor{orange}{rgb}{1 0.5 0}
+\definecolor{mygrey}{rgb}{.94 .94 .94}
+\definecolor{amber}{rgb}{1.0, 0.75, 0.0}
+\newcommand\myblue{\color{myblue}}
+\newcommand\olive{\color{olive}}
+\newcommand\orange{\color{orange}}
+\newcommand\mygrey{\color{mygrey}}
+\newcommand\amber{\color{amber}}
+\newcommand\red{\color{red}}
+\newcommand\blue{\color{blue}}
+\newcommand\black{\color{black}}
+\newcommand\white{\color{white}}
+\newcommand\magenta{\color{magenta}}
+
+\newcommand{\E}{\mbox{E}}
+\renewcommand{\b}{\mbox{B}}
+\newcommand{\bcea}{\texttt{BCEA}\xspace}
+\newcommand{\R}{\texttt{R}\xspace}
+\newcommand{\hs}{\hspace{5pt}}
+
+\title[\fontsize{5}{5} \selectfont Introduction to \texttt{INLA}]
+{A (ridiculously short and incomplete) introduction to \texttt{INLA}}
+\date[\fontsize{5}{5} \selectfont NASH Seminar, 3 Apr 2019]{\fontsize{9}{10}\selectfont{\textit{Network of Applied Statisticians in Health} Seminar Series \\ University College London \\[8pt] Wednesday 3 April 2019}}
+\author[\fontsize{5}{5} \selectfont Gianluca Baio]{\textbf{Gianluca Baio} \\\vspace{.3cm} \fontsize{7}{8} \selectfont \textcolor{olive}{\textbf{(Thanks to H\r{a}vard Rue)}}\\[10pt] \fontsize{8}{9}\selectfont{University College London \newline Department of Statistical Science}}
+\institute[\fontsize{5}{5} \selectfont \!\!UCL]{\olive \texttt{g.baio@ucl.ac.uk} \\\url{http://www.ucl.ac.uk/statistics/research/statistics-health-economics/} \\\url{http://www.statistica.it/gianluca}\\\url{https://github.com/giabaio}}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\UCL 
+
+\frame{
+\frametitle{Laplace's Liberation Army? \hspace{0pt plus 1 filll}\small Know what you're looking for\ldots}
+\centering
+\vspace{-0pt}
+\hspace*{-.33cm}\includegraphics[scale=.25]{INLA_screenshot.png}
+}
+
+\frame{
+\frametitle{Bayesian computation \only<2-|handout:1>{\hspace{0pt plus 1 filll}\small Markov Chain Monte Carlo (MCMC)}}
+\vspace{5pt}
+\begin{itemize}
+\item In a (\textbf{very} small!) nutshell, Bayesian inference boils down to the computation of \textbf{\red posterior} and/or \textbf{\blue predictive} distributions
+\[ \red p(\bm\theta\mid \bm y) = \frac{p(\bm y\mid \bm\theta)p(\bm\theta)}{\int p(\bm y\mid \bm\theta)p(\bm\theta) d\bm\theta} \qquad 
+\blue p(y^* \mid \bm y) = \int p(y^*\mid \bm\theta)p(\bm\theta\mid \bm y) d\bm\theta \]
+
+\pause
+\item Since the advent of simulation-based techniques (notably MCMC), Bayesian computation has enjoyed incredible development
+\item This has certainly been helped by dedicated software (eg \texttt{BUGS} and then \texttt{WinBUGS}, \texttt{OpenBUGS}, \texttt{JAGS})
+\item MCMC methods are very general and can effectively be applied to ``any'' model
+\vspace{5pt} \pause
+\item However:
+\begin{itemize}
+\item Even if \textbf{\olive in theory}, MCMC can provide (nearly) exact inference, given perfect convergence and MC error $\rightarrow 0$, in practice, this has to be balanced with model complexity and running time 
+\item This is particularly an issue for problems characterised by large data or very complex structure (eg hierarchical models)
+\end{itemize}
+\end{itemize}
+}
+
+\frame{
+\frametitle{MCMC \hspace{0pt plus 1 filll}\small Pros \& cons}
+\begin{itemize}
+\item ``Standard'' MCMC sampler are generally easy-ish to program and are in fact implemented in readily available software
+\item However, depending on the complexity of the problem, their efficiency might be limited
+\vspace{10pt} \pause
+\item Possible solutions
+\begin{enumerate}
+\item More complex \textbf{\red model specification}
+\begin{itemize}
+\item Blocking
+\item Overparameterisation
+\end{itemize}
+\vspace{5pt} \pause
+\item More complex \textbf{\blue sampling schemes}
+\begin{itemize}
+\item Hamiltonian Monte Carlo
+\item No U-turn sampling (eg \texttt{\olive stan}) --- more on this later!
+\end{itemize}
+\pause \vspace{5pt}
+\item Alternative methods of inference
+\begin{itemize}
+\item Approximate Bayesian Computation (ABC)
+\item \alert<5>{INLA} \only<5|handout:1>{\alert<5>{ --- more on this now!}}
+\end{itemize}
+\end{enumerate}
+\end{itemize}
+}
+
+\frame{
+\frametitle{Basics of INLA}
+The basic ideas revolve around
+\begin{itemize}
+\item Formulating the model using a specific characterisation
+\begin{itemize}
+\item All models that can be formulated in this way have certain features in common, which facilitate the computational aspects
+\item The characterisation is still quite general and covers a wide range of possible models (more on that later!)
+\item \textbf{NB}: This implies less flexibility with respect to MCMC --- but in many cases this is not a huge limitation!
+\end{itemize}
+\vspace{10pt}\pause
+\item Use some basic probability conditions to approximate the relevant distributions
+\vspace{10pt}\pause
+\item Compute the relevant quantities typically using numerical methods
+\end{itemize}
+
+\pause \vfill
+\small For a longer, more structured (but older) version of this talk see: \texttt{\olive http://www.statistica.it/gianluca/Talks/INLA.pdf}
+}
+
+\frame{
+\frametitle{Latent Gaussian models (LGMs)}
+\begin{itemize}
+\item The general problem of (parametric) inference is posited by assuming a probability model for the observed data, as a function of some relevant parameters
+\[\myblue \bm{y} \mid \bm{\theta},\bm\psi \sim p(\bm{y} \mid \bm{\theta},\bm\psi) = \prod_{i=1}^n p(y_i \mid \bm{\theta},\bm\psi) \]
+\pause
+\item Often (in fact for a surprisingly large range of models!), we can assume that the parameters are described by a \textbf{\red Gaussian Markov Random Field} (GMRF) \vspace{-5pt}
+\begin{eqnarray*}
+&& \myblue \bm\theta\mid\bm\psi \sim \mbox{Normal}(\bm 0,\bm\Sigma(\bm\psi)) \\
+&& \myblue \theta_l \perp\!\!\!\perp \theta_m \mid \bm\theta_{-lm} \Leftrightarrow \bm{Q}_{lm}=\bm{\Sigma}^{-1}_{lm} = 0
+\end{eqnarray*}\\[-5pt]
+where 
+\begin{itemize}
+\item The notation ``$-lm$'' indicates all the other elements of the parameters vector, excluding elements $l$ and $m$
+\item \textbf{NB}: Conditional independence implies that the precision matrix $\bm{Q}$ is \textbf{\olive sparse} (simplify calculations!)
+\item The covariance matrix $\bm\Sigma$ depends on some hyper-parameters $\bm\psi$
+\end{itemize}
+\vspace{10pt}\pause
+\item This kind of models is often referred to as \textbf{\olive Latent Gaussian models}
+\end{itemize}
+}
+
+\frame{
+\frametitle{LGMs as a general framework}
+\begin{itemize}
+\item In general, we can partition $\myblue \bm \psi = (\bm\psi_1,\bm\psi_2)$ and re-express a LGM as
+\myblue
+\begin{eqnarray*}
+\begin{aligned}
+\bm\psi & \sim p(\bm\psi) && \mbox{\black (``hyperprior'')}\\
+\bm\theta \mid \bm\psi & \sim p(\bm\theta\mid\bm\psi) = \mbox{Normal}(0,\bm\Sigma(\bm\psi_1)) && \mbox{\black (``GMRF prior'')} \\
+\bm y \mid \bm \theta,\bm\psi & \sim \prod_i p(y_i\mid\bm \theta,\bm\psi_2) &&  \mbox{\black (``data model'')}
+\end{aligned}
+\end{eqnarray*}
+\black 
+i.e.~$\olive\bm\psi_1$ are the \textbf{\red hyper-parameters} and $\olive\bm\psi_2$ are \textbf{\blue nuisance parameters}
+\pause \vspace{10pt}
+\item The dimension of $\myblue \bm\theta$ can be very large (e.g.~10$^2$-10$^5$)
+\item Conversely, because of the conditional independence properties, the dimension of $\myblue \bm\psi$ needs to be generally small (e.g.~1-5)
+\end{itemize}
+}
+
+\frame{
+\frametitle{LGMs as a general framework}
+\begin{itemize}
+\item A very general way of specifying the problem is by modelling the mean for the $i$-th unit by means of an additive linear predictor, defined on a suitable scale (e.g.~logistic for binomial data)
+\myblue
+\begin{equation*}
+\eta_i = \beta_0 + \sum_{m=1}^M \beta_m x_{mi} + \sum_{l=1}^L f_l(z_{li})
+\vspace{-10pt}
+\end{equation*}\black
+where
+\begin{itemize}
+\item $\beta_0$ is the intercept; 
+\item $(\beta_1,\ldots,\beta_M)$ quantify the effect of $\bm x=(x_1,\ldots,x_M)$ on the response; 
+\item $\bm f=\{f_1(\cdot),\ldots,f_L(\cdot)\}$ is a set of functions defined in terms of some covariates $\bm z=(z_1,\ldots,z_L)$
+\end{itemize}
+and then assume 
+\[\red \bm\theta=\left(\bm \beta,\bm f \right) \sim \mbox{GMRF}(\bm\psi)\]
+\pause
+\item \textbf{NB}: This of course implies some form of Normally-distributed marginals for $\bm \beta$ and~$\bm f$ 
+\end{itemize}
+}
+
+\frame{
+\frametitle{LGMs as a general framework \hspace{0pt plus 1 filll}\small Examples}
+Upon varying the form of the functions $\olive f_l(\cdot)$, this formulation can accommodate a wide range of models
+\vspace{5pt} \pause
+\begin{itemize}
+\item Standard regression
+\begin{itemize}
+\item $\myblue f_l(\cdot) = \mbox{NULL}$
+\end{itemize}
+\vspace{5pt} \pause
+\item Hierarchical models
+\begin{itemize}
+\item $\myblue f_l(\cdot) \sim \mbox{Normal}(0,\sigma^2_f)$ \hfill (Exchangeable)
+\item[] $\myblue \sigma^2_f\mid \bm\psi \sim \mbox{some common distribution}$
+\end{itemize}
+\vspace{5pt} \pause
+\item Spatial and spatio-temporal models
+\begin{itemize}
+\item Two components: $\myblue f_1(\cdot) \sim \mbox{CAR}$ \hfill (Spatially structured effects)
+\item[] \white Two components: $\myblue f_2(\cdot) \sim \mbox{Normal}(0,\sigma^2_{f_2})$ \hfill \black (Unstructured residual)
+\end{itemize}
+\vspace{5pt} \pause
+\item Spline smoothing
+\begin{itemize}
+\item $\myblue f_l(\cdot) \sim \mbox{AR}(\phi,\sigma^2_\varepsilon)$
+\end{itemize}
+\vspace{5pt} \pause
+\item Survival models / logGaussian Cox Processes
+\begin{itemize}
+\item More complex specification in theory, but relatively easy to fit within the INLA framework!
+\end{itemize}
+\vspace{0pt}\pause
+\item \ldots
+\end{itemize}
+}
+
+\frame{
+\frametitle{Integrated Nested Laplace Approximation (INLA)}
+\begin{itemize}
+\item In a Bayesian LGM, the required distributions are 
+\begin{eqnarray*}
+\myblue p(\theta_j\mid\bm{y}) \black & = & \int p(\theta_j,\boldsymbol\psi\mid \bm{y}) d\boldsymbol\psi = \int \red p(\boldsymbol\psi\mid\bm{y}) \magenta p(\theta_j \mid \boldsymbol\psi,\bm{y})\black d\boldsymbol\psi \\
+\myblue p(\psi_k\mid\bm{y}) \black & = & \int\red p(\boldsymbol\psi\mid\bm{y})\black d\boldsymbol\psi_{-k}
+\end{eqnarray*}
+\pause
+\vspace{10pt}
+\item Estimate
+\begin{enumerate}
+\item[] $\displaystyle\red p(\boldsymbol\psi\mid\bm{y}) \myblue = \frac{p(\boldsymbol\theta,\boldsymbol\psi\mid\bm{y})}{p(\boldsymbol\theta\mid\boldsymbol\psi,\bm{y})} \approx \left. \frac{p(\boldsymbol\psi)p(\boldsymbol\theta\mid\boldsymbol\psi)p(\bm{y}\mid\boldsymbol\theta)}{\tilde{p}(\boldsymbol\theta\mid\boldsymbol\psi,\bm{y})}\right |_{\boldsymbol\theta=\hat{\boldsymbol\theta}(\boldsymbol\psi)} $ \vspace{10pt}
+\pause
+\item[] $\displaystyle\magenta p(\theta_j \mid \boldsymbol\psi,\bm{y}) \myblue = \frac{p\left(\{\theta_j,\boldsymbol\theta_{-j}\}\mid \boldsymbol\psi,\bm{y}\right)}{p(\boldsymbol\theta_{-j}\mid\theta_j,\boldsymbol\psi,\bm{y})} \approx \left. \frac{p(\boldsymbol\psi)p(\boldsymbol\theta\mid\boldsymbol\psi)p(\bm{y}\mid\boldsymbol\theta)}{\tilde{p}(\boldsymbol\theta_{-j}\mid\theta_j,\boldsymbol\psi,\bm{y})}\right|_{\bm\theta_{-j}=\hat{\bm\theta}_{-j}(\theta_j,\boldsymbol\psi)} $
+\end{enumerate}
+\vspace{5pt}
+where $\tilde{p}$ indicates the Laplace approximation and $\hat{\bm{\theta}}$ is the mode
+\begin{itemize}
+\item Can do various forms of LA: ``Simplified'' (based on Taylor's expansion up to 3$^\text{rd}$ order) vs ``Full'' (more precise but more computationally expensive)
+\end{itemize}
+\pause \vspace{10pt}
+\item Use numerical integration to obtain the marginals
+\end{itemize}
+}
+
+\begin{frame}[fragile]
+\frametitle{INLA in practice \hspace{0pt plus 1 filll}\small{\texttt{http://www.statistica.it/gianluca/Talks/INLA.pdf}}}
+\begin{overprint}
+\begin{overlayarea}{1.1\textwidth}{1.15\textheight}
+\hspace{-.3cm}
+\begin{tikzpicture}
+\only<1-|handout:1>{
+\draw(0,0) node[align=center,rectangle,rounded corners,draw=none,font=\sffamily\fontsize{6}{7}\selectfont,text width=6.0cm](1){
+\begin{enumerate}
+\item Select a grid of points for $\psi^*_h$ and associated area weights $\Delta_h$ \& interpolate to approximate the posterior 
+\end{enumerate}
+};
+}
+
+\only<2-|handout:1>{
+\draw(6.1,0) node[align=center,rectangle,rounded corners,draw=none,font=\sffamily\fontsize{6}{7}\selectfont,text width=5.8cm](2){
+\begin{enumerate}\setcounter{enumi}{1}
+\item Weight the (conditional) marginal posteriors by the density associated with each $\psi$ on the grid
+\end{enumerate}
+};
+}
+
+\only<1-|handout:1>{
+\draw(0,-2.3) node[align=center,rectangle,rounded corners,draw=none,font=\sffamily\fontsize{6}{7}\selectfont,text width=5.8cm](3){
+\centering
+{\fontsize{4}{5}\selectfont Posterior marginal for $\psi: \myblue p(\psi \mid \bm y) \propto \frac{p(\theta,\bm y \mid \psi)p(\psi)}{p(\theta \mid \bm y, \psi)}$}\\[-12pt] 
+\includegraphics[scale=.23]{interp}
+};
+}
+
+\only<2-|handout:1>{
+\draw(6.1,-2.3) node[align=center,rectangle,rounded corners,draw=none,font=\sffamily\fontsize{6}{7}\selectfont,text width=6.2cm](4){
+\centering
+{\fontsize{4}{5}\selectfont Posterior marginal for $\theta$, conditional on each $\{\psi^*_h\}$ (unweighted)}\\[-8pt]
+\includegraphics[scale=.23]{unwgt} 
+};
+}
+
+\only<3-|handout:1>{
+\draw(0,-4.3) node[align=center,rectangle,rounded corners,draw=none,font=\sffamily\fontsize{6}{7}\selectfont,text width=6.0cm](5){
+\begin{enumerate}\setcounter{enumi}{2}
+\item Weight the (conditional) marginal posteriors by the density associated with each $\psi$ on the grid
+\end{enumerate}
+};
+}
+
+\only<4|handout:1>{
+\draw(6.1,-4.3) node[align=center,rectangle,rounded corners,draw=none,font=\sffamily\fontsize{6}{7}\selectfont,text width=6.0cm](6){
+\begin{enumerate}\setcounter{enumi}{3}
+\item (Numerically) sum over the conditional densities to get the marginal posterior for~$\theta$ 
+\end{enumerate}
+};
+}
+
+\only<3-|handout:1>{
+\draw(0,-6.5) node[align=center,rectangle,rounded corners,draw=none,font=\sffamily\fontsize{6}{7}\selectfont,text width=6.0cm](7){
+\centering
+{\fontsize{4}{5}\selectfont Posterior marginal for $\theta$, conditional on each $\{\psi^*_h\}$ (weighted)}\\[-12pt]
+\includegraphics[scale=.23]{wgt}
+};
+}
+
+\only<4|handout:1>{
+\draw(6.1,-6.5) node[align=center,rectangle,rounded corners,draw=none,font=\sffamily\fontsize{6}{7}\selectfont,text width=6.0cm](8){
+\centering
+{\fontsize{4}{5}\selectfont Posterior marginal for $\theta: \myblue p(\theta \mid \bm y)$}\\[-12pt]
+\includegraphics[scale=.23]{marg}
+};
+}
+\end{tikzpicture}
+\end{overlayarea}
+\end{overprint}
+\end{frame}
+
+\frame{
+\frametitle{Step by step guide to using \texttt{R-INLA}}
+\begin{itemize}
+\item[1.] The first thing to do is to \textbf{\red specify the model}
+\item For example, assume we have a generic model
+\myblue
+\begin{eqnarray*}
+y_i & \stackrel{\small{iid}}{\sim} & p(y_i \mid \theta_i) \\
+\eta_i & = & g(\theta_i) = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + f(z_i)
+\end{eqnarray*}
+\black 
+where
+\begin{itemize}
+\item $\olive \bm x = (x_1,x_2)$ are observed covariates for which we are assuming a linear effect on some function $g(\cdot)$ of the parameter $\theta_i$
+\item $\olive \bm \beta = (\beta_0,\beta_1,\beta_2)\sim \mbox{Normal}(0,\tau_1^{-1})$ are unstructured (``fixed'') effects 
+\item $\olive z$ is an \textbf{index}. This can be used to include structured (``random''), spatial, spatio-temporal effect, etc.
+\item $\olive f \sim \mbox{Normal}(0,\bm{Q}^{-1}_f(\tau_2))$ is a suitable function used to model the structured effects
+\end{itemize}
+\vspace{10pt} \pause
+\item As mentioned earlier, this formulation can actually be used to represent quite a wide class of models!
+\end{itemize}
+}
+
+\begin{frame}[fragile]
+\frametitle{Step by step guide to using \texttt{R-INLA}}
+\begin{itemize}
+\item The model is translated in \texttt{R} code using a \texttt{\red formula}
+\item This is sort of standard in \texttt{R} (you would do pretty much the same for calls to functions such as \texttt{lm}, or \texttt{glm}, or \texttt{lmer})
+{\fontsize{8}{9}\selectfont
+<<setup,eval=FALSE>>=
+# Install the R-INLA package (see http://www.r-inla.org/)
+INLA.repo="https://inla.r-inla-download.org/R/stable"
+install.packages("INLA",dep=TRUE,repos=c(getOption("repos"),INLA=INLA.repo))
+
+# Define a model "formula" (as you would in (g)lm)
+formula = y ~ x1 + x2 + f(z, model=...)
+@
+}
+\vspace{10pt} \pause
+\item The \texttt{\olive f()} function can account for several structured effects
+\item This is done by specifying a different \texttt{model}
+\begin{itemize}
+\item \texttt{\olive iid}, \texttt{\olive iid1d}, \texttt{\olive iid2d}, \texttt{\olive iid3d} specify random effects
+\item \texttt{\olive rw1}, \texttt{\olive rw2}, \texttt{\olive ar1} are smooth effect of covariates or time effects
+\item \texttt{\olive seasonal} specifies a seasonal effect
+\item \texttt{\olive besag} models spatially structured effects (CAR)
+\item \texttt{\olive generic} is a user-defined precision matrix
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Step by step guide to using \texttt{R-INLA}}
+\begin{itemize}
+\item[2.] Call the function \texttt{\olive inla}, specifying the data and options (more on this later),~e.g.
+{\fontsize{8}{9}\selectfont
+<<call,eval=FALSE>>=
+# Calls INLA to fit the model
+m = inla(formula, data=data.frame(y,x1,x2,z),...)
+@
+}
+\vspace{5pt} \pause
+\item The data need to be included in a suitable \texttt{\olive data.frame}
+\item \texttt{R} returns an object \texttt{\olive m} in the class \texttt{inla}, which has some methods available
+\begin{itemize}
+\item \texttt{\olive summary()}
+\item \texttt{\olive plot()}
+\end{itemize}
+\item The options let you specify the priors and hyperpriors, together with additional output
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Example \hspace{0pt plus 1 filll}\small Low birth weight data}
+\begin{overprint}
+\begin{overlayarea}{\textwidth}{\textheight}
+\begin{onlyenv}<1|handout:1>{
+\begin{itemize}
+\item Logistic regression --- data available in the \texttt{brinla} package (\texttt{\olive https://github.com/julianfaraway/brinla})
+\end{itemize}
+{\fontsize{8}{9}\selectfont
+<<lbw, message=FALSE,comment=NA,warning=FALSE>>=
+library(INLA)
+# Load the data
+data(lowbwt, package = "brinla")
+head(lowbwt)
+
+# Specify the model
+formula = LOW ~ AGE + LWT + RACE + SMOKE + HT + UI + FTV
+
+# Run INLA
+m = inla(formula, data=lowbwt, family = "binomial", Ntrials = 1, 
+                     control.compute = list(dic = TRUE, cpo = TRUE))
+
+@
+}
+\end{onlyenv}
+
+\begin{onlyenv}<2|handout:2>
+{\fontsize{7}{8}\selectfont
+<<setup_lwb,eval=FALSE,comment=NA,message=FALSE,warning=FALSE>>=
+summary(m)
+@
+\vspace{-15pt}
+<<lbw2, echo=FALSE,message=FALSE,comment=NA,warning=FALSE>>=
+options(width=200)
+cat("Time used:")
+m$cpu.used
+cat("\nFixed effects:")
+print(m$summary.fixed,digits=4)
+cat("\nThe model has no random effects")
+cat("The model has no hyperparameters")
+cat("\nExpected number of effective parameters(std dev): 8.999(0.00)")
+cat("Number of equivalent replicates : 21.00 ")
+cat("\nDeviance Information Criterion (DIC) ...............: 221.20")
+cat("Deviance Information Criterion (DIC, saturated) ....: 221.20")
+@
+}
+\end{onlyenv}
+
+\begin{onlyenv}<3|handout:3>
+\vspace{-10pt}
+\begin{itemize}
+\item By default, \texttt{INLA} uses ``minimally informative'' priors for the model parameters. But can modify in various ways
+\begin{itemize}
+\item ``Penalised Complexity'' Prior --- invariant to reparameterisations \& linked to ``objective'', Jeffreys' priors
+\item Standard distributions with fixed parameters
+\end{itemize}
+\end{itemize}
+\vspace{-5pt}
+{\fontsize{7}{8}\selectfont
+<<lbw3,message=FALSE,comment=NA,warning=FALSE>>=
+# Specify different values for (some of) the prior distributions
+priors = list(mean.intercept=0, prec.intercept=10^(-2), 
+              mean=list(AGE=log(.5), SMOKE1=log(2), default=0), prec=.5^(-2))
+
+# Re-run the model
+m2 = inla(formula, data=lowbwt, family = "binomial", Ntrials = 1, 
+          control.compute = list(dic = TRUE, cpo = TRUE),control.fixed=priors)
+
+# Shows the results
+print(m2$summary.fixed,digits=4)
+@
+}
+\end{onlyenv}
+
+\begin{onlyenv}<4|handout:4>
+\vspace{-10pt}
+<<diff_distr, echo=FALSE, comment=NA,warning=FALSE,error=FALSE,message=FALSE,out.width='65%',fig.width=7,fig.height=7,comment=NA,warning=FALSE,fig.align='center'>>=
+coefplot.inla(m)
+coefplot.inla(m2,add=TRUE,col="red")
+@
+\fontsize{5}{5}\selectfont
+--\!$\bullet$\!-- Default prior \vspace{-5pt}
+
+\red --\!$\bullet$\!-- Modified prior
+\end{onlyenv}
+\end{overlayarea}
+\end{overprint}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Example \hspace{0pt plus 1 filll}\small Longitudinal data --- health effects of air pollution}
+\begin{overprint}
+\begin{overlayarea}{\textwidth}{\textheight}
+\begin{onlyenv}<1|handout:1>{
+\vspace{-10pt}
+{\fontsize{7}{8}\selectfont
+<<ohio, message=FALSE,comment=NA,warning=FALSE>>=
+# Load the data
+data(ohio, package = "brinla")
+# Specify the model including random effects by individual
+formula = resp ~ age + smoke + f(id, model="iid")
+# Run INLA
+m = inla(formula, family="binomial", data=ohio, control.compute=list(config=TRUE))
+@
+<<ohio_plot,echo=FALSE, comment=NA,warning=FALSE,error=FALSE,message=FALSE,out.width='52%',fig.width=7,fig.height=7,comment=NA,warning=FALSE,fig.align='center'>>=
+ilogit <- function(x) exp(x)/(1 + exp(x))
+library(gridExtra)
+library(ggplot2)
+p1 <- ggplot(data.frame(m$marginals.fixed[[1]]),aes(x,y)) +
+      geom_line()+xlab("logit")+ylab("density")+ggtitle("Intercept")
+p2 <- ggplot(data.frame(m$marginals.fixed[[2]]),aes(x,y)) +
+      geom_line()+xlab("logit")+ylab("density")+ggtitle("age")
+p3 <- ggplot(data.frame(m$marginals.fixed[[3]]),aes(x,y)) +
+      geom_line()+xlab("logit")+ylab("density")+ggtitle("smoke")
+sden <- data.frame(brinla::bri.hyper.sd(m$marginals.hyperpar[[1]]))
+p4 <- ggplot(sden,aes(x,y)) + geom_line() + xlab("logit") + 
+      ylab("density")+ggtitle("SD(u)")
+grid.arrange(p1,p2,p3,p4,ncol=2)
+@
+}
+\end{onlyenv}
+\end{overlayarea}
+\end{overprint}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Simulating from the posterior distributions}
+\begin{onlyenv}<1-2|handout:1>
+\begin{itemize}
+\item Arguably, one of the main advantages of MCMC is that, given convergence, the output is given by samples from the \textbf{\blue joint} posterior distribution of all parameters, $\myblue p(\bm\theta\mid y)$
+\begin{itemize}
+\item Can obtain all marginal distributions $\myblue p(\theta_j\mid y)$ by simply selecting the relevant simulations
+\item Can obtain simulations from the posterior distribution of any function $g(\theta_j)$ by simply applying the function to the simulations for $\theta_j$
+\end{itemize}
+\vspace{5pt}\pause
+\item \texttt{INLA} is a bit more complicated
+\begin{itemize}
+\item Can use Monte Carlo to obtain simulations from the posterior distributions
+\item However, because of how it works, the estimates are for the \textbf{\olive marginal} posterior distributions for each model parameter
+\item Can use specialised functions based on copul\ae\ to approximate the underlying joint posterior and then MC-simulate 
+\end{itemize}
+\end{itemize}
+\vspace{-6pt}
+{\fontsize{7}{8}\selectfont
+<<joint_dist,message=FALSE,comment=NA,warning=FALSE>>=
+# Create an object with the simulations from the joint posterior
+jpost = inla.posterior.sample(n=1000,m)
+
+# Selects the positions in the resulting list where the values of the "fixed effects" are stored
+pos = pmatch(rownames(m$summary.fixed),rownames(jpost[[1]]$latent))
+
+# Select only the relevant simulated values and put them in a matrix with 
+# number of rows = nsim and number of columns=length(pos)
+sim <- matrix(unlist(lapply(jpost,function(x) x$latent[pos,])),ncol=length(pos),byrow=T)
+colnames(sim) <- m$names.fixed
+@
+}
+\end{onlyenv}
+
+\begin{onlyenv}<3|handout:2>
+\fontsize{7}{8}\selectfont
+<<joint_dist2,comment=NA,warning=FALSE,error=FALSE,message=FALSE,out.width='52%',fig.width=7,fig.height=7,comment=NA,warning=FALSE,fig.align='center'>>=
+# Matrix with simulations from the joint posterior distribution
+head(sim)
+
+# Posterior probability that the "age effect" exceeds 0 (on logOR scale)
+sum(sim[,"age"]>0)/nrow(sim)
+
+# Posterior probability that the "smoke effect" exceeds 1 (on OR scale)
+sum(exp(sim[,"smoke"])>1)/nrow(sim)
+@
+\end{onlyenv}
+
+\begin{onlyenv}<4|handout:3>
+\fontsize{7}{8}\selectfont
+<<joint_dist3,comment=NA,warning=FALSE,error=FALSE,message=FALSE,out.width='52%',fig.width=7,fig.height=7,comment=NA,warning=FALSE,fig.align='center'>>=
+# Histogram for the marginal posterior distribution of Age (logOR scale)
+hist(sim[,"age"],xlab="Age (log OR)",main="Posterior distribution for log OR for Age")
+abline(v=0,lwd=3)
+@
+\end{onlyenv}
+
+\begin{onlyenv}<5|handout:4>
+\fontsize{7}{8}\selectfont
+<<joint_dist4,comment=NA,warning=FALSE,error=FALSE,message=FALSE,out.width='52%',fig.width=7,fig.height=7,comment=NA,warning=FALSE,fig.align='center'>>=
+# Scatterplot for the joint posterior distribution of Age & Smoke (OR scale)
+plot(exp(sim[,"age"]),exp(sim[,"smoke"]),pch=20,cex=.7,xlab="Age",
+     ylab="Smoke",main="Joint posterior",axes=F)
+axis(1); axis(2)
+abline(v=1,lwd=2); abline(h=1,lwd=2)
+@
+\end{onlyenv}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Using \texttt{INLA} in practice\ldots \hspace{0pt plus 1 filll}\small \only<1-2|handout:1-2>{In health economic evaluation}\only<3|handout:3>{Predicting football results}}
+\begin{overprint}
+\begin{overlayarea}{\textwidth}{\textheight}
+\vspace{-15pt}
+\begin{onlyenv}<1|handout:1>
+%\vspace{5pt}
+\begin{tabular}{lr}
+\hspace{-.5cm}
+\includegraphics[scale=.43]{/home/gianluca/Dropbox/HE/ARSIA/Running_time_SAVI} & \hspace{-.7cm}
+\includegraphics[scale=.43]{/home/gianluca/Dropbox/bcea/Talks/SAVI-2}
+\end{tabular}
+
+\vspace{-10pt}\hspace{1cm}
+{\fontfamily{phv}\fontsize{5}{6}\selectfont Running time for a single value of $k$  (willingness to pay)}
+
+\vspace{5pt}\fontsize{6}{7}\selectfont 
+\begin{itemize}
+\item Fictional decision tree model with correlated parameters
+\item 2 treatment options and overall 19 parameters
+\item Parameters simulated from multivariate Normal distribution, so can compute exact EVPPI 
+\end{itemize}
+\vspace{.1cm}
+\fontsize{5}{6}\selectfont{Heath et al \textit{Statistics in Medicine}. 2016; \textbf{35(23)}: 4264-4280}
+\end{onlyenv}
+
+\begin{onlyenv}<2|handout:2>
+%\vspace{5pt}
+\begin{tabular}{lr}
+\hspace{-.5cm}
+\includegraphics[scale=.43]{/home/gianluca/Dropbox/bcea/Talks/Running_time} & \hspace{-.7cm}
+\includegraphics[scale=.43]{/home/gianluca/Dropbox/bcea/Talks/Vaccine-2}
+\end{tabular}
+
+\vspace{-10pt}\hspace{1cm}
+{\fontfamily{phv}\fontsize{5}{6}\selectfont Running time for a single value of $k$  (willingness to pay)}
+
+\vspace{5pt}\fontsize{6}{7}\selectfont 
+\begin{itemize}
+\item Cost-effectiveness model for influenza vaccine based on evidence synthesis
+\item 2 treatment options and overall 63 parameters
+\item Model not available in closed form (needs MCMC simulations)
+\end{itemize}
+\vspace{.1cm}
+\fontsize{5}{6}\selectfont{Heath et al \textit{Statistics in Medicine}. 2016; \textbf{35(23)}: 4264-4280}
+\end{onlyenv}
+
+\begin{onlyenv}<3|handout:3>
+\vspace{10pt}
+\begin{center}
+\includegraphics[scale=.78]{Tsakos}
+\end{center}
+\end{onlyenv}
+\end{overlayarea}
+\end{overprint}
+\end{frame}
+
+\frame{
+\begin{center}
+{\fontsize{26}{26}\selectfont Thank you!}
+\end{center}
+}
+
+\end{document}

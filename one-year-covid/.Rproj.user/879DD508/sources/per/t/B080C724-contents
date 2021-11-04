@@ -575,7 +575,45 @@ tibble(sigma=seq(.01,10,.01),p=dexp(sigma,-log(0.01))) %>% ggplot(aes(sigma,p))+
 
 ---
 
-count: false
+# Modelling &ndash; Bayesian spatio-temporal model
+## Inferential engine
+
+- All models have been fitted using [***Integrated Nested Laplace Approximation***](https://www.r-inla.org/) (INLA)
+
+- Considers a general formulation for a surprisingly large range of models (.red[**Latent Gaussian Models**], LGM)
+.myblue[
+\begin{aligned}
+\bm\psi & \sim p(\bm\psi) && `r sftext("hyperprior")`\\
+\bm\theta \mid \bm\psi & \sim p(\bm\theta\mid\bm\psi) = \dnorm(0,\bm\Sigma(\bm\psi_1)) && `r sftext("GMRF prior")` \\
+\bm y \mid \bm \theta,\bm\psi & \sim \prod_i p(y_i\mid\bm \theta,\bm\psi_2) && `r sftext("Data model")`
+\end{aligned}
+]
+
+- Gaussian Markov Random Field (GMRF)
+
+   .myblue[
+\begin{aligned}
+\bm\theta\mid\bm\psi \sim \dnorm(\bm 0,\bm\Sigma(\bm\psi)) &&\\
+\theta_l \perp\!\!\!\perp \theta_m \mid \bm\theta_{-lm} \Leftrightarrow \bm{Q}_{lm}=\bm{\Sigma}^{-1}_{lm} = 0 &&
+\end{aligned}
+]
+   
+   - Conditional independence among elements of $\bm\theta$ implies that the **precision** matrix is sparse $\Rightarrow$ speeds up computation
+
+--
+
+- The dimension of $\bm\theta$ can be very large (e.g. 10\\(^\2\\) -10\\(^\5\\) )
+
+- Conversely, because of the conditional independence properties, the dimension of $\bm\psi$ needs to be generally small (e.g. 1-5)
+
+---
+
+# Modelling &ndash; Bayesian spatio-temporal model
+
+`r include_fig("inla.png",width="72%",title="")`
+
+---
+
 # Modelling &ndash; Bayesian spatio-temporal model
 
 ## Model validation

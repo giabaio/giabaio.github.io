@@ -609,7 +609,45 @@ count: false
 
 ---
 
-count: false
+# Modelling &amp;ndash; Bayesian spatio-temporal model
+## Inferential engine
+
+- All models have been fitted using [***Integrated Nested Laplace Approximation***](https://www.r-inla.org/) (INLA)
+
+- Considers a general formulation for a surprisingly large range of models (.red[**Latent Gaussian Models**], LGM)
+.myblue[
+`\begin{aligned}
+\bm\psi &amp; \sim p(\bm\psi) &amp;&amp; \style{font-family:inherit;}{\text{hyperprior}}\\
+\bm\theta \mid \bm\psi &amp; \sim p(\bm\theta\mid\bm\psi) = \dnorm(0,\bm\Sigma(\bm\psi_1)) &amp;&amp; \style{font-family:inherit;}{\text{GMRF prior}} \\
+\bm y \mid \bm \theta,\bm\psi &amp; \sim \prod_i p(y_i\mid\bm \theta,\bm\psi_2) &amp;&amp; \style{font-family:inherit;}{\text{Data model}}
+\end{aligned}`
+]
+
+- Gaussian Markov Random Field (GMRF)
+
+   .myblue[
+`\begin{aligned}
+\bm\theta\mid\bm\psi \sim \dnorm(\bm 0,\bm\Sigma(\bm\psi)) &amp;&amp;\\
+\theta_l \perp\!\!\!\perp \theta_m \mid \bm\theta_{-lm} \Leftrightarrow \bm{Q}_{lm}=\bm{\Sigma}^{-1}_{lm} = 0 &amp;&amp;
+\end{aligned}`
+]
+   
+   - Conditional independence among elements of `\(\bm\theta\)` implies that the **precision** matrix is sparse `\(\Rightarrow\)` speeds up computation
+
+--
+
+- The dimension of `\(\bm\theta\)` can be very large (e.g. 10\\(^\2\\) -10\\(^\5\\) )
+
+- Conversely, because of the conditional independence properties, the dimension of `\(\bm\psi\)` needs to be generally small (e.g. 1-5)
+
+---
+
+# Modelling &amp;ndash; Bayesian spatio-temporal model
+
+&lt;center&gt;&lt;img src=./img/inla.png width='72%' title=''&gt;&lt;/center&gt;
+
+---
+
 # Modelling &amp;ndash; Bayesian spatio-temporal model
 
 ## Model validation

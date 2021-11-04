@@ -1,26 +1,26 @@
 {
-    "id": "E93459FE",
-    "path": "~/Dropbox/Blog/Eurovision21/Eurovision.R",
+    "id": "5AA2C754",
+    "path": "~/Dropbox/UCL/BayesPharma/Old/2013/INLATutorial/INLA_NASH.Rnw",
     "project_path": null,
-    "type": "r_source",
-    "hash": "0",
+    "type": "sweave",
+    "hash": "2040221918",
     "contents": "",
     "dirty": false,
-    "created": 1636021524026.0,
+    "created": 1636035447828.0,
     "source_on_save": false,
     "relative_order": 8,
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "702,26",
-        "scrollLine": "677"
+        "cursorPosition": "177,15",
+        "scrollLine": "168"
     },
     "folds": "",
-    "lastKnownWriteTime": 1623412266,
+    "lastKnownWriteTime": 1554293170,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1623412266,
+    "last_content_update": 1554293170,
     "read_only": false,
     "read_only_alternatives": []
 }

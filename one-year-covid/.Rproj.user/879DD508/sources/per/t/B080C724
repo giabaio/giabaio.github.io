@@ -3,7 +3,7 @@
     "path": "~/Dropbox/COVID-DM/one-year-covid/one-year-covid.Rmd",
     "project_path": "one-year-covid.Rmd",
     "type": "r_markdown",
-    "hash": "0",
+    "hash": "4049909806",
     "contents": "",
     "dirty": false,
     "created": 1635931959957.0,
@@ -12,15 +12,15 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "33,0",
-        "scrollLine": "33"
+        "cursorPosition": "783,0",
+        "scrollLine": "753"
     },
     "folds": "",
-    "lastKnownWriteTime": 1636031739,
+    "lastKnownWriteTime": 1636036880,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1636031739786,
+    "last_content_update": 1636036880187,
     "read_only": false,
     "read_only_alternatives": []
 }
