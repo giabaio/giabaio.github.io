@@ -1,0 +1,15 @@
+# Change the color of the background
+# rgb(52,52,173) is the RGB code for the beamer blue background
+# rgb(0,40,85) is the RGB code for the mid-blue (official UCL) background
+convert UCL-logo-midblue.png -fuzz 40% -fill 'rgb(52,52,173)' -opaque 'rgb(0,40,85)' UCL-beamer.png
+# Then changes the white color for the letters to the yellow-ish
+convert UCL-beamer.png -fuzz 10% -fill 'rgb(252,208,90)' -opaque 'rgb(255,255,255)' UCL-beamer.png
+
+
+## Can also do with an original logo
+# First convert the black background to a blue colour
+convert ucl-original.png -fuzz 40% -fill 'rgb(52,52,173)' -opaque 'rgb(0,0,0)' tmp.png
+# Then replace the transparent background for the sign "UCL" (in this case to yellow-ish colour)
+convert tmp.png -background "rgb(252,208,90)" -flatten tmp.png
+# Finally fill the white portico in the same colour as the "UCL"" sign
+convert tmp.png -fuzz 40% -fill 'rgb(252,208,90)' -opaque 'rgb(255,255,255)' tmp.png
