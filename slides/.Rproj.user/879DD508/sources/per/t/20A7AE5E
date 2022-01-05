@@ -1,0 +1,26 @@
+{
+    "id": "20A7AE5E",
+    "path": "~/Dropbox/UCL/3021/slides2021/assets/setup.R",
+    "project_path": "assets/setup.R",
+    "type": "r_source",
+    "hash": "2259441712",
+    "contents": "",
+    "dirty": false,
+    "created": 1640623002999.0,
+    "source_on_save": false,
+    "relative_order": 1,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "109,0",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1640646203,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1640646203510,
+    "read_only": false,
+    "read_only_alternatives": []
+}

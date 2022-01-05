@@ -1,0 +1,9 @@
+base
+icons
+tikzDevice
+knitr
+kableExtra
+dplyr
+ggplot2
+xaringanExtra
+RefManageR
