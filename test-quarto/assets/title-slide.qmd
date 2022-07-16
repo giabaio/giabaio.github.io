@@ -1,0 +1,38 @@
+:::: {.title-slide}
+::: {.title}
+{{< meta params.title >}}
+:::
+
+::: {.author}
+{{< meta params.author >}}
+:::
+
+::: {.institute}
+{{< meta params.institute >}}
+:::
+
+::: {.social}
+<i class="fa-solid fa-envelope" style="color:#00acee"></i> <a href="mailto:g.baio@ucl.ac.uk">g.baio@ucl.ac.uk</a>    
+<i class="fa-brands fa-firefox" style="color:#EA7600"></i> <a href="https://gianluca.statistica.it">https://gianluca.statistica.it</a>     
+<i class="fa-brands fa-firefox" style="color:#EA7600"></i> <a href="https://egon.stats.ucl.ac.uk/research/statistics-health-economics">https://egon.stats.ucl.ac.uk/research/statistics-health-economics</a>     
+<i class="fa-brands fa-github" style="color:black"></i> <a href="https://github.com/giabaio">https://github.com/giabaio</a>     
+<i class="fa-brands fa-github" style="color:black"></i> <a href="https://github.com/StatisticsHealthEconomics">https://github.com/StatisticsHealthEconomics</a>    
+<i class="fa-brands fa-twitter" style="color:#00acee"></i> <a href="https://twitter.com/gianlubaio">@gianlubaio</a>
+:::
+
+::: {.conference}
+{{< meta params.conference >}}, {{< meta params.location >}}
+:::
+
+::: {.date}
+`r date`
+:::
+
+::: {.logo-stats}
+:::
+
+::: footer
+
+:::
+
+::::
