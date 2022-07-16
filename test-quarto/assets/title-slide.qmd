@@ -28,8 +28,12 @@
 `r date`
 :::
 
-::: {.logo-stats}
-:::
+`r slides::postit(text=paste0('Check out our departmental podcast "Random Talks" on Soundcloud!', slides::add_podcast()), top="75%",left="2.5%",height="6.3em",width="6.3em",rotate="-8deg")`
+
+
+`r slides::postit(text=paste0("Follow our departmental social media accounts", slides::add_twitter(url="https://twitter.com/stats_ucl",title="@stats_UCL",fill="#00acee"), slides::add_linkedin(url="https://www.linkedin.com/in/statistical-science-ucl-906b9a201",title="LinkedIn"), slides::add_instagram(url="https://www.instagram.com/ucl.stats/",title="Instagram")),top="53%",left="6.5%",height="6.2em",width="6.2em")`
+
+`r logo_stats()`
 
 ::: footer
 

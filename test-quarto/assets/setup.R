@@ -52,3 +52,10 @@ if(!is.null(rmarkdown::metadata$params$date)){date=rmarkdown::metadata$params$da
 # Also creates a variable 'short_date' that can be used in the footers
 short_date=format(as.Date(date,format="%e %b %Y"),"%e %b %Y")
 
+logo_stats=function(url="assets/images/UCL_Stats_logo.jpeg"){
+  paste0(
+    "<p style='position: absolute; top: 86.0%; left: 92.0%; text-decoration:none; display:block; 
+    height: 3.5em; width: 3.5em; padding: .5em; box-shadow: 5px 5px 7px rgba(33,33,33,.7);
+    background-image: url(\"",url,"\"); background-size: contain; border-radius: 6px 6px 6px 6px;'></p>"
+  )
+}
