@@ -1,0 +1,843 @@
+---
+title: "Introduction to R for Health Economics using BCEA"
+author: Gianluca Baio
+institute: "[Department of Statistical Science](https://www.ucl.ac.uk/statistics/) | University College London"
+params: 
+   conference: "Health Economic Modeling in R: A Hands-on Introduction <br> ISPOR Europe 2022"
+   location: "Vienna, Austria"
+   date: 6 November 2022
+   short_title: "Intro to R in HTA & [BCEA](https://gianluca.statistica.it/software/bcea)"
+   short_location: "[ISPOR Europe 2022](https://www.ispor.org/conferences-education/conferences/upcoming-conferences/ispor-europe-2022)"
+date: 
+output:
+  xaringan::moon_reader:
+    # This allows to use the local 'remarks' installation, obtained by running 'xaringan::summon_remarks()'
+    # chakra: libs/remark-latest.min.js
+    includes: 
+       in_header: "assets/latex_macros.html" 
+       ## This line adds a logo based on the format selected in the file 'assets/THEME/include_logo.html'
+       ## NB: the actual options (eg placement of the logo and actual logo file) can be changed there
+       ## There's also a script to manipulate the colouring scheme for the UCL logo (from a basic black/white one)
+       after_body: "assets/ucl-stats/insert-logo.html"
+    seal: false
+    yolo: no
+    lib_dir: libs
+    nature:
+      beforeInit: ["https://platform.twitter.com/widgets.js"]
+      highlightStyle: github
+      highlightLines: yes
+      highlightSpans: true
+      countIncrementalSlides: no
+      ratio: '16:9'
+      titleSlideClass:
+      - center
+      - middle
+    self_contained: false 
+    css:
+    - "assets/fonts.css"
+    - "assets/ucl-stats.css"
+    - "assets/common.css"
+---
+
+```{r echo=F,message=FALSE,warning=FALSE,comment=NA}
+# Sources the R file with all the relevant setup and commands
+source("assets/setup.R")
+
+# Stuff from 'xaringanExtra' (https://pkg.garrickadenbuie.com/xaringanExtra)
+# This allows the use of panels (from 'xaringanExtra')
+xaringanExtra::use_panelset()
+# This allows to copy code from the slides directly
+xaringanExtra::use_clipboard()
+# This freezes the frame for when there's a gif included
+xaringanExtra::use_freezeframe()
+# Can also add the scribbling function to the slides
+# xaringanExtra::use_scribble()
+# Can also add a search box
+# xaringanExtra::use_search(show_icon = TRUE)
+
+# Defines the path to the file with the .bib entries (in case there are references)
+bibfile=ReadBib("~/Dropbox/Perso/Office/CV/mypubs.bib",check = FALSE)
+```
+
+```{r title-page, child="assets/title-page.Rmd"}
+```
+
+# Disclaimer...
+
+<center>
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Best opening sentence <a href="https://twitter.com/hashtag/ISPOREurope?src=hash&amp;ref_src=twsrc%5Etfw">#ISPOREurope</a> from Gianluca Baio: “statisticians should rule the world and Bayesian statisticians should rule all statisticians” <a href="https://t.co/GN2w7liAcR">https://t.co/GN2w7liAcR</a></p>&mdash; Manuela Joore (@ManuelaJoore) <a href="https://twitter.com/ManuelaJoore/status/1191397718930939904?ref_src=twsrc%5Etfw">November 4, 2019</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
+</center>
+
+`r vspace("10px")`
+...Just so you know what you're about to get into... `r emo::ji("wink")`
+
+---
+
+# Health technology assessment (HTA)
+
+**Objective**: Combine .red[costs] and .blue[benefits] of a given intervention into a rational scheme for allocating resources 
+
+`r include_fig("hta-scheme1.png",width="80%")`
+
+---
+
+count: false
+# Health technology assessment (HTA)
+
+**Objective**: Combine .red[costs] and .blue[benefits] of a given intervention into a rational scheme for allocating resources 
+
+`r include_fig("hta-scheme2.png",width="80%")`
+
+---
+
+count: false
+# Health technology assessment (HTA)
+
+**Objective**: Combine .red[costs] and .blue[benefits] of a given intervention into a rational scheme for allocating resources 
+
+`r include_fig("hta-scheme3.png",width="80%")`
+
+---
+
+count: false
+# Health technology assessment (HTA)
+
+**Objective**: Combine .red[costs] and .blue[benefits] of a given intervention into a rational scheme for allocating resources 
+
+`r include_fig("hta-scheme4.png",width="80%")`
+
+---
+
+count: false
+# Health technology assessment (HTA)
+
+For each module, we may need/use different/specific packages! (the "R-HTA-verse"?)
+
+--
+
+`r include_fig("hta-scheme5.png",width="80%")`
+
+---
+
+count: false
+# Health technology assessment (HTA)
+
+For each module, we may need/use different/specific packages! (the "R-HTA-verse"?)
+
+`r include_fig("hta-scheme6.png",width="80%")`
+
+---
+
+# R & HTA
+
+## What is `R`?
+
+- `R` is a very powerful **statistical software** 
+   - Specifically designed for statistical analysis
+   - **Very** large community of contributors &ndash; basically you can find code/packages to do any statistical analysis you need
+   - .red[**Open source and free**]
+
+--
+
+## Why use `R`?
+
+- Everything can be (and almost invariably is) scripted 
+
+- This helps with:
+   - Reproducibility
+   - Sharing your work with colleagues
+   - Reusing templates for "similar" projects
+   - .myblue["**Transparency**"]!
+
+- **Fantastic** graphical capability
+   - Especially with new [`tidyverse`](https://www.tidyverse.org/) packages ([`ggplot2`](https://ggplot2.tidyverse.org/))
+
+- Generally **fit for purpose** 
+   - You **need** advanced tools for many (most??) of the models you do...
+
+---
+
+class: hide-logo
+```{r, echo=FALSE, out.width="100%",out.extra='style="border: none;"'}
+knitr::include_url("https://r-hta.org", height="80%")
+```
+
+---
+
+# But...
+
+> "*Transparency is in the eye of the beholder*"
+>
+> (Andy Briggs at the [R-HTA workshop](https://www.youtube.com/channel/UCUog4U8cjXuQIvINSDsiEJQ) &ndash; October 2020)
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/HCsJ8nqNttU?start=270&end=295" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+--
+
+`r vspace("30px")`
+
+- There **is** an entry cost
+
+- And more importantly, the effort goes hand in hand with sophistication in the statistical modelling associated with the economic evaluation!
+
+---
+
+class: hide-logo
+background-image: url("img/chandler.gif")
+background-size: cover
+
+---
+
+class: empty-slide
+# `BCEA`
+
+---
+
+# `BCEA`
+
+## A `R` package for (Bayesian) cost-effectiveness analysis
+
+### `BCEA` and its use directly in `R` are designed with these objectives in mind
+
+1. Checking the model assumptions
+
+   - Do we mean what we mean (eg in terms of PSA simulations)?...
+   - Simulation error (especially, **but not only**, for a Bayesian approach)
+
+--
+
+2. Produce the base-case economic evaluation
+   - What’s the most cost-effective intervention, given current evidence?
+   - Cost-effectiveness plane, Expected Incremental Benefit (as a function of $k$),...
+
+--
+ 
+3. Perform uncertainty analysis
+   - Standard PSA (mandatory): Cost-effectiveness Plane, CEAC, ...
+   - Fairly easy (but not always used): CEAF
+   - More advanced/"too difficult" (rarely used): EVP(P)I/EVSI
+
+--
+
+4. Standardised reporting
+   - Graphical tools (use **excellent** `R` facilities)
+   - Embed code in structured reports (`docx`/`pdf`)
+
+---
+
+count: false
+# `BCEA`
+
+## A `R` package for (Bayesian) cost-effectiveness analysis
+
+`r include_fig("bcea_scheme-1.png",width="65%",title="")`
+
+`r vspace("-50px")`
+ 
+.small[
+`r icon::fontawesome("firefox")` [www.statistica.it/gianluca/BCEA](www.statistica.it/gianluca/BCEA)     
+`r icon::icon_style(icon::fontawesome("github"),scale=.8,fill="black")`  [https://github.com/giabaio/BCEA](https://github.com/giabaio/BCEA)
+]
+
+---
+
+class: empty-slide
+# Using `BCEA` to summarise outputs of an economic model
+
+---
+
+# How does `BCEA` work?
+
+.panelset[
+.panel[
+.panel-name[Installation]
+- `BCEA` is available from [CRAN](https://cran.r-project.org/)
+   - Current *stable* version: 2.4-2 (3 September 2022)
+
+- But it is also under constant development in the [GitHub repository](https://github.com/giabaio/BCEA)
+   - Current *stable* version: 2.4-2 (3 September 2022)
+   - Current *development* version: 2.4-2 (ongoing development, until integrated in the next stable release)
+
+```{r howwork1,eval=FALSE}
+# Install BCEA (only required once and needs an internet connection!). 
+
+# You can either get the "official" version from CRAN
+install.packages("BCEA")
+
+# Or the development version from the GitHub repository
+remotes::install_github("giabaio/BCEA")               # stable version (2.4-2)
+
+remotes::install_github("giabaio/BCEA",ref="dev")     # development version (2.4-2)
+```
+
+`r vspace("30px")`
+NB: The beauty of the GitHub version is that it can be updated on the fly and be immediately available for users!
+]
+
+.panel[
+.panel-name[Using BCEA]
+```{r howwork3}
+library(dplyr)  # (Not necessary - helpful for data manipulation!)
+
+library(BCEA)   # Then loads the package (so you can access its functions)
+data(Vaccine)   # Loads an example dataset 
+```
+
+`r vspace("40px")`
+- The "Vaccine" example is a fictional cost-effectiveness model for and influenza vaccine, based on evidence synthesis (and a real case)
+
+- 2 treatment options ("Standard of care" vs "Vaccination") and overall 63 parameters
+
+- Discussed in details in `r icon::fontawesome("book-open")` [Baio et al, 2017](http://www.statistica.it/gianluca/book/bcea/) and `r icon::academicons$pubmed` [Baio and Dawid, 2011](https://pubmed.ncbi.nlm.nih.gov/21930515/)
+
+- In this case, PSA simulations obtained from a full Bayesian model, but could be done in a spreadsheet and imported into `R`
+]
+
+.panel[
+.panel-name[Show. Me. The. Data!]
+`r vspace("-10px")`
+```{r,echo=FALSE}
+options(width=150)
+```
+```{r howwork40,echo=TRUE,eval=FALSE}
+# The object 'Vaccine' contains a matrix 'vaccine_mat', with all the simulated values for the many model 
+# parameters BCEA can create a matrix with the underlying model simulations starting from various formats 
+# (BUGS/R/Excel) and can get rid of "redundant" columns (those that are linear combination of each other...)
+inp = createInputs(vaccine_mat, print_is_linear_comb = FALSE)
+
+# Visualise the output: "piping" ('%>%') + nicer visualisation
+inp$mat %>% as_tibble() 
+```
+
+`r vspace("40px")`
+**NB**: There are various `R` packages/tools to work with tables
+
+  - [kable](https://bookdown.org/yihui/rmarkdown-cookbook/kable.html) and [kableExtra](https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html)
+]
+
+.panel[
+.panel-name[...]
+`r vspace("-10px")`
+```{r,echo=FALSE}
+options(width=150)
+```
+```{r howwork4,echo=FALSE}
+# The object 'Vaccine' contains a matrix 'vaccine_mat', with all the simulated values for the many model 
+# parameters BCEA can create a matrix with the underlying model simulations starting from various formats 
+# (BUGS/R/Excel) and can get rid of "redundant" columns (those that are linear combination of each other...)
+inp = createInputs(vaccine_mat, print_is_linear_comb = FALSE)
+
+# Visualise the output: "piping" ('%>%') + formatting nicely using DT::datatable()
+inp$mat %>% as_tibble()
+```
+]
+
+.panel[
+.panel-name[Economic model]
+
+```{r howwork6,eval=FALSE}
+# Defines the number of simulations considered
+n.sims=`inp$mat %>% nrow()` 
+# applies the function 'nrow' (number of rows) to the object 'inp$mat'
+# NB: Since R 4.1.0, can also use 'native' pipe ('|>')
+# (probably a bit quicker, but in most cases, may be immaterial...)
+
+# Aggregates the model inputs to compute (e,c)
+QALYs.inf = QALYs.pne <- QALYs.hosp <- QALYs.adv <- QALYs.death <- matrix(0,n.sims,2)
+for (t in 1:2) {
+  QALYs.inf[,t] = ((Infected[,t,1] + Infected[,t,2])*omega[,1]/365)/N
+  QALYs.pne[,t] = ((Pneumonia[,t,1] + Pneumonia[,t,2])*omega[,4]/365)/N
+  QALYs.hosp[,t] = ((Hospital[,t,1] + Hospital[,t,2])*omega[,5]/365)/N
+  QALYs.death[,t] = ((Death[,t,1] + Death[,t,2])*omega[,6])/N
+}
+QALYs.adv[,2] = (Adverse.events*omega[,7]/365)/N
+e = -(QALYs.inf + QALYs.pne + QALYs.adv + QALYs.hosp + QALYs.death) + ...
+```
+
+`r vspace("40px")`
+- NB: The data stored in the `Vaccine` object (built-in in `BCEA`) already contains the objects `e,c` that can be used to run the decision analysis...
+
+- So, this step is actually not needed (but documented in `r icon::fontawesome("book-open")` [Baio et al, 2017](http://www.statistica.it/gianluca/book/bcea/))
+]
+
+.panel[
+.panel-name[Cost & effects]
+```{r,echo=FALSE}
+options(width=150)
+```
+```{r howwork8}
+#| echo: true
+#| eval: true
+cbind(eff,cost) %>% as_tibble(.name_repair="universal")       # ensures that the columns are named
+```
+
+`r vspace("40px")`
+
+- These calculations *can* be done also in a spreadsheet (nothing more than algebra, **once you have the simulations**)
+]
+]
+
+---
+
+count: false
+# How does `BCEA` work?
+
+- At this point, we are ready to call the function `bcea` that runs the economic analysis, for example something like 
+
+```{r howwork9}
+treats = c("Status quo","Vaccination")
+m = bcea(e=eff,c=cost,ref=2,interventions=treats,Kmax=50000)
+```
+
+- The inputs to the function are
+   - `eff`: a **matrix** containing the simulations for the clinical benefits (that is $n_{\rm{sim}}\times n_{\rm{int}}$ values)
+   - `cost`: a **matrix** containing the simulations for the costs (that is $n_{\rm{sim}}\times n_{\rm{int}}$ values)
+   - `ref`: an indication of which intervention is to be taken as reference (default: the intervention in the first column of `e` or `c`)
+   - `interventions`: a vector of labels for the interventions being compared 
+   - `Kmax`: the maximum value of $k$, the parameter of willingness to pay
+
+
+--
+
+
+- The output is an object `m` containing several elements
+```{r howwork10}
+names(m)
+```
+
+---
+
+count: false
+# How does `BCEA` work?
+
+Can visualise the output in various formats (tables/graphs)
+
+```{r howwork11}
+# The 'summary' "method" produces a tabular output
+summary(m)
+```
+
+---
+
+count: false
+# How does `BCEA` work?
+
+Can visualise the output in various formats (tables/graphs)
+
+.pull-left[
+```{r howwork12, opts=list(width="75%")}
+#| echo: true
+# The 'plot' "method" produces a *specific* 
+# version of graphical output
+plot(m)
+```
+]
+
+.pull-right[
+```{r howwork13, opts=list(width="75%")}
+#| echo: true
+ceplane.plot(
+  m,wtp=20000,xlim=c(-.002,.002),ylim=c(-10,20)
+)
+```
+
+]
+
+---
+
+count: false
+# How does `BCEA` work?
+
+`r vspace("-0px")`
+
+```{r howwork14,opts=list(width="40%")}
+#| echo: true
+# Using 'ggplot', you can go crazy with customisation...
+ceplane.plot(m,wtp=10000,graph="gg",point=list(color="blue",size=1.8),area=list(fill="springgreen3"))
+```
+
+.footnote[
+`r icon::fontawesome("firefox")` [https://ggplot2.tidyverse.org/](https://ggplot2.tidyverse.org/)     
+`r icon::fontawesome("firefox")` [https://n8thangreen.github.io/BCEA/](https://n8thangreen.github.io/BCEA/)
+]
+
+---
+
+class: hide-logo
+```{r, echo=FALSE, out.width="100%",out.extra='style="border: none;"'}
+knitr::include_url("https://n8thangreen.github.io/BCEA", height="80%")
+```
+
+---
+
+count: false
+# How does `BCEA` work?
+
+.pull-left[
+```{r howwork15,opts=list(width="85%")}
+#| echo: true
+# Plots the Cost-Effectiveness Acceptability Curve
+ceac.plot(m)
+```
+]
+
+.pull-right[
+```{r howwork16,opts=list(width="85%")}
+#| echo: true
+# Plots the Expected Value of Partial Information (EVPI)
+evi.plot(m)
+```
+]
+
+---
+
+# Specialised plots
+
+- Can generate a *contour* plot of the cost-effectiveness plane and estimate the proportion of points in each quadrant
+
+.left-column[
+```{r howwork17}
+#| echo: true
+#| eval: false
+# "Basic" contourplot
+contour(m)
+```
+]
+
+.right-column[
+`r vspace("30px")`
+```{r howwork18,opts=list(width="70%")}
+#| echo: false
+# "Basic" contourplot
+contour(m)
+```
+]
+
+---
+
+count: false
+# Specialised plots
+
+The specialised function `contour2` also shows the **sustainability area**
+
+.pull-left[
+```{r howwork19,opts=list(width="85%")}
+#| echo: true
+contour2(m)
+```
+]
+
+.pull-right[
+```{r howwork20,opts=list(width="85%")}
+#| echo: true
+contour2(m,wtp=100,xlim=c(-.0005,0.0015))
+```
+]
+
+---
+
+count: false
+# Specialised plots
+
+**Cost-effectiveness efficiency frontier**
+
+.pull-left[
+```{r howwork20bis}
+#| echo: true
+ceef.plot(m,print.plot=FALSE)
+```
+]
+
+.pull-right[
+```{r howwork20tris,opts=list(width="85%")}
+#| echo: true
+ceef.plot(m,print.summary=FALSE)
+```
+]
+
+---
+
+# Exporting graphical output
+
+- `R` has excellent graphical facilities and the graphs produced by `BCEA` can be easily exported to many different formats
+
+```{r howwork21}
+#| eval: false
+#| echo: true
+# "Opens" the graphical device
+pdf("NAME_OF_THE_FILE",width=`8`,height=`8`)      # for 'pdf', units are in inches
+# Makes the plot
+ceplane.plot(`BCEA_OBJECT`)                     # of course, specify whatever name you've 
+                                                #  chosen when creating the object...
+# "Closes" the graphical device
+dev.off()
+
+
+# "Open" the graphical device"
+jpeg("NAME_OF_FILE.jpg",width=`480`,height=`480`)  # for 'jpeg' units are in px
+# Makes the plot
+ceplane.plot(BCEA_OBJECT)
+# "Closes" the graphical device
+dev.off()
+```
+
+`r vspace("30px")`
+**NB**: `Rstudio` and [`rmarkdown`](https://rmarkdown.rstudio.com/) can do even more &ndash; that's for another time...
+
+---
+
+class: empty-slide
+# Advanced use of `BCEA`
+
+---
+
+# Multiple treatment comparisons
+## Probabilistic "depression model"
+
+```{r depression1,echo=FALSE}
+n.samples<-1000 
+
+# Number and names of treatments
+n.treat<-3
+t.names<-c("No treatment","CBT","Antidepressant")
+
+# Over a 30 year time horizon
+# Costs for recovery, relapse, and no recovery
+c.rec<-rnorm(n=n.samples, mean=1000, sd=50)
+c.rel<-rnorm(n=n.samples, mean=2000, sd=100)
+c.norec<-rnorm(n=n.samples, mean=2500, sd=125)
+# Over a 30 year time horizon
+# QALYs for recovery, relapse, and no recovery
+q.rec<-rnorm(n=n.samples, mean=26, sd=2)
+q.rel<-rnorm(n=n.samples, mean=23, sd=3)
+q.norec<-rnorm(n=n.samples, mean=20, sd=4)
+
+# Probabilities of recovery and relapse following recover
+p.rec<-p.rel<-matrix(nrow=n.samples, ncol=n.treat)
+
+# Probabilities for no treatment
+p.rec[,1]<-rbeta(n=n.samples, shape1=6, shape2=200)
+p.rel[,1]<-rbeta(n=n.samples, shape1=2, shape2=100)
+
+# Probabilities for CBT
+# Probability of recovery higher than on no treatment
+p.rec[,2]<-rbeta(n=n.samples, shape1=6, shape2=130)
+# Probability of relapse lower than on no treatment
+p.rel[,2]<-rbeta(n=n.samples, shape1=2, shape2=200)
+
+# Probabilities for antidepressant
+# Probability of recovery lower than no treatment or CBT
+p.rec[,3]<-rbeta(n=n.samples, shape1=6, shape2=120)
+# Probability relase lower than no treatment, higher than CBT
+p.rel[,3]<-rbeta(n=n.samples, shape1=2, shape2=120)
+# Cost of treatment 
+c.treat<-t(matrix(rep(c(0,300,30),n.samples),ncol=n.samples,nrow=3))
+# Total cost and effects 
+costs<-c.treat+p.rec*(1-p.rel)*c.rec+p.rec*p.rel*c.rel+(1-p.rec)*c.norec
+effects<-p.rec*(1-p.rel)*q.rec+p.rec*p.rel*q.rel+(1-p.rec)*q.norec
+```
+
+- Fictional model comparing antidepressants to cognitive behaviour therapy (CBT) and no treatment in people with depression
+
+- Statistical modelling based on evidence synthesis
+   - Benefits: based on QALYs
+   - Costs: associated with treatments and various resources use
+   
+- Economic modelling: two matrices with relevant population summaries
+   - `effects`
+   - `costs`
+   
+`r vspace("30px")`
+
+- NB: The details of the actual modelling are *not* important for the purposes of demonstrating the example...
+
+---
+
+count: false
+# Multiple treatment comparisons
+## Probabilistic "depression model"
+
+.pull-left[
+```{r depression2}
+#| eval: false
+#| echo: true
+# Intervention labels
+t.names<-c("No treatment","CBT","Antidepressant")
+
+# "Standard" analysis: pairwise comparisons
+depression.bcea = bcea(effects,costs,
+                       interventions=t.names,ref=3)  
+# the third intervention is the reference
+
+# Plots the results
+plot(depression.bcea)
+```
+]
+
+.pull-right[
+```{r depression3}
+#| eval: true
+#| echo: false
+# Intervention labels
+t.names<-c("No treatment","CBT","Antidepressant")
+
+# "Standard" analysis: pairwise comparisons
+depression.bcea = bcea(effects,costs,interventions=t.names,ref=3)
+
+# Plots the results
+plot(depression.bcea)
+```
+]
+
+---
+
+count: false
+# Multiple treatment comparisons
+## Probabilistic "depression model"
+
+.pull-left[
+```{r depression4}
+#| eval: false
+#| echo: true
+
+# For `multiple treatment comparison`
+depression.multi.ce = multi.ce(depression.bcea)
+
+# Specialised plot method
+ceac.plot(
+  depression.multi.ce,pos=c(1,0.8),
+  graph="ggplot2"
+)
+```
+
+`r vspace("30px")`
+
+NB: In older releases of `BCEA`, this graph was done using the **deprecated** function `mce.plot`
+
+]
+
+.pull-right[
+```{r depression5}
+#| eval: true
+#| echo: false
+depression.multi.ce = multi.ce(depression.bcea)
+ceac.plot(depression.multi.ce,pos=c(1,0.8),graph="ggplot2")
+```
+]
+
+---
+
+count: false
+# Multiple treatment comparisons
+## Probabilistic "depression model"
+
+.pull-left[
+- Can use `ggplot` to customise the graph 
+
+```{r depression6}
+#| eval: false
+#| echo: true
+ceac.plot(
+  depression.multi.ce,pos=c(1,1),
+  graph="ggplot2"
+) + 
+  ggplot2::stat_summary(
+    fun=max, geom="line",
+    colour="grey25", 
+    alpha=.3, lwd=2.5
+  )
+
+```
+]
+
+.pull-right[
+```{r depression7}
+#| eval: true
+#| echo: false
+ceac.plot(depression.multi.ce,pos=c(1,1),graph="ggplot2") + 
+  ggplot2::stat_summary(fun=max, geom="line", colour="grey25", alpha=.3, lwd=2.5)
+```
+]
+
+---
+
+count: false
+# Multiple treatment comparisons
+## Probabilistic "depression model"
+
+.pull-left[
+- Can also use the specialised function `ceaf.plot`
+
+```{r depression8}
+#| eval: false
+#| echo: true
+# Specialised plot
+ceaf.plot(depression.multi.ce)
+```
+]
+
+
+.pull-right[
+```{r depression9}
+#| eval: true
+#| echo: false
+ceaf.plot(depression.multi.ce)
+```
+]
+
+---
+
+# `BCEAweb`
+
+-  Inspired by similar projects &ndash; eg [SAVI](http://savi.shef.ac.uk/SAVI/)
+
+- Create a web interface to use BCEA without even opening R (or even having it installed on your computer!)
+`r vspace("40px")`
+
+--
+
+- Typical work flow
+   1. Design the economic model (eg Markov model, decision tree, ...)
+   2. Run the statistical analysis to estimate the quantities of interest (eg survival analysis, evidence synthesis, ...)
+   3. Run the economic model and obtain "PSA samples"     
+   4. Upload "PSA samples", including values for $(e,c)$ to `BCEAweb`
+   5. Use `BCEA` in the background to do **all** the economic analysis
+   6. Create reports that can be used as the basis for papers, reimbursement files, ...
+   
+---
+
+count: false
+# `BCEAweb`
+
+```{r}
+#| eval: false
+#| echo: true
+#| code-line-numbers: "1-2|3-8"
+# Creates a matrix with the underlying model simulations
+inp = createInputs(vaccine_mat, print_is_linear_comb=FALSE)
+
+# Runs BCEAweb
+BCEAweb(e=e,                 # matrix of simulations for the effectiveness
+        c=c,                 # matrix of simulations for the costs
+        parameters=inp$mat   # matrix of simulations for all the model parameters
+       )
+```
+
+--
+
+`r vspace("30px")`
+
+- `BCEAweb` exists as a standalone webapp
+   
+   - Can access it `r icon::fontawesome("firefox")` [here](https://egon.stats.ucl.ac.uk/projects/BCEAweb/) 
+   
+- **Or**, you can launch your own "local" version from the `BCEA` package (as in the code above)!
+   
+   - This will launch a web page from which you can manipulate your output (`r icon::fontawesome("arrow-circle-right")` Live Demo)
+
+---
+
+
+
+
+class: thankyou-reese 

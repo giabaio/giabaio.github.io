@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>INSERT TITLE HERE</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Gianluca Baio" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <script src="libs/clipboard/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
+    <script src="libs/freezeframe/freezeframe.min.js"></script>
+    <script src="libs/xaringanExtra-freezeframe/freezeframe-init.js"></script>
+    <script id="xaringanExtra-freezeframe-options" type="application/json">{"selector":"img[src$=\"gif\"]","trigger":"click","overlay":false,"responsive":true,"warnings":true}</script>
+    <script src="libs/kePrint/kePrint.js"></script>
+    <link href="libs/lightable/lightable.css" rel="stylesheet" />
+    <!-- (Re)Defines a bunch of LaTeX commands that can then be used directly in the .Rmd file as '\command{...}' -->
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      TeX: {
+        /* This enables color macros */
+        extensions: ["color.js"],
+        Macros: {
+          /* Probability & mathematical symbols */
+          Pr: "{\\style{font-family:inherit; font-size: 110%;}{\\text{Pr}}}",
+          exp: "{\\style{font-family:inherit; font-size: 105%;}{\\text{exp}}}",
+          log: "{\\style{font-family:inherit; font-size: 105%;}{\\text{log}}}",
+          ln: "{\\style{font-family:inherit; font-size: 105%;}{\\text{ln}}}",
+          logit: "{\\style{font-family:inherit; font-size: 100%;}{\\text{logit}}}",
+          HR: "{\\style{font-family:inherit; font-size: 105%;}{\\text{HR}}}",
+          OR: "{\\style{font-family:inherit; font-size: 105%;}{\\text{OR}}}",
+          E: "{\\style{font-family:inherit; font-size: 105%;}{\\text{E}}}",
+          Var: "{\\style{font-family:inherit; font-size: 105%;}{\\text{Var}}}",
+          Cov: "{\\style{font-family:inherit; font-size: 105%;}{\\text{Cov}}}",
+          Corr: "{\\style{font-family:inherit; font-size: 105%;}{\\text{Corr}}}",
+          DIC: "{\\style{font-family:inherit; font-size: 105%;}{\\text{DIC}}}",
+          se: "{\\style{font-family:inherit; font-size: 100%;}{\\text{se}}}",
+          sd: "{\\style{font-family:inherit; font-size: 100%;}{\\text{sd}}}",
+          /* Distributions */
+          dnorm: "{\\style{font-family:inherit;}{\\text{Normal}}}",
+          dt: "{\\style{font-family:inherit;}{\\text{t}}}",
+          ddirch: "{\\style{font-family:inherit;}{\\text{Dirichlet}}}",
+          dmulti: "{\\style{font-family:inherit;}{\\text{Multinomial}}}",
+          dbeta: "{\\style{font-family:inherit;}{\\text{Beta}}}",
+          dgamma: "{\\style{font-family:inherit;}{\\text{Gamma}}}",
+          dbern: "{\\style{font-family:inherit;}{\\text{Bernoulli}}}",
+          dbin: "{\\style{font-family:inherit;}{\\text{Binomial}}}",
+          dpois: "{\\style{font-family:inherit;}{\\text{Poisson}}}",
+          dweib: "{\\style{font-family:inherit;}{\\text{Weibull}}}",
+          dexp: "{\\style{font-family:inherit;}{\\text{Exponential}}}",
+          dlnorm: "{\\style{font-family:inherit;}{\\text{logNormal}}}",
+          dunif: "{\\style{font-family:inherit;}{\\text{Uniform}}}",
+          /* LaTeX formatting */
+          bm: ["{\\boldsymbol #1}",1],
+          /* These create macros to typeset numbers in maths with the basic font */
+          0: "{\\style{font-family:inherit; font-size: 105%;}{\\text{0}}}",
+          1: "{\\style{font-family:inherit; font-size: 105%;}{\\text{1}}}",
+          3: "{\\style{font-family:inherit; font-size: 105%;}{\\text{2}}}",
+          3: "{\\style{font-family:inherit; font-size: 105%;}{\\text{3}}}",
+          4: "{\\style{font-family:inherit; font-size: 105%;}{\\text{4}}}",
+          5: "{\\style{font-family:inherit; font-size: 105%;}{\\text{5}}}",
+          6: "{\\style{font-family:inherit; font-size: 105%;}{\\text{6}}}",
+          7: "{\\style{font-family:inherit; font-size: 105%;}{\\text{7}}}",
+          8: "{\\style{font-family:inherit; font-size: 105%;}{\\text{8}}}",
+          9: "{\\style{font-family:inherit; font-size: 105%;}{\\text{9}}}",
+          /* Health economics quantities */
+          icer: "{\\style{font-family:inherit; font-size: 100%;}{\\text{ICER}}}",
+          nb: "{\\style{font-family:inherit; font-size: 100%;}{\\text{NB}}}",
+          ol: "{\\style{font-family:inherit; font-size: 100%;}{\\text{OL}}}",
+          ceac: "{\\style{font-family:inherit; font-size: 100%;}{\\text{CEAC}}}",
+          evpi: "{\\style{font-family:inherit; font-size: 100%;}{\\text{EVPI}}}",
+          evppi: "{\\style{font-family:inherit; font-size: 100%;}{\\text{EVPPI}}}",
+          evsi: "{\\style{font-family:inherit; font-size: 100%;}{\\text{EVSI}}}"
+        }
+      }
+    });
+    </script>
+    <link rel="stylesheet" href="assets/fonts.css" type="text/css" />
+    <link rel="stylesheet" href="assets/ucl-stats.css" type="text/css" />
+    <link rel="stylesheet" href="assets/common.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+# Financial strategy
+
+### Background
+
+Discussions have been going on for quite some time at UCL regarging the restructuring of our finances. University Management Committee (UMC) have commissioned a series of white papers, including on "Size and Shape" of UCL
+
+- Work has been done in consultation with various parts of the institution
+
+- Modelling (and other inputs) have feed into strategic planning for the next 4 years horizon
+
+&lt;span style="display:block; margin-top: 40px ;"&gt;&lt;/span&gt;
+
+--
+
+### Conclusion
+
+- We **need** to improve our finances
+
+   - Immediate necessity in response to extra-ordinary events (cost of living + energy bills)
+
+   - Long term objectives/viability as an institution
+
+   - Overall request: up to **10% savings across the board**
+      - Differential by faculities/department
+
+      
+- .blue[**This will guarantee a buffer of £100m/year needed to ensure financial viability of UCL**]
+
+---
+
+# What does it mean for MAPS?
+
+&lt;table class="table table-striped table-hover" style="font-size: 17px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Faculty &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Pay Target (£000) &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Non Pay Target (£000) &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Total Target (£000) &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Total 22/23 Core Expenditure Budget (£000) &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Target as % of 22/23 Core Expenditure Budget &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;border-top: 1px solid"&gt; Arts &amp;amp; Humanities &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; border-top: 1px solid"&gt; 626 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; border-top: 1px solid"&gt; 14 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; border-top: 1px solid"&gt; 639 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; border-top: 1px solid"&gt; 28,375 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; border-top: 1px solid"&gt; 2% &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Laws &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 719 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 70 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 789 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 12,964 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 6% &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; S&amp;amp;HS &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 1,174 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 693 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 1,868 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 58,177 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 3% &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; SSEES &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 172 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 180 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 8,322 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 2% &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Engineering Science &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 7,257 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 2,108 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 9,365 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 109,237 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 9% &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Built Environment &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 2,975 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 1,428 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 4,403 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 56,375 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 8% &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;font-weight: bold;background-color: lightgrey !important;"&gt; MAPS &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; font-weight: bold;background-color: lightgrey !important;"&gt; 2,248 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; font-weight: bold;background-color: lightgrey !important;"&gt; 214 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; font-weight: bold;background-color: lightgrey !important;"&gt; 2,463 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; font-weight: bold;background-color: lightgrey !important;"&gt; 62,957 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; font-weight: bold;background-color: lightgrey !important;"&gt; 4% &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Population Health Sciences &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 3,153 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 243 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 3,396 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 43,576 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 8% &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Brain Sciences &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 3,788 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 104 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 3,891 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 54,735 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 7% &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Life Sciences &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 2,314 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 922 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 3,236 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 42,992 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 8% &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Medical Sciences &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 3,270 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 883 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 4,152 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 45,040 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 9% &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Institute of Education &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 2,501 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 586 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 3,088 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 68,733 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; "&gt; 5% &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;font-weight: bold;border-top: 1px solid"&gt; Total &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; font-weight: bold;border-top: 1px solid"&gt; 30,198 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; font-weight: bold;border-top: 1px solid"&gt; 7,272 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; font-weight: bold;border-top: 1px solid"&gt; 37,470 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; font-weight: bold;border-top: 1px solid"&gt; 586,483 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 16%; font-weight: bold;border-top: 1px solid"&gt; 6% &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+### Main implications
+- MAPS needs to deliver £2.5m in savings in the 4 year period 23/24 &amp;ndash; 26/27
+- Faculty has agency on how this will be delivered
+
+---
+
+# What does it mean for **us**?
+
+- Faculty Leadership Team has discussed and decided to make the individual targets **proportionally**
+
+&lt;table class="table table-striped table-hover" style="font-size: 18px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Department &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Core Staff (£000) &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Core Opex (£000) &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Total Core (£000) &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Core Staff savings &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Core Opex savings &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Total Core savings &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;border-top: 1px solid"&gt; Chemistry &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; border-top: 1px solid"&gt; 8,594 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; border-top: 1px solid"&gt; 2,920 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; border-top: 1px solid"&gt; 11,514 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; border-top: 1px solid"&gt; 344 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; border-top: 1px solid"&gt; 117 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; border-top: 1px solid"&gt; 461 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Earth Science &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 3,667 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 661 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 4,328 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 147 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 26 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 173 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; STS &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 2,155 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 139 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 2,294 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 86 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 92 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Maths &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 8,239 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 2,044 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 10,283 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 330 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 82 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 412 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Physics &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 11,045 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 2,041 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 13,086 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 442 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 82 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 524 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;font-weight: bold;background-color: lightgrey !important;"&gt; Statistical Science &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; font-weight: bold;background-color: lightgrey !important;"&gt; 5,053 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; font-weight: bold;background-color: lightgrey !important;"&gt; 958 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; font-weight: bold;background-color: lightgrey !important;"&gt; 6,011 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; font-weight: bold;background-color: lightgrey !important;"&gt; 202 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; font-weight: bold;background-color: lightgrey !important;"&gt; 38 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; font-weight: bold;background-color: lightgrey !important;"&gt; 240 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; MAPS FO &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 2,756 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 1,010 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 3,766 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 110 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 40 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 150 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; MSSL &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 4,697 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 407 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 5,104 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 188 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 16 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 204 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; LCN &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 2,466 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 845 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 3,311 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 99 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 34 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 133 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; IRDR &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 2,068 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 314 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 2,382 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 83 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 13 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 96 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; IMD &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 1,306 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 524 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 1,830 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 52 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 21 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; "&gt; 73 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;font-weight: bold;border-top: 1px solid"&gt; Total &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; font-weight: bold;border-top: 1px solid"&gt; 52,046 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; font-weight: bold;border-top: 1px solid"&gt; 11,863 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; font-weight: bold;border-top: 1px solid"&gt; 63,909 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; font-weight: bold;border-top: 1px solid"&gt; 2,082 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; font-weight: bold;border-top: 1px solid"&gt; 475 &lt;/td&gt;
+   &lt;td style="text-align:center;width: 13%; font-weight: bold;border-top: 1px solid"&gt; 2,557 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+.footnote[**NB**: These figures are *approximated* and the actual values by items may vary slightly, but they **are** the correct ball-park... ]
+
+---
+
+# So what do we do?...
+
+## Background
+
+- We have 3 posts already approved in our 21/22 budget, which we haven't yet advertised 
+&lt;span style="display:block; margin-top: 20px ;"&gt;&lt;/span&gt;   
+
+   1. Permanent Teaching Lecturership (G8)
+   2. Permanent Lectureship (G8)
+   3. Permanent IMSS Lectureship (G8)
+   
+   **NB**: We have delayed appointment to meet saving targets we were set last year
+
+&lt;span style="display:block; margin-top: 20px ;"&gt;&lt;/span&gt;   
+- We also need to replace the rolling contract with which we were emplying Julian Herbert (who's quit)
+
+   - Advert is out now
+
+--
+
+## Immediate objective
+
+- Ensure stability for all our current staff
+   
+- Response to (thankfully, limited!) student bulge in 22/23
+
+   - Ask for 50%FTE fixed term Lectureship + additional capacity in terms of PGTAs
+
+---
+
+# So what do we do?...
+
+## Proposal to Faculty Finance team 
+
+(Discussed last Friday and previously at SMT)
+
+&lt;span style="display:block; margin-top: 50px ;"&gt;&lt;/span&gt;
+
+1. Removal of IMSS-related posts
+
+   - For now, **all** capital investments (ie ££ that would have gone to build up Grey's Inn Road) have been put on hold
+
+2. Removal of fixed-term post related to last year students bulge 
+
+   - This year overshooting has not been *too* bad --- we've even been **on target** with MSc (only +3)
+
+&lt;span style="display:block; margin-top: 50px ;"&gt;&lt;/span&gt;
+
+### Over the 4 year horizon this gives us **just over** the £240k target 
+
+---
+
+
+exclude: true
+# So what do we do?...
+
+## Proposal to Faculty Finance team 
+
+(Discussed last Friday and previously at SMT)
+
+&lt;span style="display:block; margin-top: 50px ;"&gt;&lt;/span&gt;
+
+1. Removal of Fixed Term Lecturer (G8) post (approved as a result of student bulge in 21/22)
+
+   - We had agreed to advertise this in 2023, to make savings on last year budget &amp;ndash; now we do not advertise
+
+2. Removal of permanent IMSS Lectureship (G8) (approved in preparation to IMSS back in 20/21)
+
+   - Again, we had agreed to advertise this in 2023, to make savings on last year budget &amp;ndash; now we do not advertise
+   
+3. Do not renew one fixed term IMSS Senior Research Fellowship (G8)
+
+   - **NB** This means we *currently* don't budget to renew the first of these posts when Nico and Omar finish their tenure
+
+4. Reduce the other fixed term IMSS Senior Research Fellowship (G8) to 50%
+
+   - **NB** This means we *currently* don't budget to *fully* renew the second of these posts when Nico and Omar finish their tenure
+   
+&lt;span style="display:block; margin-top: 50px ;"&gt;&lt;/span&gt;
+
+### Over the 4 year horizon this gives us just over the £240k saving
+
+---
+
+# So what do we do?...
+
+## Of course, this is .red[**far from ideal**]!
+
+- It hits us on both teaching and research capacity, at a time when we were starting to see the light...
+   
+- Reduces our direct investment in IMSS by putting a (hopefully temporary!) halt to expansion directly related to it
+
+   - This will have very likely material implications in our REF capacity (and, for what it's worth, we have made it clear to Faculty and above...)
+   
+--
+
+## BUT:
+
+- The alternative would have been to make part of the savings by much more regressive measures...
+
+   - Cutting substantially scholarships
+   - Reducing other research-related activities (e.g. budget for travelling)
+   - Increasing the number of students (more on this later...)
+   
+- ... and we would have still needed to make some savings on core posts...
+
+---
+
+# Looking ahead
+
+- This should **not** come as a surprise to any of you, if you've looked at the White Papers (especially the [Shape and Size](https://www.ucl.ac.uk/strategic-plan-2022-27/sites/strategic_plan_2022_27/files/ucl_size_and_shape.pdf) one)
+
+&lt;center&gt;&lt;img src=./img/shape-size.png width='85%' title='INCLUDE TEXT HERE'&gt;&lt;/center&gt;
+
+---
+
+count: false
+# Looking ahead
+
+- This should **not** come as a surprise to any of you, if you've looked at the White Papers (especially the [Shape and Size](https://www.ucl.ac.uk/strategic-plan-2022-27/sites/strategic_plan_2022_27/files/ucl_size_and_shape.pdf) one)
+
+&gt; UCL are planning for an **overall** increase in the students population (in line with scenario 4)
+
+&lt;span style="display:block; margin-top: 20px ;"&gt;&lt;/span&gt;
+
+--
+
+### Some ideas...
+
+- This means we should prepare to counter this to limit as much as possible its implications!
+
+- Accept an increase in targets for MSc, rather than in BSc?
+
+   - Larger numbers in BSc implies bigger classes for which we need more tutorials 
+   - This creates *huge* problems for our teaching allocation exercise
+   &lt;span style="display:block; margin-top: 10px ;"&gt;&lt;/span&gt;
+   
+   - Larger numbers in MSc implies more projects to supervise over the summer
+   - Again **not** ideal, but perhaps easier to manage?
+  
+&lt;span style="display:block; margin-top: 20px ;"&gt;&lt;/span&gt; 
+
+--
+
+- Become **much** more active (aggressive?) in trying to secure industrial sponsorship for PhD posts
+   - iCASE studentships (we have managed to get one this year, so we have a better/more established process...)
+   
+- Become **much** more active *and* structured in seeking co-supervision for MSc projects and, possibly, use joint projects
+
+- .blue[**More discussion at next DTC meeting!**]
+
+&lt;span style="display:block; margin-top: 20px ;"&gt;&lt;/span&gt;
+
+--
+
+- In response to the living crisis, we're working to established paid projects for our PhD students
+   - Two already done &amp;ndash; more on the way, hopefully...
+   - May be a good thing to help the CDT application + bring some extra income in the department
+   
+- Look more closely at ways to self-fund our activities?
+   - Summer schools/short courses,...
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+<style>
+.logo {
+  background-image: url("assets/ucl-stats/UCL-stats.png");
+  background-size: 14% 7%;
+  background-repeat: no-repeat;
+  position: absolute;
+  top:  2.625%; /* 2.65%em */
+  left: 85%;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+</style>
+
+<script>
+document
+  .querySelectorAll(
+    '.remark-slide-content' +
+    ':not(.title-slide)' +
+    // add additional classes to exclude here, e.g.
+    // ':not(.inverse)' +
+    ':not(.hide-logo)' +
+    ':not(.thankyou-michelle)' +
+    ':not(.thankyou-barney)'
+  )
+  .forEach(el => {
+    el.innerHTML += '<div class="logo"></div>';
+  });
+</script>
+
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
