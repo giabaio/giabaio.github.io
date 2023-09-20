@@ -20,7 +20,7 @@ $presentation-h3-font-size: 1.2em !default;
 $presentation-h4-font-size: 1em !default;
 // Slightly increase the font-size for code (from the default quarto.scss)
 $code-block-font-size: 0.75em !default;
-$code-block-bg: #eaeeee!important;
+$code-block-bg: #eaeeee;
 //$code-bg: $code-block-bg;
 // This impacts the callouts font
 $presentation-font-smaller: 0.85 !default;
