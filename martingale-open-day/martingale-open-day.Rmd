@@ -147,7 +147,7 @@ count: false
 - The first globally to have departments of **Statistics**, Economics, Modern Languages, ...
 
 `r vspace("20px")`
-- ... And one of the original Martingale's partners
+- ... And, of course, one of the founding Martingale's partners
 ]
 ]
 
@@ -278,28 +278,8 @@ Check this out on our podcast [https://soundcloud.com/uclsound/sets/sample-space
 
 [https://sample-space.org](https://sample-space.org)
 
-<iframe frameborder="no" src="https://sample-space.org/"
-style="
-    position: fixed;
-    top: -40px;
-    bottom: 0px;
-    right: 0px;
-    left: -0px;
-    width: 120%;
-    border: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    z-index: 999999;
-    height: 120%;
-    ms-transform: scale(0.45);
-   -moz-transform: scale(0.45);
-   -o-transform: scale(0.45);
-   -webkit-transform: scale(0.45);
-   transform: scale(0.65);
-  "></iframe>
 
-```{r, echo=FALSE, out.width="100%",out.extra='style="border: none;"',eval=FALSE}
+```{r, echo=FALSE, out.width="100%",out.extra='style="border: none;"',eval=TRUE}
 knitr::include_url("https://sample-space.org/", height="600px")
 ```
 
@@ -341,21 +321,32 @@ count: false
 # Your pathway at UCL
 
 We work at the forefront of the mathematical sciences, providing the foundations for many scientific, technological and social advances
+`r vspace("30pt")`
 
 1. Foundational Data Science and its applications
 
-   - Environmental cciences (partnership the MetOffice)
-   - Biomedical sciences (links with UCLH and others)
+   - Environmental sciences (partnership with the MetOffice)
+   - Biomedical sciences (links with UCLH, IoN and others)
+`r vspace("20pt")`
 
 2. Machine learning and (the ethical and sensible use of) artificial intelligence
+`r vspace("20pt")`
 
-3. Financial mathematical and statistical modelling
+3. Mathematical and statistical modelling for financial applications
+`r vspace("20pt")`
 
 4. Computational methods
 
   - Bayesian computation and applications to a wide range of areas
+`r vspace("20pt")`
 
 5. Mathematical and statistical modelling for decision-making
+
+   - Economic evaluation of intervention
+   - Causal inference
+`r vspace("20pt")`
+
+6. Probability theory
 
 ---
 
