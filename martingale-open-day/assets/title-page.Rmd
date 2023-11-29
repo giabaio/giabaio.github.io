@@ -36,7 +36,7 @@ Can also add sticky notes:
 -->
 `r postit(text=paste0('Check out our departmental podcast "Random Talks" on Soundcloud!', add_podcast()),top="75%",left="2.5%",height="6.3em",width="6.3em",rotate="-8deg")`
 
-`r postit(text=paste0("Follow our departmental social media accounts", add_twitter(url="https://twitter.com/stats_ucl",title="@stats_UCL",fill="#00acee"), add_linkedin(url="https://www.linkedin.com/in/statistical-science-ucl-906b9a201",title="LinkedIn"),add_instagram(url="https://www.instagram.com/ucl.stats/",title="Instagram")),top="53%",left="6.5%",height="6.3em",width="6.3em")`
+`r postit(text=paste0("Follow our departmental social media accounts", add_x(url="https://twitter.com/stats_ucl",title="@stats_UCL",fill="black"), add_linkedin(url="https://www.linkedin.com/in/statistical-science-ucl-906b9a201",title="LinkedIn"),add_instagram(url="https://www.instagram.com/ucl.stats/",title="Instagram")),top="53%",left="6.5%",height="6.3em",width="6.3em")`
 
 <!-- This adds a footer (optional and with other possibilities...) 
      For example, can use `r samptux()` to add the Samp Tux log,
