@@ -180,7 +180,7 @@ font-size: 115%;
 
 - First ever Department of Statistics in the world; founded in 1911
 
-- Its first head was Karl Pearson
+- Its first head was Karl Pearson (more on this later...)
 
 - Now one of the largest in the UK
 
@@ -203,7 +203,7 @@ count: false
 
 - First ever Department of Statistics in the world; founded in 1911
 
-- Its first head was Karl Pearson
+- Its first head was Karl Pearson (more on this later...)
 
 - Now one of the largest in the UK
 
@@ -236,7 +236,7 @@ count: false
 
 - First ever Department of Statistics in the world; founded in 1911
 
-- Its first head was Karl Pearson
+- Its first head was Karl Pearson (more on this later...)
 
 - Now one of the largest in the UK
 
@@ -252,33 +252,36 @@ count: false
 
 ## Friendly department
 
-- About 30 academic staff
+- About 50 academic staff
 
-- About 500 undergraduate students and about 150 postgraduate students
+- Over 600 undergraduate students and about 150 postgraduate students
 
 - Teaching carried out by staff at the forefront of their subject
 
-- We even have our own `r paste0('&nbsp;<a href="https://twitter.com/stats_UCL"; title="Follow us on twitter (@stats_UCL)">',icons::icon_style(icons::fontawesome("twitter"),scale=.8,fill="#00acee",bottom="1em"),'</a>&nbsp;')`, `r paste0('&nbsp;<a href="https://www.linkedin.com/in/statistical-science-ucl-906b9a201"; title="Follow us on LinkedIn">',icons::icon_style(icons::fontawesome("linkedin"),scale=.8,fill="#0077b5",bottom="1em"),'</a>&nbsp;')`,  `r paste0('&nbsp;<a href="https://www.instagram.com/ucl.stats/"; title="Follow us on Instagram">',icons::icon_style(icons::fontawesome("instagram-square"),scale=.8,bottom="1em"),'</a>&nbsp;')`, [magazine](https://www.ucl.ac.uk/statistics/news/2020/apr/sample-space-issue-1-spring-2020) and [podcast](https://soundcloud.com/uclsound/sets/sample-space)!
-
+- We even have our own `r paste0('&nbsp;<a href="https://twitter.com/stats_UCL"; title="Follow us on twitter (@stats_UCL)">',fontawesome::fa("x-twitter",fill="black",height="0.8em"),'</a>&nbsp;')`, `r paste0('&nbsp;<a href="https://www.linkedin.com/in/statistical-science-ucl-906b9a201"; title="Follow us on LinkedIn">',icons::icon_style(icons::fontawesome("linkedin"),scale=.8,fill="#0077b5",bottom="1em"),'</a>&nbsp;')`,  `r paste0('&nbsp;<a href="https://www.instagram.com/ucl.stats/"; title="Follow us on Instagram">',icons::icon_style(icons::fontawesome("instagram-square"),scale=.8,bottom="1em"),'</a>&nbsp;')`, [magazine](https://www.ucl.ac.uk/statistics/news/2020/apr/sample-space-issue-1-spring-2020) and [podcast](https://soundcloud.com/uclsound/sets/sample-space)! 
 ]
 ]
 
 ---
 
-# Random talks
+# Random talks 
 
 `r include_fig("soundcloud-tom.png",width="65%")`
 
-Check this out on our [podcast](https://soundcloud.com/uclsound/the-history-of-statistics-and-eugenics-at-ucl-with-professor-tom-fearn)
+.footnote[
+Check this out on our podcast [https://soundcloud.com/uclsound/sets/sample-space](https://soundcloud.com/uclsound/sets/sample-space)
+]
 
 ---
 
-# Sample space ([https://sample-space.org](https://sample-space.org))
+# Sample space
+
+[https://sample-space.org](https://sample-space.org)
 
 <iframe frameborder="no" src="https://sample-space.org/"
 style="
     position: fixed;
-    top: -50px;
+    top: -40px;
     bottom: 0px;
     right: 0px;
     left: -0px;
