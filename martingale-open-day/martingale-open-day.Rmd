@@ -1,0 +1,305 @@
+---
+title: "UCL Maths & Stats"
+author: Gianluca Baio
+institute: "[Department of Statistical Science](https://www.ucl.ac.uk/statistics/) | University College London"
+params: 
+   conference: "Martingale Foundation Open Day"
+   location: " Royal Institution, London"
+   date: 8 December 2023
+   short_title: "Martingale Open Day"
+   center_footer: TRUE
+   slides_url: ""
+date: 
+output:
+  xaringan::moon_reader:
+    # This allows to use the local 'remarks' installation, obtained by running 'xaringan::summon_remarks()'
+    # chakra: libs/remark-latest.min.js
+    includes: 
+       in_header: "assets/latex_macros.html" 
+       ## This line adds a logo based on the format selected in the file 'assets/THEME/include_logo.html'
+       ## NB: the actual options (eg placement of the logo and actual logo file) can be changed there
+       ## There's also a script to manipulate the colouring scheme for the UCL logo (from a basic black/white one)
+       after_body: "assets/ucl-stats/insert-logo.html"
+    seal: false
+    yolo: no
+    lib_dir: libs
+    nature:
+      beforeInit: ["https://platform.twitter.com/widgets.js"]
+      highlightStyle: github
+      highlightLines: yes
+      countIncrementalSlides: no
+      ratio: '16:9'
+      titleSlideClass:
+      - center
+      - middle
+    self_contained: false 
+    css:
+    - "assets/fonts.css"
+    - "assets/ucl-stats.css"
+    - "assets/common.css"
+---
+
+```{r echo=F,message=FALSE,warning=FALSE,comment=NA}
+# Sources the R file with all the relevant setup and commands
+source("assets/setup.R")
+
+# Stuff from 'xaringanExtra' (https://pkg.garrickadenbuie.com/xaringanExtra)
+# This allows the use of panels (from 'xaringanExtra')
+xaringanExtra::use_panelset()
+# This allows to copy code from the slides directly
+xaringanExtra::use_clipboard()
+# This freezes the frame for when there's a gif included
+xaringanExtra::use_freezeframe()
+# Can also add the scribbling function to the slides
+# xaringanExtra::use_scribble()
+# Can also add a search box
+# xaringanExtra::use_search(show_icon = TRUE)
+
+# Defines the path to the file with the .bib entries (in case there are references)
+bibfile=ReadBib("~/Dropbox/Perso/Office/CV/mypubs.bib",check = FALSE)
+```
+
+```{r title-page, child="assets/title-page.Rmd"}
+```
+
+# University College London
+
+<style>
+.font125 {
+font-size: 125%;
+}
+.left-35 {
+  width: 35%;
+  height: 92%;
+  float: left;
+}
+.left-35 h2, .left-column h3 {
+  color: #035AA699;
+}
+.left-35 h2:last-of-type, .left-column h3:last-child {
+  color: #035AA6;
+}
+.right-65 {
+  width: 60%;
+  float: right;
+  padding-top: 0em;
+}
+</style>
+
+`r vspace("50px")`
+.left-35[
+`r vspace("30px")`
+`r include_fig("ucl-portico-ranbow.jpg",width="100%")`
+]
+
+.right-65[
+.font125[
+- UCL is a part of the [University of London](https://london.ac.uk/)
+
+   - UoL is a **federation** of 17 independent member institutions of outstanding global reputation
+
+`r vspace("30px")`
+   
+- We are a multidisciplinary university in its own right
+
+- Founded in 1826 (you'll be bang in the middle of the bicentenary celebrations!)
+
+- The first English university to admit Jewish, Catholics, Non-conformists faiths, Women, ...
+
+   - [Thomas Arnold](https://en.wikipedia.org/wiki/Thomas_Arnold) referred to us as "*that Godless institution in Gower Street*".
+
+`r vspace("30px")`
+
+- The first globally to have departments of **Statistics**, Economics, Modern Languages, ...
+
+]
+]
+
+---
+
+count: false
+# University College London
+
+`r vspace("50px")`
+.left-35[
+`r vspace("30px")`
+`r include_fig("ucl-portico-ranbow.jpg",width="100%")`
+]
+
+.right-65[
+.font125[
+- UCL is a part of the [University of London](https://london.ac.uk/)
+
+   - UoL is a **federation** of 17 independent member institutions of outstanding global reputation
+
+`r vspace("30px")`
+   
+- We are a multidisciplinary university in its own right
+
+- Founded in 1826 (you'll be bang in the middle of the bicentenary celebrations!)
+
+- The first English university to admit Jewish, Catholics, Non-conformists faiths, Women, ...
+
+   - [Thomas Arnold](https://en.wikipedia.org/wiki/Thomas_Arnold) referred to us as "*that Godless institution in Gower Street*".
+
+`r vspace("30px")`
+
+- The first globally to have departments of **Statistics**, Economics, Modern Languages, ...
+
+`r vspace("20px")`
+- ... And one of the original Martingale's partners
+]
+]
+
+---
+
+# UCL Department of Mathematics
+
+ADD FROM CHRISTIAN/HELEN HERE
+
+
+
+---
+
+# UCL Department of Statistical Science
+
+<style>
+.font115 {
+font-size: 115%;
+}
+</style>
+
+.left-column[
+`r include_fig("UCL_Stats_logo.jpeg",width="100%")`
+]
+
+.font115[
+.right-column[
+`r vspace("-30px")`
+## History
+
+- First ever Department of Statistics in the world; founded in 1911
+
+- Its first head was Karl Pearson
+
+- Now one of the largest in the UK
+
+]
+]
+
+---
+
+count: false
+# UCL Department of Statistical Science
+
+.left-column[
+`r include_fig("UCL_Stats_logo.jpeg",width="100%")`
+]
+
+.font115[
+.right-column[
+`r vspace("-30px")`
+## History
+
+- First ever Department of Statistics in the world; founded in 1911
+
+- Its first head was Karl Pearson
+
+- Now one of the largest in the UK
+
+
+## Active in research
+
+- Wide variety of statistical research
+
+- 90% of research outputs submitted in the "Research Excellence Framework" (REF; 2021) ranked as "**internationally excellent**"
+
+- We've improved markedly in our "Impact Case Studies" submission too &ndash; over 50% are 4*
+
+]
+]
+
+---
+
+count: false
+# UCL Department of Statistical Science
+
+.left-column[
+`r include_fig("UCL_Stats_logo.jpeg",width="100%")`
+]
+
+.font115[
+.right-column[
+`r vspace("-30px")`
+
+## History
+
+- First ever Department of Statistics in the world; founded in 1911
+
+- Its first head was Karl Pearson
+
+- Now one of the largest in the UK
+
+
+## Active in research
+
+- Wide variety of statistical research
+
+- 90% of research outputs submitted in the "Research Excellence Framework" (REF; 2021) ranked as "**internationally excellent**"
+
+- We've improved markedly in our "Impact Case Studies" submission too &ndash; over 50% are 4*
+
+
+## Friendly department
+
+- About 30 academic staff
+
+- About 500 undergraduate students and about 150 postgraduate students
+
+- Teaching carried out by staff at the forefront of their subject
+
+- We even have our own `r paste0('&nbsp;<a href="https://twitter.com/stats_UCL"; title="Follow us on twitter (@stats_UCL)">',icons::icon_style(icons::fontawesome("twitter"),scale=.8,fill="#00acee",bottom="1em"),'</a>&nbsp;')`, `r paste0('&nbsp;<a href="https://www.linkedin.com/in/statistical-science-ucl-906b9a201"; title="Follow us on LinkedIn">',icons::icon_style(icons::fontawesome("linkedin"),scale=.8,fill="#0077b5",bottom="1em"),'</a>&nbsp;')`,  `r paste0('&nbsp;<a href="https://www.instagram.com/ucl.stats/"; title="Follow us on Instagram">',icons::icon_style(icons::fontawesome("instagram-square"),scale=.8,bottom="1em"),'</a>&nbsp;')`, [magazine](https://www.ucl.ac.uk/statistics/news/2020/apr/sample-space-issue-1-spring-2020) and [podcast](https://soundcloud.com/uclsound/sets/sample-space)!
+
+]
+]
+
+---
+
+# Random talks
+
+`r include_fig("soundcloud-tom.png",width="65%")`
+
+Check this out on our [podcast](https://soundcloud.com/uclsound/the-history-of-statistics-and-eugenics-at-ucl-with-professor-tom-fearn)
+
+---
+
+# Sample space ([https://sample-space.org](https://sample-space.org))
+
+<iframe frameborder="no" src="https://sample-space.org/"
+style="
+    position: fixed;
+    top: -50px;
+    bottom: 0px;
+    right: 0px;
+    left: -0px;
+    width: 120%;
+    border: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    z-index: 999999;
+    height: 120%;
+    ms-transform: scale(0.45);
+   -moz-transform: scale(0.45);
+   -o-transform: scale(0.45);
+   -webkit-transform: scale(0.45);
+   transform: scale(0.65);
+  "></iframe>
+
+```{r, echo=FALSE, out.width="100%",out.extra='style="border: none;"',eval=FALSE}
+knitr::include_url("https://sample-space.org/", height="600px")
+```
+
+---
+
+class: thankyou-michelle 
