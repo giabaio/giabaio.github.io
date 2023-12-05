@@ -214,21 +214,41 @@
 
     const initPanelSet = (panelset, idx) => {
       let panels = Array.from(panelset.querySelectorAll('.panel'))
-      if (!panels.length && panelset.matches('.section[class*="level"]')) {
-        // we're in tabset-alike R Markdown
-        const panelsetLevel = [...panelset.classList]
-          .filter(s => s.match(/^level/))[0]
-          .replace('level', '')
+      const pandocSectionSelector = ':is(section, .section)[class*="level"]'
+      if (!panels.length) {
+        // we're in tabset-alike R Markdown or Quarto
+        const getSectionLevel = (el) => {
+          const levels = [...el.classList].filter(s => s.match(/^level/))
+          return levels.length ? levels[0].replace('level', '') : levels
+        }
+
+        // {.panelset} applied to a section heading
+        let panelsetLevel = getSectionLevel(panelset)
+
+        if (!panelsetLevel.length) {
+          // {.panelset} applied as a fenced div around subsections
+          const subSections = panelset.querySelectorAll(pandocSectionSelector)
+          if (!subSections.length) return
+
+          panelsetLevel = Array.from(subSections)
+            .map(getSectionLevel)
+            .map(x => parseInt(x))
+            .reduce((acc, x) => Math.min(acc, x), Infinity)
+
+          panelsetLevel = +panelsetLevel - 1
+        }
 
         // move children that aren't inside a section up above the panelset
         Array.from(panelset.children).forEach(function (el) {
-          if (el.matches('div.section[class*="level"]')) return
+          if (el.matches(pandocSectionSelector)) return
           panelset.parentElement.insertBefore(el, panelset)
         })
 
         // panels are all .sections with .level<panelsetLevel + 1>
         const panelLevel = +panelsetLevel + 1
-        panels = Array.from(panelset.querySelectorAll(`.section.level${panelLevel}`))
+        panels = Array.from(
+          panelset.querySelectorAll(`:is(section, .section).level${panelLevel}`)
+        )
       }
 
       if (!panels.length) return
