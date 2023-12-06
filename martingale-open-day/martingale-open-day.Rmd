@@ -155,12 +155,61 @@ count: false
 
 # UCL Department of Mathematics
 
+.left-column[
+`r include_fig("maths.jpg",width="100%")`
+]
+
+.right-column[
+`r vspace("-30px")`
 ## History
 
 - The Department of Mathematics goes back to 1826 as one of the founding departments of UCL
 - It is the third oldest mathematics department in England
 
---
+]
+
+---
+
+count: false
+
+# UCL Department of Mathematics
+
+.left-column[
+`r include_fig("maths.jpg",width="100%")`
+]
+
+.right-column[
+`r vspace("-30px")`
+## History
+
+- The Department of Mathematics goes back to 1826 as one of the founding departments of UCL
+- It is the third oldest mathematics department in England
+
+
+## Notable staff
+
+- De Morgan, Sylvester, Hill, Davenport, Clifford, Lighthill, Roth, Baker, Gowers and many others
+- Susan Brown, in 1986, became one of the first female professors in mathematics in the UK
+- Helen Wilson (former Head of Department) was president of the British Society of Rheology (2015–2017) , the first woman to hold this position
+]
+
+---
+
+count: false
+
+# UCL Department of Mathematics
+
+.left-column[
+`r include_fig("maths.jpg",width="100%")`
+]
+
+.right-column[
+`r vspace("-30px")`
+## History
+
+- The Department of Mathematics goes back to 1826 as one of the founding departments of UCL
+- It is the third oldest mathematics department in England
+
 
 ## Notable staff
 
@@ -168,12 +217,11 @@ count: false
 - Susan Brown, in 1986, became one of the first female professors in mathematics in the UK
 - Helen Wilson (former Head of Department) was president of the British Society of Rheology (2015–2017) , the first woman to hold this position
 
---
-
 ## The department today
 
 - About 70 academic staff, almost 30 full professors, supported by 20 PS staff active research in many areas of mathematics, ranging from pure Mathematics like Analysis, Number Theory and Geometry to Fluids Mechanics, Mathematical Biology, Financial Mathematics and many more
 - Over 1000 students across all degree programmes including PhD students very active public engagement during the pandemic by CORU (Clinical Operational Research Unit)
+]
 
 ---
 
@@ -287,6 +335,16 @@ count: false
 .footnote[
 Check this out on our podcast [https://soundcloud.com/uclsound/sets/sample-space](https://soundcloud.com/uclsound/sets/sample-space)
 ]
+
+---
+
+# Chalkdust
+
+[https://chalkdustmagazine.com/](https://chalkdustmagazine.com/)
+
+```{r, echo=FALSE, out.width="100%",out.extra='style="border: none;"',eval=TRUE}
+knitr::include_url("https://chalkdustmagazine.com/", height="600px")
+```
 
 ---
 
