@@ -1,0 +1,10 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+# These files from quarto slides are irrelevant and don't need to be synced
+*.qmd 
+*.Rmd
+*/_extensions
+*/latex_macros.html
+*/title-slide.html
