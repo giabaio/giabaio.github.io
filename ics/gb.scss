@@ -360,10 +360,16 @@ section.has-dark-background a, section.has-dark-background a:hover {
   background: transparent;
   background-image: linear-gradient(
     to right,
-    rgba(233,250,231,1.00),
+    rgba(233,250,231,0.1),
     rgba(68,214,44,1.00) 4%,
-    rgba(27,252,6,1.00)
+    rgba(233,255,208,1)
   );
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }
+
+#refs {
+  font-size: 1.25rem;
+  overflow-y: auto;
+}
+

@@ -974,10 +974,13 @@ height: 170px;
 </ol>
 </div>
 <div class="fragment">
-<p><span style="display:block; margin-top: 30px ;"></span> 2. Functions that are not exposed (so the user may not even know they exist…), can still be accessed using the “<code>:::</code>” notation</p>
+<p><span style="display:block; margin-top: 30px ;"></span></p>
+<ol start="2" type="1">
+<li><p>Functions that are not exposed (so the user may not even know they exist…), can still be accessed using the “<code>:::</code>” notation</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a>BCEA<span class="sc">:::</span><span class="fu">add_ceplane_icer</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+</div></li>
+</ol>
 </div>
 </section>
 <section id="why-and-how-to-write-a-package-3" class="slide level2" data-visibility="uncounted">
@@ -1268,6 +1271,7 @@ RoxygenNote: 7.3.1
 </section>
 <section id="speaking-of-version-controlling" class="slide level2">
 <h2>Speaking of… version controlling</h2>
+<p><span style="display:block; margin-top: -20px ;"></span></p>
 <div class="columns">
 <div class="column" style="width:65%;">
 <ul>
@@ -1282,7 +1286,7 @@ RoxygenNote: 7.3.1
 <li>Avoid the infamous <code>package_version_2_2024_04_22_GB.R</code> file diaspora…</li>
 </ul>
 </div>
-<div class="fragment" style="margin-top: 10px">
+<div class="fragment" style="margin-top: 5px">
 <ol type="1">
 <li>Make your <code>R</code> package folder a <code>.git</code> repository</li>
 <li>Get your head around the <code>git</code> syntax and philosophy (some entry barrier…)
@@ -1889,7 +1893,7 @@ RoxygenNote: 7.3.1
       }
     });
     </script>
-    <script>var lightboxQuarto = GLightbox({"openEffect":"zoom","selector":".lightbox","closeEffect":"zoom","descPosition":"bottom","loop":false});
+    <script>var lightboxQuarto = GLightbox({"selector":".lightbox","openEffect":"zoom","descPosition":"bottom","loop":false,"closeEffect":"zoom"});
     window.onload = () => {
       lightboxQuarto.on('slide_before_load', (data) => {
         const { slideIndex, slideNode, slideConfig, player, trigger } = data;
