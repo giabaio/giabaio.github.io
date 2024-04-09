@@ -493,7 +493,7 @@
 <p><span class="logo-stats"></span></p>
 
 <!-- GB: adds this to include a possible URL to the slides on the side of every slide 
-<p class="slides-url"><i class="fa-solid fa-circle-info" style="color: #647d97;"></i> Slides available at: <a href="https://gianluca.statistica.it/slides/escher">https://gianluca.statistica.it/slides/escher</a></p>
+<p class="slides-url"><i class="fa-solid fa-circle-info" style="color: #647d97;"></i> Slides available at: <a href="https://giabaio.github.io/erasmus">https://giabaio.github.io/erasmus</a></p>
 -- --- -->
 
 </section>
@@ -537,6 +537,18 @@
 </div>
 </section>
 
+<section id="the-real-erasmus" class="slide level2">
+<h2>(The real) Erasmus…</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><a href="images/Holbein-erasmus.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img data-src="images/Holbein-erasmus.jpg"></a></p>
+</div><div class="column" data-fragment-index="2" style="width:50%;">
+<div class="fragment">
+<p><a href="images/gianlu-erasmus.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img data-src="images/gianlu-erasmus.jpg"></a></p>
+</div>
+</div>
+</div>
+</section>
 <section id="outline" class="slide level2">
 <h2>Outline</h2>
 <div class="fragment fade-in-then-semi-out">
@@ -636,7 +648,7 @@
 <li><span class="magic-marker"><strong>Free</strong></span>
 <ul>
 <li>Doesn’t cost to install</li>
-<li><a href="https://www.fsf.org/about/what-is-free-software" data-preview-link="true" style="text-align: center"><em>Free software</em></a></li>
+<li><a href="https://www.fsf.org/about/what-is-free-software" data-preview-link="true" style="text-align: center; font-family: Inter Tight;"><em>Free software</em></a></li>
 </ul></li>
 </ul>
 </div>
@@ -666,7 +678,7 @@
 </ul>
 <div class="columns">
 <div class="column" style="width:45%;">
-<p><a href="images/packages.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img data-src="images/packages.jpg"></a></p>
+<p><a href="images/packages.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img data-src="images/packages.jpg"></a></p>
 </div><div class="column" style="width:55%;">
 <ul>
 <li>An <code>R</code> package is a collection of functions that are bundled together in a way that lets them be easily shared</li>
@@ -687,8 +699,8 @@
 <li>Often, you don’t set out to write a package, as if it were the calling of your life…</li>
 </ul>
 <div class="r-stack">
-<p><a href="images/calling1.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img data-src="images/calling1.jpg" class="fragment" data-fragment-index="1" width="400"></a></p>
-<p><a href="images/calling2.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img data-src="images/calling2.jpg" class="fragment" data-fragment-index="2" width="400"></a></p>
+<p><a href="images/calling1.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img data-src="images/calling1.jpg" class="fragment" data-fragment-index="1" width="400"></a></p>
+<p><a href="images/calling2.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img data-src="images/calling2.jpg" class="fragment" data-fragment-index="2" width="400"></a></p>
 </div>
 <div class="fragment fade-down" data-fragment-index="1" style="color: #636363">
 <div class="fragment fade-out" data-fragment-index="2">
@@ -753,7 +765,7 @@
 <div class="column" style="width:60%;">
 <p><span class="magic-marker"><strong>That’s</strong> when you know you <em>need</em> to turn it all into a package!</span></p>
 </div><div class="column" style="width:40%;">
-<p><a href="images/eureka.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img data-src="images/eureka.jpg"></a></p>
+<p><a href="images/eureka.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img data-src="images/eureka.jpg"></a></p>
 </div>
 </div>
 </div>
@@ -1016,7 +1028,7 @@ height: 170px;
 <span id="cb6-2"><a href=""></a>devtools<span class="sc">::</span><span class="fu">create</span>(<span class="st">"testPackage"</span>,<span class="at">open =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <pre><code>✔ Creating 'testPackage/'
-✔ Setting active project to '/home/gianluca/Dropbox/erasmus/slides/testPackage'
+✔ Setting active project to '/home/gianluca/erasmus/testPackage'
 ✔ Creating 'R/'
 ✔ Writing 'DESCRIPTION'
 Package: testPackage
@@ -1035,7 +1047,7 @@ RoxygenNote: 7.3.1
 ✔ Adding '^testPackage\\.Rproj$' to '.Rbuildignore'
 ✔ Adding '.Rproj.user' to '.gitignore'
 ✔ Adding '^\\.Rproj\\.user$' to '.Rbuildignore'
-✔ Opening '/home/gianluca/Dropbox/erasmus/slides/testPackage/' in new RStudio session
+✔ Opening '/home/gianluca/erasmus/testPackage/' in new RStudio session
 ✔ Setting active project to '&lt;no active project&gt;'</code></pre>
 <div class="fragment">
 <ul>
@@ -1185,7 +1197,8 @@ RoxygenNote: 7.3.1
 </section>
 <section id="controlling-dependencies" class="slide level2">
 <h2>Controlling dependencies</h2>
-<iframe width="100%" height="650" src="https://rstudio.github.io/packrat/" title="Packrat"></iframe>
+<iframe width="100%" height="650" src="https://rstudio.github.io/renv/index.html" title="renv"></iframe>
+<!-- https://rstudio.github.io/packrat/ -->
 </section>
 <section id="installing-a-package" class="slide level2">
 <h2><em>Installing</em> a package</h2>
@@ -1283,7 +1296,7 @@ RoxygenNote: 7.3.1
 </ul>
 <div class="fragment">
 <ul>
-<li>Avoid the infamous <code>package_version_2_2024_04_22_GB.R</code> file diaspora…</li>
+<li>Avoid the infamous <code>package_version_2_2024_04_22_final_new_GB.R</code> file diaspora…</li>
 </ul>
 </div>
 <div class="fragment" style="margin-top: 5px">
@@ -1299,7 +1312,7 @@ RoxygenNote: 7.3.1
 </ol>
 </div>
 </div><div class="column" style="width:35%;">
-<p><a href="images/using-git.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img data-src="images/using-git.png"></a></p>
+<p><a href="images/using-git.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img data-src="images/using-git.png"></a></p>
 </div>
 </div>
 </section>
@@ -1467,7 +1480,7 @@ RoxygenNote: 7.3.1
 </div>
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
-<p>© Gianluca Baio (UCL) &nbsp; | &nbsp; <a href="https://twitter.com/giabaio" title="Follow me on X"><i class="fa-brands fa-x-twitter" aria-label="x-twitter"></i></a> &nbsp; <a href="https://mas.to/@gianlubaio" title="Follow me on Mastodon"><i class="fa-brands fa-mastodon" aria-label="mastodon"></i></a> &nbsp; <a href="https://github.com/giabaio" title="Check out my repos"><i class="fa-brands fa-github" aria-label="github"></i></a> &nbsp; <a href="mailto:g.baio@ucl.ac.uk" title="Email me"><i class="fa-solid fa-envelope" aria-label="envelope"></i></a> &nbsp; <a href="https://gianluca.statistica.it" title="Visit my website"><i class="fa-brands fa-firefox" aria-label="firefox"></i></a> &nbsp; | &nbsp; R Packages in research &nbsp; | &nbsp; EsCHER workshop &nbsp; | &nbsp; 23 Apr 2024 &nbsp; | &nbsp; <i class="fa-solid fa-circle-info" aria-label="circle-info"></i> Slides available at <a href="https://gianluca.statistica.it/slides/escher">https://gianluca.statistica.it/slides/escher</a></p>
+<p>© Gianluca Baio (UCL) &nbsp; | &nbsp; <a href="https://twitter.com/giabaio" title="Follow me on X"><i class="fa-brands fa-x-twitter" aria-label="x-twitter"></i></a> &nbsp; <a href="https://mas.to/@gianlubaio" title="Follow me on Mastodon"><i class="fa-brands fa-mastodon" aria-label="mastodon"></i></a> &nbsp; <a href="https://github.com/giabaio" title="Check out my repos"><i class="fa-brands fa-github" aria-label="github"></i></a> &nbsp; <a href="mailto:g.baio@ucl.ac.uk" title="Email me"><i class="fa-solid fa-envelope" aria-label="envelope"></i></a> &nbsp; <a href="https://gianluca.statistica.it" title="Visit my website"><i class="fa-brands fa-firefox" aria-label="firefox"></i></a> &nbsp; | &nbsp; R Packages in research &nbsp; | &nbsp; EsCHER workshop &nbsp; | &nbsp; 23 Apr 2024 &nbsp; | &nbsp; <i class="fa-solid fa-circle-info" aria-label="circle-info"></i> Slides available at <a href="https://giabaio.github.io/erasmus">https://giabaio.github.io/erasmus</a></p>
 </div>
 </div>
 </section>
@@ -1899,7 +1912,7 @@ RoxygenNote: 7.3.1
       }
     });
     </script>
-    <script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"selector":".lightbox","openEffect":"zoom"});
+    <script>var lightboxQuarto = GLightbox({"descPosition":"bottom","openEffect":"zoom","loop":false,"closeEffect":"zoom","selector":".lightbox"});
     window.onload = () => {
       lightboxQuarto.on('slide_before_load', (data) => {
         const { slideIndex, slideNode, slideConfig, player, trigger } = data;
