@@ -585,6 +585,7 @@ UK Prime Minister (July 2016 — July 2019)</p>
 <li>Windrush media coverage 2017</li>
 </ul></li>
 <li>Exposed ethnicities: Black African, Black Caribbean, Indian, Pakistani, Bangladeshi vs White</li>
+<li>Main confounders: age, sex, urban/rural, IMD, children, UK born, education, working condition</li>
 </ul>
 </div>
 </section>
@@ -617,7 +618,7 @@ UK Prime Minister (July 2016 — July 2019)</p>
 <li><span class="math inline">\(w_{i}=1\)</span> if unit <span class="math inline">\(i\)</span> is exposed and 0 if it is a control</li>
 </ul>
 <p><span class="math display">\[
-g\left(\E[Y_{it}]\right) = g(\mu_{it}) \color{white}{= \alpha_0 + \alpha_1 w_i + \sum_{k=1}^K \beta_k X_{itk} + \phi_{0}t + \phi_{1}t w_i + \delta_0 z_{t} + \delta_1 w_i z_t + \gamma_i + \lambda_t} [+\ldots]
+g\left(\E[Y_{it}]\right) = g(\mu_{it}) \color{white}{= \alpha_0 + \alpha_1 w_i + \sum_{k=1}^K \beta_k X_{itk} + \phi_{0}t + \phi_{1}t w_i + \delta_0 z_{t} + \delta_1 w_i z_t + \gamma_i + \lambda_t} \,[+\ldots]
 \]</span></p>
 <ul>
 <li><span class="math inline">\(g(\cdot)\)</span> is a suitable link function</li>
@@ -707,7 +708,7 @@ g\left(\E[Y_{it}]\right) = g(\mu_{it}) = \alpha_0 + \alpha_1 w_i + \sum_{k=1}^K 
 <li><span class="math inline">\(w_{i}=1\)</span> if unit <span class="math inline">\(i\)</span> is exposed and 0 if it is a control</li>
 </ul>
 <p><span class="math display">\[
-g\left(\E[Y_{it}]\right) = g(\mu_{it}) = \alpha_0 + \alpha_1 w_i + \sum_{k=1}^K \beta_k X_{itk} + \phi_{0}t + \phi_{1}t w_i + \delta_0 z_{t} + \delta_1 w_i z_t + \gamma_i + \lambda_t [+\ldots]
+g\left(\E[Y_{it}]\right) = g(\mu_{it}) = \alpha_0 + \alpha_1 w_i + \sum_{k=1}^K \beta_k X_{itk} + \phi_{0}t + \phi_{1}t w_i + \delta_0 z_{t} + \delta_1 w_i z_t + \gamma_i + \lambda_t \,[+\ldots]
 \]</span></p>
 <ul>
 <li><span class="math inline">\(g(\cdot)\)</span> is a suitable link function</li>
@@ -768,7 +769,7 @@ g\left(\E[Y_{it}]\right) = g(\mu_{it}) = \alpha_0 + \alpha_1 w_i + \sum_{k=1}^K 
 <section id="hostile-environment-2" class="slide level2">
 <h2>Hostile environment</h2>
 <h3 id="results-1">Results</h3>
-<div class="cell" data-layout-align="center" width="10" height="7">
+<div class="cell" data-layout-align="center" width="8" height="5">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -822,7 +823,7 @@ g\left(\E[Y_{it}]\right) = g(\mu_{it}) = \alpha_0 + \alpha_1 w_i + \sum_{k=1}^K 
 <div>
 
 </div>
-<div class="cell quarto-layout-panel" width="8" data-layout-align="center" data-layout-ncol="2" height="7">
+<div class="cell quarto-layout-panel" width="8" height="7" data-layout-ncol="2" data-layout-align="center">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <div class="quarto-figure quarto-figure-center">
@@ -1319,7 +1320,7 @@ g\left(\E[Y_{it}]\right) = g(\mu_{it}) = \alpha_0 + \alpha_1 w_i + \sum_{k=1}^K 
       }
     });
     </script>
-    <script>var lightboxQuarto = GLightbox({"openEffect":"zoom","selector":".lightbox","closeEffect":"zoom","loop":false,"descPosition":"bottom"});
+    <script>var lightboxQuarto = GLightbox({"selector":".lightbox","openEffect":"zoom","closeEffect":"zoom","descPosition":"bottom","loop":false});
     window.onload = () => {
       lightboxQuarto.on('slide_before_load', (data) => {
         const { slideIndex, slideNode, slideConfig, player, trigger } = data;
