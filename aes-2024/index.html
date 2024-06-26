@@ -717,6 +717,7 @@ g\left(\E[Y_{it}]\right) = g(\mu_{it}) = \alpha_0 + \alpha_1 w_i + \sum_{k=1}^K 
 <li><span class="math inline">\(\delta_0\)</span> and <span class="math inline">\((\delta_0+\delta_1)\)</span> model the change in the outcome pre-post intervention in the controls and the exposed, respectively</li>
 <li><span class="math inline">\(\bm{\gamma}=(\gamma_1,\ldots,\gamma_I)\)</span> are a set of unit-specific random effects to model dependencies across the units</li>
 <li><span class="math inline">\(\bm\lambda=(\lambda_1,\ldots,\lambda_T)\)</span> quantifies the time trends for the overall period, modelled using autoregressive structures, which will allow to increase the model flexibility</li>
+<li><span class="math inline">\([+\ldots]\)</span> (optional) additional structured effect (e.g.&nbsp;to model spatial correlation)</li>
 </ul>
 </section>
 <section id="interrupted-time-series-8" class="slide level2" data-visibility="uncounted">
@@ -742,7 +743,11 @@ g\left(\E[Y_{it}]\right) = g(\mu_{it}) = \alpha_0 + \alpha_1 w_i + \sum_{k=1}^K 
 <li>Can include relatively vague information in the priors, which can still help regularise the inference
 <ul>
 <li>Avoid inconsistent estimates because of small numbers/separation</li>
+<li>Use Penalised Complexity (PC) priors</li>
 </ul></li>
+</ul>
+<p><span style="display:block; margin-top: 30px ;"></span></p>
+<ul>
 <li>Direct characterisation of full uncertainty in all model parameters
 <ul>
 <li>Can then rescale (e.g.&nbsp;from regression coefficients to original scores etc) and still obtain samples from the full posterior distributions</li>
@@ -1314,7 +1319,7 @@ g\left(\E[Y_{it}]\right) = g(\mu_{it}) = \alpha_0 + \alpha_1 w_i + \sum_{k=1}^K 
       }
     });
     </script>
-    <script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","selector":".lightbox","descPosition":"bottom","loop":false,"openEffect":"zoom"});
+    <script>var lightboxQuarto = GLightbox({"descPosition":"bottom","closeEffect":"zoom","openEffect":"zoom","loop":false,"selector":".lightbox"});
     window.onload = () => {
       lightboxQuarto.on('slide_before_load', (data) => {
         const { slideIndex, slideNode, slideConfig, player, trigger } = data;
