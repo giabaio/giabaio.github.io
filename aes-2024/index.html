@@ -436,8 +436,9 @@
 </section>
 <section id="epitome-1" class="slide level2" data-viibility="uncounted">
 <h2>Epitome</h2>
-<p>Other examples</p>
+<p>Examples</p>
 <ul>
+<li><a href="https://en.wikipedia.org/wiki/Home_Office_hostile_environment_policy">Hostile environment</a> (most of this talk)</li>
 <li><a href="https://en.wikipedia.org/wiki/Universal_Credit">Universal credit</a> (more on this later…)</li>
 <li>Suicides</li>
 <li>Speed limits (20mph zones across large sections of many UK cities)</li>
@@ -595,19 +596,7 @@ UK Prime Minister (July 2016 — July 2019)</p>
 </figure>
 </div>
 </section>
-<section id="interrupted-time-series" class="slide level2">
-<h2>Interrupted time series</h2>
-<h4 id="typical-setup">Typical setup</h4>
-<div class="cell" data-layout-align="center" width="10" height="5">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><a href="index_files/figure-revealjs/its-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img data-src="index_files/figure-revealjs/its-1.png" class="quarto-figure quarto-figure-center" style="width:55.0%"></a></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
+
 <section id="interrupted-time-series-1" class="slide level2">
 <h2>Interrupted time series</h2>
 <h4 id="general-model-structure">General model structure</h4>
@@ -628,7 +617,7 @@ UK Prime Minister (July 2016 — July 2019)</p>
 <li><span class="math inline">\(w_{i}=1\)</span> if unit <span class="math inline">\(i\)</span> is exposed and 0 if it is a control</li>
 </ul>
 <p><span class="math display">\[
-g\left(\E[Y_{it}]\right) = g(\mu_{it}) \color{white}{= \alpha_0 + \alpha_1 w_i + \sum_{k=1}^K \beta_k X_{itk} + \phi_{0}t + \phi_{1}t w_i + \delta_0 z_{t} + \delta_1 w_i z_t + \gamma_i + \lambda_t}
+g\left(\E[Y_{it}]\right) = g(\mu_{it}) \color{white}{= \alpha_0 + \alpha_1 w_i + \sum_{k=1}^K \beta_k X_{itk} + \phi_{0}t + \phi_{1}t w_i + \delta_0 z_{t} + \delta_1 w_i z_t + \gamma_i + \lambda_t} [+\ldots]
 \]</span></p>
 <ul>
 <li><span class="math inline">\(g(\cdot)\)</span> is a suitable link function</li>
@@ -644,7 +633,7 @@ g\left(\E[Y_{it}]\right) = g(\mu_{it}) \color{white}{= \alpha_0 + \alpha_1 w_i +
 <li><span class="math inline">\(w_{i}=1\)</span> if unit <span class="math inline">\(i\)</span> is exposed and 0 if it is a control</li>
 </ul>
 <p><span class="math display">\[
-g\left(\E[Y_{it}]\right) = g(\mu_{it}) = \alpha_0 + \alpha_1 w_i \color{white}{+ \sum_{k=1}^K \beta_k X_{itk} + \phi_{0}t + \phi_{1}t w_i + \delta_0 z_{t} + \delta_1 w_i z_t + \gamma_i + \lambda_t}
+g\left(\E[Y_{it}]\right) = g(\mu_{it}) = \alpha_0 + \alpha_1 w_i \color{white}{+ \sum_{k=1}^K \beta_k X_{itk} + \phi_{0}t + \phi_{1}t w_i + \delta_0 z_{t} + \delta_1 w_i z_t + \gamma_i + \lambda_t} [+\ldots]
 \]</span></p>
 <ul>
 <li><span class="math inline">\(g(\cdot)\)</span> is a suitable link function</li>
@@ -661,7 +650,7 @@ g\left(\E[Y_{it}]\right) = g(\mu_{it}) = \alpha_0 + \alpha_1 w_i \color{white}{+
 <li><span class="math inline">\(w_{i}=1\)</span> if unit <span class="math inline">\(i\)</span> is exposed and 0 if it is a control</li>
 </ul>
 <p><span class="math display">\[
-g\left(\E[Y_{it}]\right) = g(\mu_{it}) = \alpha_0 + \alpha_1 w_i + \sum_{k=1}^K \beta_k X_{itk} \color{white}{+ \phi_{0}t + \phi_{1}t w_i + \delta_0 z_{t} + \delta_1 w_i z_t + \gamma_i + \lambda_t}
+g\left(\E[Y_{it}]\right) = g(\mu_{it}) = \alpha_0 + \alpha_1 w_i + \sum_{k=1}^K \beta_k X_{itk} \color{white}{+ \phi_{0}t + \phi_{1}t w_i + \delta_0 z_{t} + \delta_1 w_i z_t + \gamma_i + \lambda_t} [+\ldots]
 \]</span></p>
 <ul>
 <li><span class="math inline">\(g(\cdot)\)</span> is a suitable link function</li>
@@ -679,7 +668,7 @@ g\left(\E[Y_{it}]\right) = g(\mu_{it}) = \alpha_0 + \alpha_1 w_i + \sum_{k=1}^K 
 <li><span class="math inline">\(w_{i}=1\)</span> if unit <span class="math inline">\(i\)</span> is exposed and 0 if it is a control</li>
 </ul>
 <p><span class="math display">\[
-g\left(\E[Y_{it}]\right) = g(\mu_{it}) = \alpha_0 + \alpha_1 w_i + \sum_{k=1}^K \beta_k X_{itk} + \phi_{0}t + \phi_{1}t w_i \color{white}{+ \delta_0 z_{t} + \delta_1 w_i z_t + \gamma_i + \lambda_t}
+g\left(\E[Y_{it}]\right) = g(\mu_{it}) = \alpha_0 + \alpha_1 w_i + \sum_{k=1}^K \beta_k X_{itk} + \phi_{0}t + \phi_{1}t w_i \color{white}{+ \delta_0 z_{t} + \delta_1 w_i z_t + \gamma_i + \lambda_t} [+\ldots]
 \]</span></p>
 <ul>
 <li><span class="math inline">\(g(\cdot)\)</span> is a suitable link function</li>
@@ -698,7 +687,7 @@ g\left(\E[Y_{it}]\right) = g(\mu_{it}) = \alpha_0 + \alpha_1 w_i + \sum_{k=1}^K 
 <li><span class="math inline">\(w_{i}=1\)</span> if unit <span class="math inline">\(i\)</span> is exposed and 0 if it is a control</li>
 </ul>
 <p><span class="math display">\[
-g\left(\E[Y_{it}]\right) = g(\mu_{it}) = \alpha_0 + \alpha_1 w_i + \sum_{k=1}^K \beta_k X_{itk} + \phi_{0}t + \phi_{1}t w_i + \delta_0 z_{t} + \delta_1 w_i z_t \color{white}{+ \gamma_i + \lambda_t}
+g\left(\E[Y_{it}]\right) = g(\mu_{it}) = \alpha_0 + \alpha_1 w_i + \sum_{k=1}^K \beta_k X_{itk} + \phi_{0}t + \phi_{1}t w_i + \delta_0 z_{t} + \delta_1 w_i z_t \color{white}{+ \gamma_i + \lambda_t} [+\ldots]
 \]</span></p>
 <ul>
 <li><span class="math inline">\(g(\cdot)\)</span> is a suitable link function</li>
@@ -718,7 +707,7 @@ g\left(\E[Y_{it}]\right) = g(\mu_{it}) = \alpha_0 + \alpha_1 w_i + \sum_{k=1}^K 
 <li><span class="math inline">\(w_{i}=1\)</span> if unit <span class="math inline">\(i\)</span> is exposed and 0 if it is a control</li>
 </ul>
 <p><span class="math display">\[
-g\left(\E[Y_{it}]\right) = g(\mu_{it}) = \alpha_0 + \alpha_1 w_i + \sum_{k=1}^K \beta_k X_{itk} + \phi_{0}t + \phi_{1}t w_i + \delta_0 z_{t} + \delta_1 w_i z_t + \gamma_i + \lambda_t
+g\left(\E[Y_{it}]\right) = g(\mu_{it}) = \alpha_0 + \alpha_1 w_i + \sum_{k=1}^K \beta_k X_{itk} + \phi_{0}t + \phi_{1}t w_i + \delta_0 z_{t} + \delta_1 w_i z_t + \gamma_i + \lambda_t [+\ldots]
 \]</span></p>
 <ul>
 <li><span class="math inline">\(g(\cdot)\)</span> is a suitable link function</li>
@@ -828,7 +817,7 @@ g\left(\E[Y_{it}]\right) = g(\mu_{it}) = \alpha_0 + \alpha_1 w_i + \sum_{k=1}^K 
 <div>
 
 </div>
-<div class="cell quarto-layout-panel" height="7" width="8" data-layout-ncol="2" data-layout-align="center">
+<div class="cell quarto-layout-panel" width="8" data-layout-ncol="2" data-layout-align="center" height="7">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <div class="quarto-figure quarto-figure-center">
@@ -1325,7 +1314,7 @@ g\left(\E[Y_{it}]\right) = g(\mu_{it}) = \alpha_0 + \alpha_1 w_i + \sum_{k=1}^K 
       }
     });
     </script>
-    <script>var lightboxQuarto = GLightbox({"descPosition":"bottom","loop":false,"openEffect":"zoom","closeEffect":"zoom","selector":".lightbox"});
+    <script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","selector":".lightbox","descPosition":"bottom","loop":false,"openEffect":"zoom"});
     window.onload = () => {
       lightboxQuarto.on('slide_before_load', (data) => {
         const { slideIndex, slideNode, slideConfig, player, trigger } = data;
