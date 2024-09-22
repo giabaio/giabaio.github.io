@@ -6,11 +6,15 @@
 <script src="history-dept_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="history-dept_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="history-dept_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="history-dept_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
-<link href="history-dept_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<link href="history-dept_files/libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet"><meta charset="utf-8">
+<link href="history-dept_files/libs/quarto-html/quarto-syntax-highlighting-79bb3942e891885f9f7af119cd221462.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="history-dept_files/libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
+<link href="history-dept_files/libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
+<script src="history-dept_files/libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="history-dept_files/libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="history-dept_files/libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><meta charset="utf-8">
   <meta name="generator" content="quarto-99.9.9">
 
+  <meta name="author" content="Gianluca Baio">
   <title>UCL Statistical Science - History of the department</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -30,8 +34,7 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="history-dept_files/libs/revealjs/dist/theme/quarto.css">
-  <link rel="stylesheet" href="_extensions/giabaio/ucl/styles.css">
+  <link rel="stylesheet" href="history-dept_files/libs/revealjs/dist/theme/quarto-d8db5ea2296edfb3b27d307756b8292c.css">
   <link href="history-dept_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="history-dept_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="history-dept_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -326,14 +329,12 @@
   <!-- (Re)Defines a bunch of LaTeX commands that can then be used directly in the .Rmd file as '\command{...}' -->
   <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
-    /* Need to override Quarto default and force the use of the normal TeX fonts instead of stix */
-    "HTML-CSS": {
-      availableFonts: ["TeX"]
-    },
     TeX: {
       /* This enables color macros */
       extensions: ["color.js"],
       Macros: {
+        /* A new command \txt equivalent to \text, but which typeset in local font */
+        txt: ["{\\style{font-family:inherit;}{\\text{#1}}}",1],
         /* Probability & mathematical symbols */
         Pr: "{\\style{font-family:inherit; font-size: 110%;}{\\text{Pr}}}",
         exp: "{\\style{font-family:inherit; font-size: 105%;}{\\text{exp}}}",
@@ -349,7 +350,6 @@
         DIC: "{\\style{font-family:inherit; font-size: 105%;}{\\text{DIC}}}",
         se: "{\\style{font-family:inherit; font-size: 100%;}{\\text{se}}}",
         sd: "{\\style{font-family:inherit; font-size: 100%;}{\\text{sd}}}",
-        kld: "{\\style{font-family:inherit;}{\\text{KLD}}}",
         /* Distributions */
         dnorm: "{\\style{font-family:inherit;}{\\text{Normal}}}",
         dt: "{\\style{font-family:inherit;}{\\text{t}}}",
@@ -389,54 +389,50 @@
     }
   });
   </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
 </head>
 <body class="quarto-light">
   <div class="reveal">
     <div class="slides">
 
+<section id="title-slide" data-background-opacity="0.08" data-background-size="stretch" class="center">
+  <h1 class="title">UCL Statistical Science - History of the department</h1>
 
-<section id="section" class="slide level2 title-slide center">
-<h2>UCL Statistical Science - History of the department</h2>
-<div class="author">
-<p>Gianluca Baio</p>
-</div>
-<div class="institute">
-<p><a href="https://www.ucl.ac.uk/statistics/">Department of Statistical Science</a> | University College London</p>
-</div>
-<div class="social">
-<p><i class="fa-solid fa-envelope" style="color:#00acee"></i> <a href="mailto:g.baio@ucl.ac.uk">g.baio@ucl.ac.uk</a><br>
-<i class="fa-brands fa-firefox" style="color:#EA7600"></i> <a href="https://gianluca.statistica.it">https://gianluca.statistica.it</a><br>
-<i class="fa-brands fa-firefox" style="color:#EA7600"></i> <a href="https://egon.stats.ucl.ac.uk/research/statistics-health-economics">https://egon.stats.ucl.ac.uk/research/statistics-health-economics</a><br>
-<i class="fa-brands fa-github" style="color:black"></i> <a href="https://github.com/giabaio">https://github.com/giabaio</a><br>
-<i class="fa-brands fa-github" style="color:black"></i> <a href="https://github.com/StatisticsHealthEconomics">https://github.com/StatisticsHealthEconomics</a><br>
-<i class="fa-brands fa-twitter" style="color:#00acee"></i> <a href="https://twitter.com/gianlubaio"><code>@gianlubaio</code></a></p>
-</div>
-<div class="conference">
-<p>Undergraduates Induction week, UCL</p>
-</div>
-<div class="date">
-<p>25 September 2023</p>
-</div>
-<p style="position: absolute; top:75%; left:2.5%; font-family: Nanum Pen Script; font-size:85%; text-decoration: none; color: #000; background: #ffc; display: block; height:6.3em; width:6.3em; padding: .5em; box-shadow: 5px 5px 7px rgba(33,33,33,.7); transform: rotate(-8deg); border-bottom-right-radius: 60px 5px;">
-Check out our departmental podcast “Random Talks” on Soundcloud!&nbsp;<a style=";" href="https://soundcloud.com/uclsound/sets/sample-space" title="Random Talks"><svg viewbox="0 0 640 512" style="position:relative;display:inline-block;top:.1em;fill:#FE5000;height:0.8em;bottom:1em;" xmlns="http://www.w3.org/2000/svg"> <path d="M111.4 256.3l5.8 65-5.8 68.3c-.3 2.5-2.2 4.4-4.4 4.4s-4.2-1.9-4.2-4.4l-5.6-68.3 5.6-65c0-2.2 1.9-4.2 4.2-4.2 2.2 0 4.1 2 4.4 4.2zm21.4-45.6c-2.8 0-4.7 2.2-5 5l-5 105.6 5 68.3c.3 2.8 2.2 5 5 5 2.5 0 4.7-2.2 4.7-5l5.8-68.3-5.8-105.6c0-2.8-2.2-5-4.7-5zm25.5-24.1c-3.1 0-5.3 2.2-5.6 5.3l-4.4 130 4.4 67.8c.3 3.1 2.5 5.3 5.6 5.3 2.8 0 5.3-2.2 5.3-5.3l5.3-67.8-5.3-130c0-3.1-2.5-5.3-5.3-5.3zM7.2 283.2c-1.4 0-2.2 1.1-2.5 2.5L0 321.3l4.7 35c.3 1.4 1.1 2.5 2.5 2.5s2.2-1.1 2.5-2.5l5.6-35-5.6-35.6c-.3-1.4-1.1-2.5-2.5-2.5zm23.6-21.9c-1.4 0-2.5 1.1-2.5 2.5l-6.4 57.5 6.4 56.1c0 1.7 1.1 2.8 2.5 2.8s2.5-1.1 2.8-2.5l7.2-56.4-7.2-57.5c-.3-1.4-1.4-2.5-2.8-2.5zm25.3-11.4c-1.7 0-3.1 1.4-3.3 3.3L47 321.3l5.8 65.8c.3 1.7 1.7 3.1 3.3 3.1 1.7 0 3.1-1.4 3.1-3.1l6.9-65.8-6.9-68.1c0-1.9-1.4-3.3-3.1-3.3zm25.3-2.2c-1.9 0-3.6 1.4-3.6 3.6l-5.8 70 5.8 67.8c0 2.2 1.7 3.6 3.6 3.6s3.6-1.4 3.9-3.6l6.4-67.8-6.4-70c-.3-2.2-2-3.6-3.9-3.6zm241.4-110.9c-1.1-.8-2.8-1.4-4.2-1.4-2.2 0-4.2.8-5.6 1.9-1.9 1.7-3.1 4.2-3.3 6.7v.8l-3.3 176.7 1.7 32.5 1.7 31.7c.3 4.7 4.2 8.6 8.9 8.6s8.6-3.9 8.6-8.6l3.9-64.2-3.9-177.5c-.4-3-2-5.8-4.5-7.2zm-26.7 15.3c-1.4-.8-2.8-1.4-4.4-1.4s-3.1.6-4.4 1.4c-2.2 1.4-3.6 3.9-3.6 6.7l-.3 1.7-2.8 160.8s0 .3 3.1 65.6v.3c0 1.7.6 3.3 1.7 4.7 1.7 1.9 3.9 3.1 6.4 3.1 2.2 0 4.2-1.1 5.6-2.5 1.7-1.4 2.5-3.3 2.5-5.6l.3-6.7 3.1-58.6-3.3-162.8c-.3-2.8-1.7-5.3-3.9-6.7zm-111.4 22.5c-3.1 0-5.8 2.8-5.8 6.1l-4.4 140.6 4.4 67.2c.3 3.3 2.8 5.8 5.8 5.8 3.3 0 5.8-2.5 6.1-5.8l5-67.2-5-140.6c-.2-3.3-2.7-6.1-6.1-6.1zm376.7 62.8c-10.8 0-21.1 2.2-30.6 6.1-6.4-70.8-65.8-126.4-138.3-126.4-17.8 0-35 3.3-50.3 9.4-6.1 2.2-7.8 4.4-7.8 9.2v249.7c0 5 3.9 8.6 8.6 9.2h218.3c43.3 0 78.6-35 78.6-78.3.1-43.6-35.2-78.9-78.5-78.9zm-296.7-60.3c-4.2 0-7.5 3.3-7.8 7.8l-3.3 136.7 3.3 65.6c.3 4.2 3.6 7.5 7.8 7.5 4.2 0 7.5-3.3 7.5-7.5l3.9-65.6-3.9-136.7c-.3-4.5-3.3-7.8-7.5-7.8zm-53.6-7.8c-3.3 0-6.4 3.1-6.4 6.7l-3.9 145.3 3.9 66.9c.3 3.6 3.1 6.4 6.4 6.4 3.6 0 6.4-2.8 6.7-6.4l4.4-66.9-4.4-145.3c-.3-3.6-3.1-6.7-6.7-6.7zm26.7 3.4c-3.9 0-6.9 3.1-6.9 6.9L227 321.3l3.9 66.4c.3 3.9 3.1 6.9 6.9 6.9s6.9-3.1 6.9-6.9l4.2-66.4-4.2-141.7c0-3.9-3-6.9-6.9-6.9z"></path> </svg></a>&nbsp;
-</p>
-<p style="position: absolute; top:47%; left:6.5%; font-family: Nanum Pen Script; font-size:85%; text-decoration: none; color: #000; background: #ffc; display: block; height:6.2em; width:6.2em; padding: .5em; box-shadow: 5px 5px 7px rgba(33,33,33,.7); transform: rotate(6deg); border-bottom-right-radius: 60px 5px;">
-Follow our departmental social media accounts&nbsp;<a style=";" href="https://twitter.com/stats_ucl" title="@stats_UCL"><svg viewbox="0 0 512 512" style="position:relative;display:inline-block;top:.1em;fill:#00acee;height:0.8em;bottom:1em;" xmlns="http://www.w3.org/2000/svg"> <path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"></path> </svg></a>&nbsp;&nbsp;<a style=";" href="https://www.linkedin.com/in/statistical-science-ucl-906b9a201" title="LinkedIn"><svg viewbox="0 0 448 512" style="position:relative;display:inline-block;top:.1em;fill:#2867b2;height:0.8em;bottom:1em;" xmlns="http://www.w3.org/2000/svg"> <path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"></path> </svg></a>&nbsp;&nbsp;<a style=";" href="https://www.instagram.com/ucl.stats/" title="Instagram"><svg viewbox="0 0 448 512" style="position:relative;display:inline-block;top:.1em;fill:#2867b2;height:0.8em;bottom:1em;" xmlns="http://www.w3.org/2000/svg"> <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"></path> </svg></a>&nbsp;
-</p>
-<!-- <p style="position: absolute; top:45%; left:93%; font-family: Nanum Pen Script; font-size:85%; text-decoration: none; color: #000; background: #ffc; display: block; height:4em; width:4em; padding: .5em; box-shadow: 5px 5px 7px rgba(33,33,33,.7); transform: rotate(-2deg); border-bottom-right-radius: 60px 5px;">Powered by <a href='https://quarto.org/' target='_blank' style='color: #002c53;'>Quarto</a> & <a href='https://www.linkedin.com/in/alessandro-baio' target='_blank'  style='color: #002c53;'>Alebaio</a></p> -->
-<p style="position: absolute; top: 86.0%; left: 92.0%; text-decoration:none; display:block; 
-    height: 3.5em; width: 3.5em; padding: .5em; box-shadow: 5px 5px 7px rgba(33,33,33,.7);
-    background-image: url(&quot;assets/images/UCL_Stats_logo.jpeg&quot;); background-size: contain; border-radius: 6px 6px 6px 6px;">
-</p>
+
+<br>
+
+<p style="margin:0px 0px .8em 0px; font-family: Ubuntu; font-size: 1.2em;" class="author"><strong>Gianluca Baio</strong></p>
+
+<p style="margin:0px; opacity:0.8;font-family: Inter Tight;">Department of Statistical Science &nbsp; | &nbsp; University College London</p>
+<p style="margin:5px; font-family: 'Ubuntu Mono'; font-size: .9em; opacity:0.8;"><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:0.8em;width:0.8em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#00acee;overflow:visible;position:relative;"><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"></path></svg> <a href="mailto:g.baio@ucl.ac.uk">g.baio@ucl.ac.uk</a></p>
+
+<br>
+
+
+<p style="margin:0px 15px 0px 15px; font-family: 'Ubuntu Mono'; font-size: .9em; opacity:0.8"><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:0.8em;width:0.8em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#EA7600;overflow:visible;position:relative;"><path d="M503.52,241.48c-.12-1.56-.24-3.12-.24-4.68v-.12l-.36-4.68v-.12a245.86,245.86,0,0,0-7.32-41.15c0-.12,0-.12-.12-.24l-1.08-4c-.12-.24-.12-.48-.24-.6-.36-1.2-.72-2.52-1.08-3.72-.12-.24-.12-.6-.24-.84-.36-1.2-.72-2.4-1.08-3.48-.12-.36-.24-.6-.36-1-.36-1.2-.72-2.28-1.2-3.48l-.36-1.08c-.36-1.08-.84-2.28-1.2-3.36a8.27,8.27,0,0,0-.36-1c-.48-1.08-.84-2.28-1.32-3.36-.12-.24-.24-.6-.36-.84-.48-1.2-1-2.28-1.44-3.48,0-.12-.12-.24-.12-.36-1.56-3.84-3.24-7.68-5-11.4l-.36-.72c-.48-1-.84-1.8-1.32-2.64-.24-.48-.48-1.08-.72-1.56-.36-.84-.84-1.56-1.2-2.4-.36-.6-.6-1.2-1-1.8s-.84-1.44-1.2-2.28c-.36-.6-.72-1.32-1.08-1.92s-.84-1.44-1.2-2.16a18.07,18.07,0,0,0-1.2-2c-.36-.72-.84-1.32-1.2-2s-.84-1.32-1.2-2-.84-1.32-1.2-1.92-.84-1.44-1.32-2.16a15.63,15.63,0,0,0-1.2-1.8L463.2,119a15.63,15.63,0,0,0-1.2-1.8c-.48-.72-1.08-1.56-1.56-2.28-.36-.48-.72-1.08-1.08-1.56l-1.8-2.52c-.36-.48-.6-.84-1-1.32-1-1.32-1.8-2.52-2.76-3.72a248.76,248.76,0,0,0-23.51-26.64A186.82,186.82,0,0,0,412,62.46c-4-3.48-8.16-6.72-12.48-9.84a162.49,162.49,0,0,0-24.6-15.12c-2.4-1.32-4.8-2.52-7.2-3.72a254,254,0,0,0-55.43-19.56c-1.92-.36-3.84-.84-5.64-1.2h-.12c-1-.12-1.8-.36-2.76-.48a236.35,236.35,0,0,0-38-4H255.14a234.62,234.62,0,0,0-45.48,5c-33.59,7.08-63.23,21.24-82.91,39-1.08,1-1.92,1.68-2.4,2.16l-.48.48H124l-.12.12.12-.12a.12.12,0,0,0,.12-.12l-.12.12a.42.42,0,0,1,.24-.12c14.64-8.76,34.92-16,49.44-19.56l5.88-1.44c.36-.12.84-.12,1.2-.24,1.68-.36,3.36-.72,5.16-1.08.24,0,.6-.12.84-.12C250.94,20.94,319.34,40.14,367,85.61a171.49,171.49,0,0,1,26.88,32.76c30.36,49.2,27.48,111.11,3.84,147.59-34.44,53-111.35,71.27-159,24.84a84.19,84.19,0,0,1-25.56-59,74.05,74.05,0,0,1,6.24-31c1.68-3.84,13.08-25.67,18.24-24.59-13.08-2.76-37.55,2.64-54.71,28.19-15.36,22.92-14.52,58.2-5,83.28a132.85,132.85,0,0,1-12.12-39.24c-12.24-82.55,43.31-153,94.31-170.51-27.48-24-96.47-22.31-147.71,15.36-29.88,22-51.23,53.16-62.51,90.36,1.68-20.88,9.6-52.08,25.8-83.88-17.16,8.88-39,37-49.8,62.88-15.6,37.43-21,82.19-16.08,124.79.36,3.24.72,6.36,1.08,9.6,19.92,117.11,122,206.38,244.78,206.38C392.77,503.42,504,392.19,504,255,503.88,250.48,503.76,245.92,503.52,241.48Z"></path></svg> <a href="https://gianluca.statistica.it">https://gianluca.statistica.it</a></p>
+<p style="margin:0px 15px 0px 15px; font-family: 'Ubuntu Mono'; font-size: .9em; opacity:0.8"><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:0.8em;width:0.8em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#EA7600;overflow:visible;position:relative;"><path d="M503.52,241.48c-.12-1.56-.24-3.12-.24-4.68v-.12l-.36-4.68v-.12a245.86,245.86,0,0,0-7.32-41.15c0-.12,0-.12-.12-.24l-1.08-4c-.12-.24-.12-.48-.24-.6-.36-1.2-.72-2.52-1.08-3.72-.12-.24-.12-.6-.24-.84-.36-1.2-.72-2.4-1.08-3.48-.12-.36-.24-.6-.36-1-.36-1.2-.72-2.28-1.2-3.48l-.36-1.08c-.36-1.08-.84-2.28-1.2-3.36a8.27,8.27,0,0,0-.36-1c-.48-1.08-.84-2.28-1.32-3.36-.12-.24-.24-.6-.36-.84-.48-1.2-1-2.28-1.44-3.48,0-.12-.12-.24-.12-.36-1.56-3.84-3.24-7.68-5-11.4l-.36-.72c-.48-1-.84-1.8-1.32-2.64-.24-.48-.48-1.08-.72-1.56-.36-.84-.84-1.56-1.2-2.4-.36-.6-.6-1.2-1-1.8s-.84-1.44-1.2-2.28c-.36-.6-.72-1.32-1.08-1.92s-.84-1.44-1.2-2.16a18.07,18.07,0,0,0-1.2-2c-.36-.72-.84-1.32-1.2-2s-.84-1.32-1.2-2-.84-1.32-1.2-1.92-.84-1.44-1.32-2.16a15.63,15.63,0,0,0-1.2-1.8L463.2,119a15.63,15.63,0,0,0-1.2-1.8c-.48-.72-1.08-1.56-1.56-2.28-.36-.48-.72-1.08-1.08-1.56l-1.8-2.52c-.36-.48-.6-.84-1-1.32-1-1.32-1.8-2.52-2.76-3.72a248.76,248.76,0,0,0-23.51-26.64A186.82,186.82,0,0,0,412,62.46c-4-3.48-8.16-6.72-12.48-9.84a162.49,162.49,0,0,0-24.6-15.12c-2.4-1.32-4.8-2.52-7.2-3.72a254,254,0,0,0-55.43-19.56c-1.92-.36-3.84-.84-5.64-1.2h-.12c-1-.12-1.8-.36-2.76-.48a236.35,236.35,0,0,0-38-4H255.14a234.62,234.62,0,0,0-45.48,5c-33.59,7.08-63.23,21.24-82.91,39-1.08,1-1.92,1.68-2.4,2.16l-.48.48H124l-.12.12.12-.12a.12.12,0,0,0,.12-.12l-.12.12a.42.42,0,0,1,.24-.12c14.64-8.76,34.92-16,49.44-19.56l5.88-1.44c.36-.12.84-.12,1.2-.24,1.68-.36,3.36-.72,5.16-1.08.24,0,.6-.12.84-.12C250.94,20.94,319.34,40.14,367,85.61a171.49,171.49,0,0,1,26.88,32.76c30.36,49.2,27.48,111.11,3.84,147.59-34.44,53-111.35,71.27-159,24.84a84.19,84.19,0,0,1-25.56-59,74.05,74.05,0,0,1,6.24-31c1.68-3.84,13.08-25.67,18.24-24.59-13.08-2.76-37.55,2.64-54.71,28.19-15.36,22.92-14.52,58.2-5,83.28a132.85,132.85,0,0,1-12.12-39.24c-12.24-82.55,43.31-153,94.31-170.51-27.48-24-96.47-22.31-147.71,15.36-29.88,22-51.23,53.16-62.51,90.36,1.68-20.88,9.6-52.08,25.8-83.88-17.16,8.88-39,37-49.8,62.88-15.6,37.43-21,82.19-16.08,124.79.36,3.24.72,6.36,1.08,9.6,19.92,117.11,122,206.38,244.78,206.38C392.77,503.42,504,392.19,504,255,503.88,250.48,503.76,245.92,503.52,241.48Z"></path></svg> <a href="https://egon.stats.ucl.ac.uk/research/statistics-health-economics">https://egon.stats.ucl.ac.uk/research/statistics-health-economics</a></p>
+
+<p style="margin:0px 15px 0px 15px; font-family: 'Ubuntu Mono'; font-size: .9em; opacity:0.8;"><svg aria-hidden="true" role="img" viewbox="0 0 496 512" style="height:0.8em;width:0.78em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:black;overflow:visible;position:relative;"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg> <a href="https://github.com/giabaio">https://github.com/giabaio</a> &nbsp; <svg aria-hidden="true" role="img" viewbox="0 0 496 512" style="height:0.8em;width:0.78em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:black;overflow:visible;position:relative;"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg> <a href="https://github.com/StatisticsHealthEconomics">https://github.com/StatisticsHealthEconomics</a> &nbsp; </p>
+
+<p style="margin:0px 15px 0px 15px; font-family: 'Ubuntu Mono'; font-size: .9em; opacity:0.8;"><svg aria-hidden="true" role="img" viewbox="0 0 448 512" style="height:0.8em;width:0.7em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#563acc;overflow:visible;position:relative;"><path d="M433 179.11c0-97.2-63.71-125.7-63.71-125.7-62.52-28.7-228.56-28.4-290.48 0 0 0-63.72 28.5-63.72 125.7 0 115.7-6.6 259.4 105.63 289.1 40.51 10.7 75.32 13 103.33 11.4 50.81-2.8 79.32-18.1 79.32-18.1l-1.7-36.9s-36.31 11.4-77.12 10.1c-40.41-1.4-83-4.4-89.63-54a102.54 102.54 0 0 1-.9-13.9c85.63 20.9 158.65 9.1 178.75 6.7 56.12-6.7 105-41.3 111.23-72.9 9.8-49.8 9-121.5 9-121.5zm-75.12 125.2h-46.63v-114.2c0-49.7-64-51.6-64 6.9v62.5h-46.33V197c0-58.5-64-56.6-64-6.9v114.2H90.19c0-122.1-5.2-147.9 18.41-175 25.9-28.9 79.82-30.8 103.83 6.1l11.6 19.5 11.6-19.5c24.11-37.1 78.12-34.8 103.83-6.1 23.71 27.3 18.4 53 18.4 175z"></path></svg> <a href="https://mas.to/@gianlubaio">@gianlubaio@mas.to</a> &nbsp; &nbsp;<svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:0.8em;width:0.8em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:black;overflow:visible;position:relative;"><path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"></path></svg> <a href="https://twitter.com/gianlubaio">@gianlubaio</a> &nbsp; &nbsp;</p>
+
+<br>
+       <p style="margin:0px; opacity:0.8; font-family: Inter Tight; font-size: 0.95em;">Undergraduates Induction week, HoD lecture</p>
+  
+<!-- <p style="margin-top:10px; font-family: Inter Tight; font-size: 0.9em;">22 September 2024</p> -->
+
+
+<p><span class="postit1">Check out our departmental podcast “Random Talks” on Soundcloud! <a href="https://soundcloud.com/uclsound/sets/sample-space" style="color: #ff7700;" title="Listen to our podcast"><i class="fa-brands fa-soundcloud" aria-label="soundcloud"></i></a></span></p>
+
+<p><span class="postit2">Follow our departmental social media accounts <a href="url=%22https://twitter.com/stats_ucl" style="color: #000000;" title="Follow us on X"><i class="fa-brands fa-x-twitter" aria-label="x-twitter"></i></a> <a href="https://www.linkedin.com/in/statistical-science-ucl-906b9a201" style="color: #0A66C2;" title="Follow us on LinkedIn"><i class="fa-brands fa-linkedin" aria-label="linkedin"></i></a> <a href="https://www.instagram.com/ucl.stats/" style="color: #8a3ab9;" title="Follow us on Instagram"><i class="fa-brands fa-instagram" aria-label="instagram"></i></a> + magazine <a href="https://sample-space.org/" style="color: #434252;" title="Read our online magazine">“Sample Space”</a></span></p>
+
+<p><span class="logo-stats"></span></p>
+
 </section>
 <section id="university-college-london" class="slide level2">
 <h2>University College London</h2>
 <div class="columns">
 <div class="column" style="width:40%;">
-<p><img data-src="img/ucl-portico-ranbow.jpg"></p>
+<p><a href="images/ucl-portico-ranbow.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img data-src="images/ucl-portico-ranbow.jpg"></a></p>
 </div><div class="column" style="width:60%;">
 <ul>
 <li><p>UCL is a part of the <a href="https://london.ac.uk/">University of London</a></p>
@@ -444,24 +440,28 @@ Follow our departmental social media accounts&nbsp;<a style=";" href="https://tw
 <li>UoL is a <strong>federation</strong> of 17 independent member institutions of outstanding global reputation</li>
 </ul></li>
 </ul>
-<p><span style="display:block; margin-top: 30px ;"></span></p>
+<div class="fragment" style="margin-top: 30px">
 <ul>
 <li><p>A multidisciplinary university in its own right</p></li>
-<li><p>Founded in 1826</p></li>
-<li><p>The first English university to admit Jewish, Catholic and non-conformist faith, women, …</p></li>
+<li><p>Founded in 1826 (so you’ll be bang in the middle of the bicentenary celebrations!)</p></li>
+<li><p>The first English university to admit Jewish, Catholic and non-conformist faith, women, …</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Thomas_Arnold">Thomas Arnold</a> referred to us as “that Godless institution in Gower Street”.</li>
+</ul></li>
 </ul>
-<p><span style="display:block; margin-top: 30px ;"></span></p>
+</div>
+<div class="fragment" style="margin-top: 30px">
 <ul>
 <li>The first globally to have departments of <strong>Statistics</strong>, Economics, Modern Languages, …</li>
 </ul>
 </div>
-</div>
+</div></div>
 </section>
 <section id="ucl-department-of-statistical-science" class="slide level2">
 <h2>UCL Department of Statistical Science</h2>
 <div class="columns">
 <div class="column" style="width:40%;">
-<p><img data-src="img/UCL_Stats_logo.jpeg"></p>
+<p><a href="images/UCL_Stats_logo.jpeg" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img data-src="images/UCL_Stats_logo.jpeg"></a></p>
 </div><div class="column" style="width:60%;">
 <h3 id="history">History</h3>
 <ul>
@@ -469,50 +469,72 @@ Follow our departmental social media accounts&nbsp;<a style=";" href="https://tw
 <li><p>Its first head was Karl Pearson</p></li>
 <li><p>Now one of the largest in the UK</p></li>
 </ul>
-<p><span style="display:block; margin-top: 30px ;"></span></p>
+<div class="fragment" style="margin-top:20px">
 <h3 id="active-in-research">Active in research</h3>
 <ul>
 <li><p>Wide variety of statistical research</p></li>
 <li><p>90% of research outputs submitted in the “Research Excellence Framework” (REF; 2021) ranked as “<strong>internationally excellent</strong>”</p></li>
+<li><p>We’ve improved markedly in our “Impact Case Studies” submission too – over 50% are 4*</p></li>
 </ul>
-<p><span style="display:block; margin-top: 30px ;"></span></p>
+</div>
+<div class="fragment" style="margin-top:20px">
 <h3 id="friendly-department">Friendly department</h3>
 <ul>
 <li><p>About 50 academic staff</p></li>
-<li><p>Over 500 undergraduate students and over 150 postgraduate students</p></li>
+<li><p>Over 600 undergraduate students and over 150 postgraduate students</p></li>
 <li><p>Teaching carried out by staff at the forefront of their subject</p></li>
-<li><p>We even have our own <a href="https://twitter.com/stats_UCL"><i class="fa-brands fa-twitter"></i></a>, <a href="https://www.linkedin.com/in/statistical-science-ucl-906b9a201"><i class="fa-brands fa-linkedin"></i></a>, <a href="https://www.instagram.com/ucl.stats"><i class="fa-brands fa-instagram"></i></a></p></li>
+<li><p>We even have our own <a href="https://twitter.com/stats_UCL"><i class="fa-brands fa-twitter" aria-label="twitter"></i></a>, <a href="https://www.linkedin.com/in/statistical-science-ucl-906b9a201"><i class="fa-brands fa-linkedin" aria-label="linkedin"></i></a>, <a href="https://www.instagram.com/ucl.stats"><i class="fa-brands fa-instagram" aria-label="instagram"></i></a></p></li>
 <li><p>And our own <a href="https://www.ucl.ac.uk/statistics/news/2020/apr/sample-space-issue-1-spring-2020">magazine</a> and <a href="https://soundcloud.com/uclsound/sets/sample-space">podcast</a>!</p></li>
 </ul>
 </div>
+</div></div>
+</section>
+<section id="random-talks" class="slide level2">
+<h2>Random Talks</h2>
+<p><a href="https://soundcloud.com/uclsound/the-history-of-statistics-and-eugenics-at-ucl-with-professor-tom-fearn">https://soundcloud.com/uclsound/the-history-of-statistics-and-eugenics-at-ucl-with-professor-tom-fearn</a></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="images/soundcloud-tom.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img data-src="images/soundcloud-tom.png" class="quarto-figure quarto-figure-center" style="width:75.0%"></a></p>
+</figure>
 </div>
 </section>
-<section id="section-1" class="slide level2 nobar">
-<h2></h2>
-<div style="position: absolute; left: 20%; top: 0%;">
-<p><img data-src="img/soundcloud-tom.png"></p>
-</div>
-<div style="position: absolute; left: 15%; top: 85%; font-size: 1.85rem;">
-<p>Check this out on our <a href="https://soundcloud.com/uclsound/the-history-of-statistics-and-eugenics-at-ucl-with-professor-tom-fearn">podcast</a></p>
-</div>
-<div class="footer">
-
-</div>
-</section>
-<section id="section-2" class="slide level2 nobar">
-<h2></h2>
-<iframe width="100%" height="100%" src="https://sample-space.org/" title="Webpage example"></iframe>
-<div class="footer">
-
-</div>
+<section id="sample-space" class="slide level2">
+<h2>Sample Space</h2>
+<iframe width="100%" height="700" src="https://sample-space.org/" title="Webpage example"></iframe>
 </section>
 <section id="our-history" class="slide level2">
 <h2>Our history</h2>
 <ul>
-<li><p>We were founded in 1911 by Karl Pearson as the <em>Department of Applied Statistics</em> — we were the first university department of Statistics in the world</p></li>
-<li><p>Pearson and his collaborators/successors laid the foundations of 20th century statistics, with ideas like correlation, regression, and p-values that are common currency today</p></li>
-<li><p>BUT: There’s a darker side to this history and this too deserves to be told!</p></li>
+<li>We were founded in 1911 by Karl Pearson as the <em>Department of Applied Statistics</em>
+<ul>
+<li>We were the first university department of Statistics in the world</li>
+</ul></li>
 </ul>
+<div class="fragment">
+<ul>
+<li><p>Pearson and his collaborators/successors laid the foundations of 20th century statistics, with ideas like correlation, regression, and p-values that are common currency today</p></li>
+<li><p>We have been at the forefront of the development of our discipline throughout its history</p>
+<ul>
+<li>Foundations of cross-validation</li>
+<li>Modern Bayesian statistics</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Today we contribute to important methodological and applied work
+<ul>
+<li>Computational statistics</li>
+<li>Statistical foundations of ML/AI</li>
+<li>Applications in biosciences, environment and society</li>
+</ul></li>
+</ul>
+<div class="fragment" style="margin-top: 25px">
+<ul>
+<li>BUT: There’s a darker side to this history and this too deserves to be told!</li>
+</ul>
+</div>
+</div>
 </section>
 <section id="galton-pearson-regression" class="slide level2">
 <h2>Galton, Pearson &amp; regression</h2>
@@ -571,8 +593,16 @@ Follow our departmental social media accounts&nbsp;<a style=";" href="https://tw
 <li><p>Among many other topics, Galton worked to study hereditary traits. In particular, he collected data on <span class="math inline">\(n=898\)</span> children from 197 families.</p></li>
 <li><p>The data comprise the height of each child <span class="math inline">\(y_i\)</span>, as well as the height of the father <span class="math inline">\(X_{1i}\)</span> and the mother <span class="math inline">\(X_{2i}\)</span>, for <span class="math inline">\(i=1,\ldots,n\)</span>, all measured in inches and can be visualised in the following graph (where each family is labelled by a different colour)</p></li>
 </ul>
-
-<img src="./img/datagaltonplot-1.png" class="r-stretch"></section>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="history-dept_files/figure-revealjs/datagaltonplot-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img data-src="history-dept_files/figure-revealjs/datagaltonplot-1.png" class="quarto-figure quarto-figure-center" style="width:55.0%"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
 <section id="harmless-modelling-1" class="slide level2" data-visibility="uncounted">
 <h2>Harmless modelling?…</h2>
 <p><span style="display:block; margin-top: -15px ;"></span></p>
@@ -583,7 +613,13 @@ Follow our departmental social media accounts&nbsp;<a style=";" href="https://tw
 <div class="columns">
 <div class="column" style="width:55%;">
 <div class="cell" data-layout-align="center">
-<p><img src="./img/galtonline4-1.png"></p>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="history-dept_files/figure-revealjs/galtonline4-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img data-src="history-dept_files/figure-revealjs/galtonline4-1.png" class="quarto-figure quarto-figure-center" style="width:100.0%"></a></p>
+</figure>
+</div>
+</div>
 </div>
 </div><div class="column" style="width:45%;">
 <ul>
@@ -595,8 +631,7 @@ Follow our departmental social media accounts&nbsp;<a style=";" href="https://tw
 <li><p>With his eugenist hat on, he found this rather disappointing, because it meant that the species could not be improved (e.g.&nbsp;by selecting only taller parents to breed)</p></li>
 <li><p>For this reason, he gave this phenomenon the rather demeaning name “<strong>regression to mediocrity</strong>” or “to the mean”</p></li>
 </ul>
-</div>
-</div>
+</div></div>
 </section>
 <section id="ucl-eugenics-inquiry" class="slide level2">
 <h2>UCL Eugenics inquiry</h2>
@@ -604,7 +639,10 @@ Follow our departmental social media accounts&nbsp;<a style=";" href="https://tw
 <li><p>It has taken a long time for UCL to come to terms with its dark past, but just before the pandemics, we commissioned a structured and detailed inquiry into historic and recent eugenics activity at UCL</p></li>
 <li><p>The commission made a number of recommendations (whose implementation got delayed by Covid) &amp;nspace; all were accepted by the then Provost of UCL</p></li>
 <li><p>These included <em>denaming</em> buildings and lecture theatres around UCL, which were previously named after Galton and Pearson</p></li>
-<li><p>As a department, we are taking this very seriously and want to include ethics and awareness of the implications of statistical modelling in policy implementations</p>
+</ul>
+<div class="fragment">
+<ul>
+<li>As a department, we are taking this very seriously and want to include ethics and awareness of the implications of statistical modelling in policy implementations
 <ul>
 <li>Face recognition</li>
 <li>“Stop &amp; frisk” policing</li>
@@ -612,8 +650,18 @@ Follow our departmental social media accounts&nbsp;<a style=";" href="https://tw
 <li>…</li>
 </ul></li>
 </ul>
+<!-- 
+   If the meta parameter 'thank-you' is set to "false", this won't show. Can 
+   choose among various options, all stored in the 'assets' folder. For now:
+   - michelle
+   - phoebe
+   - reese
+-->
+<div class="quarto-auto-generated-content">
 <div class="footer footer-default">
-<p>© Gianluca Baio (UCL) &nbsp; | &nbsp; <a style="border-bottom: 0px!important;" href="https://twitter.com/giabaio" title="Follow me on Twitter"><i class="fa-brands fa-twitter" style="color:black;"></i></a>&nbsp; &nbsp;<a style="border-bottom: 0px!important;" href="https://github.com/giabaio" title="Check out my repos"><i class="fa-brands fa-github" style="color:black"></i></a>&nbsp; &nbsp; <a style="border-bottom: 0px!important;" href="mailto:g.baio@ucl.ac.uk" title="Email me"><i class="fa-solid fa-envelope" style="color:black"></i></a>&nbsp; &nbsp; <a style="border-bottom: 0px!important;" href="https://gianluca.statistica.it" title="Visit my website"><i class="fa-brands fa-firefox" style="color:black"></i></a> &nbsp; | &nbsp; History of the department &nbsp; | &nbsp; Induction week &nbsp; | &nbsp; <a href="https://en.wikipedia.org/wiki/September_25" title="On this day..." target="_blank">25 Sep 2023</a></p>
+<p>© Gianluca Baio (UCL) &nbsp; | &nbsp; <a href="https://twitter.com/giabaio" title="Follow me on X"><i class="fa-brands fa-x-twitter" aria-label="x-twitter"></i></a> &nbsp; <a href="https://mas.to/@gianlubaio" title="Follow me on Mastodon"><i class="fa-brands fa-mastodon" aria-label="mastodon"></i></a> &nbsp; <a href="https://github.com/giabaio" title="Check out my repos"><i class="fa-brands fa-github" aria-label="github"></i></a> &nbsp; <a href="mailto:g.baio@ucl.ac.uk" title="Email me"><i class="fa-solid fa-envelope" aria-label="envelope"></i></a> &nbsp; <a href="https://gianluca.statistica.it" title="Visit my website"><i class="fa-brands fa-firefox" aria-label="firefox"></i></a> &nbsp; | &nbsp; History of the department &nbsp; | &nbsp; Induction HoD lecture &nbsp; | &nbsp; <span style="font-size: 1em ;"><i class="fa-solid fa-circle-info" aria-label="circle-info"></i> Slides available at <a href="https://giabaio.github.io/history-dept">https://giabaio.github.io/history-dept</a></span></p>
+</div>
+</div>
 </div>
 </section>
     </div>
@@ -648,7 +696,7 @@ Follow our departmental social media accounts&nbsp;<a style=";" href="https://tw
 'autoAnimateDuration': 1,
 'autoAnimateUnmatched': true,
 'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
-'chalkboard': {"buttons":false,"theme":"whiteboard"},
+'chalkboard': {"buttons":false},
 'smaller': false,
  
         // Display controls in the bottom right corner
@@ -794,9 +842,9 @@ Follow our departmental social media accounts&nbsp;<a style=";" href="https://tw
         // The "normal" size of the presentation, aspect ratio will be preserved
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
-        width: 1800,
+        width: 1500,
 
-        height: 1000,
+        height: 900,
 
         // Factor of the display size that should remain empty around the content
         margin: 0.1,
@@ -827,27 +875,6 @@ Follow our departmental social media accounts&nbsp;<a style=";" href="https://tw
           RevealZoom
         ]
       });
-    </script>
-    // Alebaio's script to place logo on all slides but the first page 
-    <style>
-    .logo {
-      background-image: url("./assets/images/UCL-stats.png");
-      background-size: 14% 7%;
-      background-repeat: no-repeat;
-      position: absolute;
-      top:  2.25%; /* 2.65%em */
-      left: 85%;
-      height: 100%;
-      width: 100%;
-    }
-    </style>
-
-    <script>
-    (function ($) {
-    	$(document).ready(function() {			
-    				$( "section.slide h2" ).append( '<div class="logo"></div>');
-    	});
-    	}(jQuery));
     </script>
     
     <script>
@@ -919,18 +946,7 @@ Follow our departmental social media accounts&nbsp;<a style=";" href="https://tw
         }
         return false;
       }
-      const clipboard = new window.ClipboardJS('.code-copy-button', {
-        text: function(trigger) {
-          const codeEl = trigger.previousElementSibling.cloneNode(true);
-          for (const childEl of codeEl.children) {
-            if (isCodeAnnotation(childEl)) {
-              childEl.remove();
-            }
-          }
-          return codeEl.innerText;
-        }
-      });
-      clipboard.on('success', function(e) {
+      const onCopySuccess = function(e) {
         // button target
         const button = e.trigger;
         // don't keep focus
@@ -962,7 +978,47 @@ Follow our departmental social media accounts&nbsp;<a style=";" href="https://tw
         }, 1000);
         // clear code selection
         e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
       });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        // For code content inside modals, clipBoardJS needs to be initialized with a container option
+        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
       function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
         const config = {
           allowHTML: true,
@@ -999,7 +1055,11 @@ Follow our departmental social media accounts&nbsp;<a style=";" href="https://tw
           try { href = new URL(href).hash; } catch {}
           const id = href.replace(/^#\/?/, "");
           const note = window.document.getElementById(id);
-          return note.innerHTML;
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
         });
       }
       const findCites = (el) => {
@@ -1041,6 +1101,38 @@ Follow our departmental social media accounts&nbsp;<a style=";" href="https://tw
       }
     });
     </script>
+    <script>var lightboxQuarto = GLightbox({"loop":false,"openEffect":"zoom","selector":".lightbox","descPosition":"bottom","closeEffect":"zoom"});
+    (function() {
+      let previousOnload = window.onload;
+      window.onload = () => {
+        if (previousOnload) {
+          previousOnload();
+        }
+        lightboxQuarto.on('slide_before_load', (data) => {
+          const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+          const href = trigger.getAttribute('href');
+          if (href !== null) {
+            const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+            if (imgEl !== null) {
+              const srcAttr = imgEl.getAttribute("src");
+              if (srcAttr && srcAttr.startsWith("data:")) {
+                slideConfig.href = srcAttr;
+              }
+            }
+          } 
+        });
+      
+        lightboxQuarto.on('slide_after_load', (data) => {
+          const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(slideNode);
+          }
+        });
+      
+      };
+      
+    })();
+              </script>
     
 
 </body></html>
